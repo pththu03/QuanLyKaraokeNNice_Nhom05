@@ -1,8 +1,10 @@
 package gui.nhanVien;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -90,7 +92,8 @@ public class GD_QuanLyNhanVien extends JPanel {
 
 	public GD_QuanLyNhanVien() {
 		setLayout(null);
-		setBounds(0, 0, 1365, 694);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 
 		pnlQuanLyNhanVien = new JPanel();
 		pnlQuanLyNhanVien.setBounds(0, 0, 1365, 694);
@@ -254,7 +257,7 @@ public class GD_QuanLyNhanVien extends JPanel {
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setBounds(448, 445, 120, 35);
 		pnlThongTinNhanVien.add(btnLamMoi);
-		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconLamMoi3.png")));
+//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconLamMoi3.png")));
 		btnLamMoi.setBackground(new Color(144, 238, 144));
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setForeground(Color.BLACK);

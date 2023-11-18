@@ -1,7 +1,9 @@
 package gui.khachHang;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -69,7 +71,8 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 	public GD_QuanLyKhachHang() {
 		setLayout(null);
-		setBounds(0, 0, 1365, 694);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 
 		pnlKhachHang = new JPanel();
 		pnlKhachHang.setBackground(new Color(211, 211, 211));

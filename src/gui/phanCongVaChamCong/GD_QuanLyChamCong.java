@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
@@ -65,7 +66,8 @@ public class GD_QuanLyChamCong extends JPanel {
 
 	public GD_QuanLyChamCong() {
 		setLayout(null);
-		setBounds(0, 0, 1365, 694);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 
 		pnlChamCong = new JPanel();
 		pnlChamCong.setBackground(UIManager.getColor("Button.light"));

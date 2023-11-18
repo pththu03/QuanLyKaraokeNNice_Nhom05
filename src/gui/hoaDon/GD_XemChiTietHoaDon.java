@@ -1,9 +1,11 @@
 package gui.hoaDon;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -55,7 +57,8 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		this.hoaDonEntity = hoaDonEntity;
 //		setIconImage(Toolkit.getDefaultToolkit().getImage(GD_ChiTietHoaDon.class.getResource("/images/iconLogo1.png")));
 		setTitle("Xem chi tiết hóa đơn");
-		setBounds(100, 100, 925, 548);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 		setLocationRelativeTo(null);
 		pnlContent = new JPanel();
 		pnlContent.setBackground(SystemColor.controlHighlight);

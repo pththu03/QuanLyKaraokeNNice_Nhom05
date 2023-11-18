@@ -84,10 +84,10 @@ public class GD_TrangChu extends JFrame {
 		this.nhanVienEntity = nhanVien;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GD_TrangChu.class.getResource("/images/iconLogo.png")));
 		setResizable(false);
-		this.nhanVienEntity = nhanVien;
 		setTitle("Quản lý hệ thống karaoke NNice");
 		setBackground(Color.WHITE);
-		setSize(1365, 747);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setSize((int) screen.getWidth(), (int) screen.getHeight());
 		setLocationRelativeTo(null);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.getContentPane().setSize(this.getWidth(), this.getHeight());
@@ -263,10 +263,9 @@ public class GD_TrangChu extends JFrame {
 		pnlChinh = new JPanel();
 		pnlChinh.setBounds(0, 52, 1365, 694);
 		contentPane.add(pnlChinh);
-		pnlChinh.setLayout(null);
+		pnlChinh.setLayout(new BorderLayout(0, 0));
 
 		pnlBannner = new JPanel();
-		pnlBannner.setBounds(0, 0, 1365, 694);
 		pnlChinh.add(pnlBannner);
 		pnlBannner.setLayout(null);
 

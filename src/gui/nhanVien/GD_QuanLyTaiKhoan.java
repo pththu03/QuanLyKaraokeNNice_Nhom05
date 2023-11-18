@@ -1,9 +1,11 @@
 package gui.nhanVien;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -52,7 +54,8 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 	public GD_QuanLyTaiKhoan(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
-		setBounds(0, 0, 1365, 694);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 
 		pnlTaiKhoan = new JPanel();
 		pnlTaiKhoan.setBackground(new Color(230, 230, 250));

@@ -1,7 +1,9 @@
 package gui.dichVu;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -24,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 //import dao.QuanLyDichVuDAO;
 import entities.DichVuEntity;
 import entities.NhanVienEntity;
+import javax.swing.border.TitledBorder;
 
 public class GD_QuanLyDichVu extends JPanel {
 
@@ -61,19 +64,24 @@ public class GD_QuanLyDichVu extends JPanel {
 	// JScrollPane
 	private JScrollPane scrQLDV;
 
-	// JButton
-	public JButton btnThem;
-	public JButton btnXoa;
-	public JButton btnChinhSua;
-	public JButton btnLamMoi;
-	public JButton btnTim;
-
 	// DefaultTableModel
 	private DefaultTableModel tblmodelDichVu;
-//	private QuanLyDichVuController controller;
-//	private List<DichVuEntity> listDichVu;
-//	private QuanLyDichVuDAO quanLyDichVuDAO = new QuanLyDichVuDAO();
 	private NhanVienEntity nhanVienEntity;
+	private JPanel pnlDichVu;
+	private JPanel pnlLoaiDichVu;
+	private JTextField textField;
+	private JLabel lblTnLoiDch;
+	private JTextField textField_1;
+	private JLabel lblLoaiDichVu_2;
+	private JButton btnThemLoaiDichVu;
+	private JButton btnXoaLoaiDichVu;
+	private JButton btnSuaLoaiDichVu;
+	private JPanel panel;
+	private JButton btnThm;
+	private JButton btnTimKiem;
+	private JButton btnLamMoi;
+	private JButton btnXaDchV;
+	private JButton btnChnhSaDch;
 
 	public GD_QuanLyDichVu(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
@@ -81,107 +89,24 @@ public class GD_QuanLyDichVu extends JPanel {
 		setLayout(null);
 
 		pnlThongTin = new JPanel();
-		pnlThongTin.setBackground(new Color(255, 192, 203));
-		pnlThongTin.setBounds(0, 0, 672, 480);
+		pnlThongTin.setBackground(new Color(230, 230, 250));
+		pnlThongTin.setBounds(0, 0, 1365, 251);
 		add(pnlThongTin);
 		pnlThongTin.setLayout(null);
 
 		lblQuanLiDichVu = new JLabel("Thông tin Dịch vụ");
 		lblQuanLiDichVu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblQuanLiDichVu.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblQuanLiDichVu.setBounds(0, 40, 672, 40);
+		lblQuanLiDichVu.setBounds(0, 11, 1356, 40);
 		pnlThongTin.add(lblQuanLiDichVu);
-
-		lblMaDichVu = new JLabel("Mã Dịch Vụ : ");
-		lblMaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblMaDichVu.setBounds(82, 117, 104, 30);
-		pnlThongTin.add(lblMaDichVu);
-
-		lblLoaiDichVu = new JLabel("Tên Dịch Vụ :");
-		lblLoaiDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblLoaiDichVu.setBounds(82, 177, 104, 30);
-		pnlThongTin.add(lblLoaiDichVu);
-
-		txtMaDV = new JTextField();
-		txtMaDV.setDisabledTextColor(Color.BLACK);
-		txtMaDV.setForeground(Color.BLACK);
-		txtMaDV.setBackground(Color.WHITE);
-		txtMaDV.setEnabled(false);
-		txtMaDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtMaDV.setBounds(216, 115, 340, 33);
-		pnlThongTin.add(txtMaDV);
-		txtMaDV.setColumns(10);
-
-		txtTenDV = new JTextField();
-		txtTenDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTenDV.setBounds(216, 175, 340, 33);
-		pnlThongTin.add(txtTenDV);
-		txtTenDV.setColumns(10);
-
-		lblLoaiDV = new JLabel("Loại Dịch Vụ :");
-		lblLoaiDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblLoaiDV.setBounds(82, 237, 104, 30);
-		pnlThongTin.add(lblLoaiDV);
 
 		String[] cols_loaiDv = { "", "Đồ uống", "Món ăn", "Tiệc" };
 		cmbmodelLoaiDV = new DefaultComboBoxModel<>(cols_loaiDv);
-		cmbLoaiDV = new JComboBox<String>(cmbmodelLoaiDV);
-		cmbLoaiDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cmbLoaiDV.setBounds(216, 235, 340, 33);
-		pnlThongTin.add(cmbLoaiDV);
-
-		btnLamMoi = new JButton("Làm mới\r\n");
-		btnLamMoi.setBounds(515, 395, 120, 40);
-		pnlThongTin.add(btnLamMoi);
-		btnLamMoi.setFocusable(false);
-		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconLamMoi3.png")));
-		btnLamMoi.setBackground(new Color(144, 238, 144));
-		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-		btnXoa = new JButton("Xóa\r\n");
-		btnXoa.setBounds(357, 395, 120, 40);
-		pnlThongTin.add(btnXoa);
-		btnXoa.setFocusable(false);
-		btnXoa.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnXoa.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconXoa3.png")));
-		btnXoa.setBackground(new Color(144, 238, 144));
-		btnXoa.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-		btnChinhSua = new JButton("Chỉnh Sửa");
-		btnChinhSua.setBounds(199, 395, 120, 40);
-		pnlThongTin.add(btnChinhSua);
-		btnChinhSua.setFocusable(false);
-		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconChinhSua1.png")));
-		btnChinhSua.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnChinhSua.setBackground(new Color(144, 238, 144));
-
-		btnThem = new JButton("Thêm");
-		btnThem.setBounds(41, 395, 120, 40);
-		pnlThongTin.add(btnThem);
-		btnThem.setFocusable(false);
-		btnThem.setFocusCycleRoot(true);
-		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnThem.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconThem3.png")));
-		btnThem.setBackground(new Color(144, 238, 144));
-		btnThem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-		lblGiaDichVu = new JLabel("Giá Dịch vụ:");
-		lblGiaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblGiaDichVu.setBounds(82, 297, 104, 30);
-		pnlThongTin.add(lblGiaDichVu);
-
-		txtGia = new JTextField();
-		txtGia.setBounds(216, 295, 340, 33);
-		pnlThongTin.add(txtGia);
-		txtGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGia.setColumns(10);
 
 		pnlChucNang = new JPanel();
 		pnlChucNang.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlChucNang.setBackground(new Color(255, 228, 225));
-		pnlChucNang.setBounds(672, 0, 694, 694);
+		pnlChucNang.setBackground(new Color(230, 230, 250));
+		pnlChucNang.setBounds(0, 393, 1365, 301);
 		add(pnlChucNang);
 		pnlChucNang.setLayout(null);
 
@@ -189,7 +114,7 @@ public class GD_QuanLyDichVu extends JPanel {
 		tblmodelDichVu = new DefaultTableModel(cols_QLDV, 0);
 		tblDichVu = new JTable(tblmodelDichVu);
 		scrQLDV = new JScrollPane(tblDichVu);
-		scrQLDV.setBounds(10, 79, 674, 604);
+		scrQLDV.setBounds(35, 65, 1277, 225);
 		pnlChucNang.add(scrQLDV);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -204,66 +129,218 @@ public class GD_QuanLyDichVu extends JPanel {
 		JLabel lblDanhSchDch = new JLabel("Danh sách dịch vụ");
 		lblDanhSchDch.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDanhSchDch.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblDanhSchDch.setBounds(0, 28, 694, 40);
+		lblDanhSchDch.setBounds(0, 10, 1356, 40);
 		pnlChucNang.add(lblDanhSchDch);
 
 		pnlTimKiem = new JPanel();
-		pnlTimKiem.setBackground(new Color(204, 204, 255));
-		pnlTimKiem.setBounds(0, 478, 672, 216);
+		pnlTimKiem.setBackground(new Color(230, 230, 250));
+		pnlTimKiem.setBounds(0, 251, 1365, 142);
 		add(pnlTimKiem);
 		pnlTimKiem.setLayout(null);
-
-		lblGia = new JLabel("Giá dịch vụ từ:");
-		lblGia.setBounds(66, 96, 114, 30);
-		pnlTimKiem.add(lblGia);
-		lblGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-		lblGiaDen = new JLabel("Đến:");
-		lblGiaDen.setBounds(383, 96, 34, 30);
-		pnlTimKiem.add(lblGiaDen);
-		lblGiaDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-
-		txtGiaDen = new JTextField();
-		txtGiaDen.setBounds(427, 95, 175, 33);
-		pnlTimKiem.add(txtGiaDen);
-		txtGiaDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGiaDen.setColumns(10);
-
-		btnTim = new JButton("Tìm kiếm");
-		btnTim.setBounds(472, 161, 130, 35);
-		pnlTimKiem.add(btnTim);
-		btnTim.setBackground(new Color(144, 238, 144));
-		btnTim.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 //		btnTim.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconTimKiem1.png")));
 
 		lblLoaiDVTimKiem = new JLabel("Loại Dịch Vụ :");
 		lblLoaiDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblLoaiDVTimKiem.setBounds(66, 31, 114, 30);
+		lblLoaiDVTimKiem.setBounds(66, 34, 114, 30);
 		pnlTimKiem.add(lblLoaiDVTimKiem);
 
 		String[] cols_LoaiDVTimKiem = { "Tất cả", "Đồ uống", "Món ăn", "Tiệc" };
 		cmbmodelLoaiDVTimKiem = new DefaultComboBoxModel<>(cols_LoaiDVTimKiem);
-		cmbLoaiDVTimKiem = new JComboBox<String>(cmbmodelLoaiDVTimKiem);
-		cmbLoaiDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cmbLoaiDVTimKiem.setBounds(202, 30, 399, 33);
-		pnlTimKiem.add(cmbLoaiDVTimKiem);
-
-		txtGiaDichVuTu = new JTextField();
-		txtGiaDichVuTu.setBounds(202, 95, 166, 33);
-		pnlTimKiem.add(txtGiaDichVuTu);
-		txtGiaDichVuTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGiaDichVuTu.setColumns(10);
-
-//		controller = new QuanLyDichVuController(this);
-//		btnTim.addActionListener(controller);
-//		btnThem.addActionListener(controller);
-//		btnChinhSua.addActionListener(controller);
-//		btnLamMoi.addActionListener(controller);
-//		btnXoa.addActionListener(controller);
-//		tblDichVu.addMouseListener(controller);
-//		btnThem.setEnabled(false);
-		btnChinhSua.setEnabled(false);
-		btnXoa.setEnabled(false);
+						
+						panel = new JPanel();
+						panel.setBorder(new TitledBorder(null, "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+						panel.setBackground(new Color(230, 230, 250));
+						panel.setBounds(38, 11, 757, 120);
+						pnlTimKiem.add(panel);
+						panel.setLayout(null);
+						
+								lblGia = new JLabel("Giá dịch vụ từ:");
+								lblGia.setBounds(28, 67, 114, 30);
+								panel.add(lblGia);
+								lblGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+								
+										txtGiaDichVuTu = new JTextField();
+										txtGiaDichVuTu.setBounds(164, 66, 230, 33);
+										panel.add(txtGiaDichVuTu);
+										txtGiaDichVuTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+										txtGiaDichVuTu.setColumns(10);
+										
+												lblGiaDen = new JLabel("Đến:");
+												lblGiaDen.setBounds(429, 67, 34, 30);
+												panel.add(lblGiaDen);
+												lblGiaDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+												
+														txtGiaDen = new JTextField();
+														txtGiaDen.setBounds(473, 66, 230, 33);
+														panel.add(txtGiaDen);
+														txtGiaDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+														txtGiaDen.setColumns(10);
+														cmbLoaiDVTimKiem = new JComboBox<String>(cmbmodelLoaiDVTimKiem);
+														cmbLoaiDVTimKiem.setBounds(164, 22, 230, 33);
+														panel.add(cmbLoaiDVTimKiem);
+														cmbLoaiDVTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+														
+														btnThm = new JButton("Thêm dịch vụ");
+														btnThm.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconThem.png")));
+														btnThm.setForeground(Color.BLACK);
+														btnThm.setFont(new Font("Cambria", Font.BOLD, 14));
+														btnThm.setFocusPainted(false);
+														btnThm.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+														btnThm.setBackground(new Color(152, 251, 152));
+														btnThm.setBounds(829, 27, 150, 35);
+														pnlTimKiem.add(btnThm);
+														
+														btnTimKiem = new JButton("Tìm kiếm");
+														btnTimKiem.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconTimKiem.png")));
+														btnTimKiem.setForeground(Color.BLACK);
+														btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
+														btnTimKiem.setFocusPainted(false);
+														btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+														btnTimKiem.setBackground(new Color(152, 251, 152));
+														btnTimKiem.setBounds(829, 96, 150, 35);
+														pnlTimKiem.add(btnTimKiem);
+														
+														btnLamMoi = new JButton("Làm mới");
+														btnLamMoi.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconLamMoi.png")));
+														btnLamMoi.setForeground(Color.BLACK);
+														btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+														btnLamMoi.setFocusPainted(false);
+														btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+														btnLamMoi.setBackground(new Color(152, 251, 152));
+														btnLamMoi.setBounds(1000, 96, 150, 35);
+														pnlTimKiem.add(btnLamMoi);
+														
+														btnXaDchV = new JButton("Xóa dịch vụ");
+														btnXaDchV.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconXoa.png")));
+														btnXaDchV.setForeground(Color.BLACK);
+														btnXaDchV.setFont(new Font("Cambria", Font.BOLD, 14));
+														btnXaDchV.setFocusPainted(false);
+														btnXaDchV.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+														btnXaDchV.setBackground(new Color(152, 251, 152));
+														btnXaDchV.setBounds(1000, 27, 150, 35);
+														pnlTimKiem.add(btnXaDchV);
+														
+														btnChnhSaDch = new JButton("Chỉnh sửa dịch vụ");
+														btnChnhSaDch.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconChinhSua1.png")));
+														btnChnhSaDch.setForeground(Color.BLACK);
+														btnChnhSaDch.setFont(new Font("Cambria", Font.BOLD, 14));
+														btnChnhSaDch.setFocusPainted(false);
+														btnChnhSaDch.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+														btnChnhSaDch.setBackground(new Color(152, 251, 152));
+														btnChnhSaDch.setBounds(1171, 27, 170, 35);
+														pnlTimKiem.add(btnChnhSaDch);
+		
+		pnlDichVu = new JPanel();
+		pnlDichVu.setBorder(new TitledBorder(null, "D\u1ECBch v\u1EE5", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnlDichVu.setBackground(new Color(230, 230, 250));
+		pnlDichVu.setBounds(35, 61, 764, 179);
+		pnlThongTin.add(pnlDichVu);
+		pnlDichVu.setLayout(null);
+		
+				lblMaDichVu = new JLabel("Mã Dịch Vụ : ");
+				lblMaDichVu.setBounds(28, 35, 104, 30);
+				pnlDichVu.add(lblMaDichVu);
+				lblMaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+				
+						txtMaDV = new JTextField();
+						txtMaDV.setBounds(130, 34, 230, 33);
+						pnlDichVu.add(txtMaDV);
+						txtMaDV.setDisabledTextColor(Color.BLACK);
+						txtMaDV.setForeground(Color.BLACK);
+						txtMaDV.setBackground(Color.WHITE);
+						txtMaDV.setEnabled(false);
+						txtMaDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+						txtMaDV.setColumns(10);
+						
+								lblLoaiDV = new JLabel("Loại Dịch Vụ :");
+								lblLoaiDV.setBounds(28, 91, 104, 30);
+								pnlDichVu.add(lblLoaiDV);
+								lblLoaiDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+								cmbLoaiDV = new JComboBox<String>(cmbmodelLoaiDV);
+								cmbLoaiDV.setBounds(130, 90, 233, 33);
+								pnlDichVu.add(cmbLoaiDV);
+								cmbLoaiDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+								
+										lblLoaiDichVu = new JLabel("Tên Dịch Vụ :");
+										lblLoaiDichVu.setBounds(390, 35, 104, 30);
+										pnlDichVu.add(lblLoaiDichVu);
+										lblLoaiDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+										
+												txtGia = new JTextField();
+												txtGia.setBounds(500, 90, 230, 33);
+												pnlDichVu.add(txtGia);
+												txtGia.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+												txtGia.setColumns(10);
+												
+														txtTenDV = new JTextField();
+														txtTenDV.setBounds(500, 34, 230, 33);
+														pnlDichVu.add(txtTenDV);
+														txtTenDV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+														txtTenDV.setColumns(10);
+														
+																lblGiaDichVu = new JLabel("Giá Dịch vụ:");
+																lblGiaDichVu.setBounds(390, 91, 104, 30);
+																pnlDichVu.add(lblGiaDichVu);
+																lblGiaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+																
+																pnlLoaiDichVu = new JPanel();
+																pnlLoaiDichVu.setBorder(new TitledBorder(null, "Lo\u1EA1i d\u1ECBch v\u1EE5", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+																pnlLoaiDichVu.setBackground(new Color(230, 230, 250));
+																pnlLoaiDichVu.setBounds(830, 62, 509, 179);
+																pnlThongTin.add(pnlLoaiDichVu);
+																pnlLoaiDichVu.setLayout(null);
+																
+																textField = new JTextField();
+																textField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+																textField.setColumns(10);
+																textField.setBounds(163, 88, 295, 33);
+																pnlLoaiDichVu.add(textField);
+																
+																lblTnLoiDch = new JLabel("Tên loại dịch vụ:");
+																lblTnLoiDch.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+																lblTnLoiDch.setBounds(28, 89, 115, 30);
+																pnlLoaiDichVu.add(lblTnLoiDch);
+																
+																textField_1 = new JTextField();
+																textField_1.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+																textField_1.setColumns(10);
+																textField_1.setBounds(163, 34, 295, 33);
+																pnlLoaiDichVu.add(textField_1);
+																
+																lblLoaiDichVu_2 = new JLabel("Mã loại dịch vụ:");
+																lblLoaiDichVu_2.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+																lblLoaiDichVu_2.setBounds(28, 35, 110, 30);
+																pnlLoaiDichVu.add(lblLoaiDichVu_2);
+																
+																btnThemLoaiDichVu = new JButton("Thêm");
+																btnThemLoaiDichVu.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconThem2.png")));
+																btnThemLoaiDichVu.setForeground(Color.BLACK);
+																btnThemLoaiDichVu.setFont(new Font("Cambria", Font.BOLD, 13));
+																btnThemLoaiDichVu.setFocusPainted(false);
+																btnThemLoaiDichVu.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+																btnThemLoaiDichVu.setBackground(new Color(255, 128, 128));
+																btnThemLoaiDichVu.setBounds(49, 132, 100, 30);
+																pnlLoaiDichVu.add(btnThemLoaiDichVu);
+																
+																btnXoaLoaiDichVu = new JButton("Xóa");
+																btnXoaLoaiDichVu.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconXoa1.png")));
+																btnXoaLoaiDichVu.setForeground(Color.BLACK);
+																btnXoaLoaiDichVu.setFont(new Font("Cambria", Font.BOLD, 13));
+																btnXoaLoaiDichVu.setFocusPainted(false);
+																btnXoaLoaiDichVu.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+																btnXoaLoaiDichVu.setBackground(new Color(255, 128, 128));
+																btnXoaLoaiDichVu.setBounds(198, 132, 100, 30);
+																pnlLoaiDichVu.add(btnXoaLoaiDichVu);
+																
+																btnSuaLoaiDichVu = new JButton("Chỉnh sửa");
+																btnSuaLoaiDichVu.setIcon(new ImageIcon(GD_QuanLyDichVu.class.getResource("/images/iconChinhSua2.png")));
+																btnSuaLoaiDichVu.setForeground(Color.BLACK);
+																btnSuaLoaiDichVu.setFont(new Font("Cambria", Font.BOLD, 13));
+																btnSuaLoaiDichVu.setFocusPainted(false);
+																btnSuaLoaiDichVu.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+																btnSuaLoaiDichVu.setBackground(new Color(255, 128, 128));
+																btnSuaLoaiDichVu.setBounds(347, 132, 110, 30);
+																pnlLoaiDichVu.add(btnSuaLoaiDichVu);
 	}
 
 }

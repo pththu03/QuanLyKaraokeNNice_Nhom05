@@ -1,7 +1,9 @@
 package gui.lapHoaDon;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -91,7 +93,8 @@ public class GD_LapHoaDon extends JPanel {
 
 	public GD_LapHoaDon() {
 		setLayout(null);
-		setBounds(0, 0, 1365, 694);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 
 		JPanel pnlLapHoaDon = new JPanel();
 		pnlLapHoaDon.setBounds(0, 0, 1365, 694);

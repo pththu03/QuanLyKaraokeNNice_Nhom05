@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -154,7 +155,8 @@ public class GD_DatPhong extends JPanel {
 	public GD_DatPhong(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
-		setBounds(0, 0, 1365, 694);
+		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 
 		JPanel pnlDatPhong = new JPanel();
 		pnlDatPhong.setBounds(0, 0, 1365, 694);
