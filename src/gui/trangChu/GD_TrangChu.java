@@ -84,13 +84,13 @@ public class GD_TrangChu extends JFrame {
 		this.nhanVienEntity = nhanVien;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GD_TrangChu.class.getResource("/images/iconLogo.png")));
 		setResizable(false);
+		setSize(1365, 746);
 		setTitle("Quản lý hệ thống karaoke NNice");
 		setBackground(Color.WHITE);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setSize((int) screen.getWidth(), (int) screen.getHeight());
+		
 		setLocationRelativeTo(null);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		this.getContentPane().setSize(this.getWidth(), this.getHeight());
+		this.getContentPane().setSize(1365, 746);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 			public void windowClosing(WindowEvent windowEvent) {
@@ -272,13 +272,13 @@ public class GD_TrangChu extends JFrame {
 		JLabel lblSlogan2 = new JLabel("Khi đến với NNice");
 		lblSlogan2.setForeground(Color.WHITE);
 		lblSlogan2.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 30));
-		lblSlogan2.setBounds(44, 544, 229, 35);
+		lblSlogan2.setBounds(44, 544, 279, 35);
 		pnlBannner.add(lblSlogan2);
 
 		JLabel lblSlogan1 = new JLabel("Hát hay hơn");
 		lblSlogan1.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 30));
 		lblSlogan1.setForeground(Color.WHITE);
-		lblSlogan1.setBounds(44, 498, 157, 35);
+		lblSlogan1.setBounds(44, 498, 202, 35);
 		pnlBannner.add(lblSlogan1);
 
 		JLabel lblBanner = new JLabel("");

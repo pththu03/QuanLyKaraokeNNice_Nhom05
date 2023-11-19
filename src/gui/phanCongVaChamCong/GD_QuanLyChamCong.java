@@ -28,11 +28,6 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
-//import controller.ChamCongController;
-//import dao.ChamCongDAO;
-//import dao.PhanCongDAO;
-//import dao.QuanLyCaTrucDAO;
-//import dao.QuanLyNhanVienDAO;
 import entities.PhieuChamCongEntity;
 import entities.PhieuPhanCongEntity;
 import util.DateFormatter;
@@ -76,7 +71,7 @@ public class GD_QuanLyChamCong extends JPanel {
 		pnlChamCong.setLayout(null);
 
 		pnlChucNang = new JPanel();
-		pnlChucNang.setBackground(new Color(191, 205, 219));
+		pnlChucNang.setBackground(new Color(230, 230, 250));
 		pnlChucNang.setBounds(0, 0, 1365, 717);
 		pnlChamCong.add(pnlChucNang);
 		pnlChucNang.setLayout(null);
@@ -87,7 +82,7 @@ public class GD_QuanLyChamCong extends JPanel {
 		btnLuu.setFocusable(false);
 		btnLuu.setBackground(new Color(144, 238, 144));
 		btnLuu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnLuu.setBounds(1205, 572, 150, 35);
+		btnLuu.setBounds(1185, 571, 150, 35);
 		pnlChucNang.add(btnLuu);
 
 		String[] cols_ChamCong = { "STT", "Mã PPC", "Tên Nhân Viên", "Ca Trực", "Ngày", "Trạng Thái", "Lương" };
@@ -96,7 +91,7 @@ public class GD_QuanLyChamCong extends JPanel {
 		tblChamCong.setAutoCreateRowSorter(true);
 		tblChamCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		scrChamCong = new JScrollPane(tblChamCong);
-		scrChamCong.setBounds(10, 96, 1345, 465);
+		scrChamCong.setBounds(30, 96, 1305, 465);
 		pnlChucNang.add(scrChamCong);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -173,7 +168,7 @@ public class GD_QuanLyChamCong extends JPanel {
 		chkVang.setMinimumSize(new Dimension(81, 31));
 		chkVang.setMaximumSize(new Dimension(81, 31));
 		chkVang.setFocusPainted(false);
-		chkVang.setBackground(SystemColor.inactiveCaption);
+		chkVang.setBackground(new Color(230, 230, 250));
 		chkVang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		chkVang.setBounds(780, 572, 150, 30);
 		pnlChucNang.add(chkVang);

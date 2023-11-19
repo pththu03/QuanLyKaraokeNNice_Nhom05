@@ -28,14 +28,6 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JYearChooser;
 
-//import controller.ThongKeController;
-//import dao.LapHoaDonDAO;
-//import dao.QuanLyChiTietHoaDonDAO;
-//import dao.QuanLyHoaDonDAO;
-//import dao.QuanLyKhachHangDAO;
-//import dao.QuanLyNhanVienDAO;
-//import dao.QuanLyPhongDAO;
-//import dao.ThongKeDAO;
 import entities.ChiTietHoaDonEntity;
 import entities.HoaDonEntity;
 import entities.KhachHangEntity;
@@ -190,10 +182,9 @@ public class GD_ThongKe extends JPanel {
 	 */
 
 	public GD_ThongKe() {
+		setBackground(new Color(230, 230, 250));
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
-
+		setBounds(0, 0, 1365, 695);
 		/**
 		 * Thong ke doanh thu
 		 */
@@ -203,12 +194,13 @@ public class GD_ThongKe extends JPanel {
 		pnlThongKe.setLayout(null);
 
 		tabThongKe = new JTabbedPane(JTabbedPane.TOP);
+		tabThongKe.setBackground(new Color(230, 230, 250));
 		tabThongKe.setBorder(null);
 		tabThongKe.setBounds(0, 0, 1365, 695);
 		pnlThongKe.add(tabThongKe);
 
 		pnlThongKeDoanhThu = new JPanel();
-		pnlThongKeDoanhThu.setBackground(new Color(255, 192, 203));
+		pnlThongKeDoanhThu.setBackground(new Color(230, 230, 250));
 		pnlThongKeDoanhThu.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tabThongKe.addTab("Doanh Thu", null, pnlThongKeDoanhThu, null);
 		tabThongKe.setForegroundAt(0, SystemColor.desktop);
@@ -217,19 +209,21 @@ public class GD_ThongKe extends JPanel {
 		lblTieuDeDoanhThu = new JLabel("Thống kê doanh thu");
 		lblTieuDeDoanhThu.setBorder(null);
 		lblTieuDeDoanhThu.setForeground(SystemColor.desktop);
-		lblTieuDeDoanhThu.setBackground(Color.WHITE);
+		lblTieuDeDoanhThu.setBackground(new Color(230, 230, 250));
 		lblTieuDeDoanhThu.setHorizontalAlignment(SwingConstants.CENTER);
 		lblTieuDeDoanhThu.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		lblTieuDeDoanhThu.setBounds(0, 0, 1365, 50);
 		pnlThongKeDoanhThu.add(lblTieuDeDoanhThu);
 
 		pnlThongKeDoanhThuCon = new JPanel();
+		pnlThongKeDoanhThuCon.setBackground(new Color(230, 230, 250));
 		pnlThongKeDoanhThuCon.setBorder(null);
 		pnlThongKeDoanhThuCon.setBounds(0, 50, 1365, 617);
 		pnlThongKeDoanhThu.add(pnlThongKeDoanhThuCon);
 		pnlThongKeDoanhThuCon.setLayout(null);
 
 		radTheoNgay = new JRadioButton("Theo ngày");
+		radTheoNgay.setBackground(new Color(230, 230, 250));
 		radTheoNgay.setFocusable(false);
 		radTheoNgay.setSelected(true);
 		radTheoNgay.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -237,12 +231,14 @@ public class GD_ThongKe extends JPanel {
 		pnlThongKeDoanhThuCon.add(radTheoNgay);
 
 		radTheoThang = new JRadioButton("Theo tháng");
+		radTheoThang.setBackground(new Color(230, 230, 250));
 		radTheoThang.setFocusable(false);
 		radTheoThang.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		radTheoThang.setBounds(130, 15, 110, 23);
 		pnlThongKeDoanhThuCon.add(radTheoThang);
 
 		radTheoNam = new JRadioButton("Theo năm");
+		radTheoNam.setBackground(new Color(230, 230, 250));
 		radTheoNam.setFocusable(false);
 		radTheoNam.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		radTheoNam.setBounds(250, 15, 110, 23);
@@ -267,7 +263,7 @@ public class GD_ThongKe extends JPanel {
 
 		pnlTimKiemDoanhThu = new JPanel();
 		pnlTimKiemDoanhThu.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlTimKiemDoanhThu.setBackground(new Color(176, 196, 222));
+		pnlTimKiemDoanhThu.setBackground(new Color(230, 230, 250));
 		pnlTimKiemDoanhThu.setBounds(0, 0, 671, 56);
 		pnlChiTietDoanhThu.add(pnlTimKiemDoanhThu);
 		pnlTimKiemDoanhThu.setLayout(null);
@@ -286,12 +282,13 @@ public class GD_ThongKe extends JPanel {
 		pnlTimKiemDoanhThu.add(chonNgayDoanhThu);
 
 		btnTimKiemDoanhThuNgay = new JButton("Tìm kiếm");
-		btnTimKiemDoanhThuNgay.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTimKiemDoanhThuNgay.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
+		btnTimKiemDoanhThuNgay.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiemDoanhThuNgay.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemDoanhThuNgay.setFocusable(false);
 		btnTimKiemDoanhThuNgay.setBackground(new Color(144, 238, 144));
 //		btnTimKiemDoanhThuNgay.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
-		btnTimKiemDoanhThuNgay.setBounds(542, 12, 120, 35);
+		btnTimKiemDoanhThuNgay.setBounds(511, 10, 150, 35);
 		pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNgay);
 
 		btnTimKiemDoanhThuThang = new JButton("Tìm kiếm");
@@ -401,7 +398,7 @@ public class GD_ThongKe extends JPanel {
 
 		pnlDSDoanhThu = new JPanel();
 		pnlDSDoanhThu.setBorder(new MatteBorder(1, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlDSDoanhThu.setBackground(new Color(176, 196, 222));
+		pnlDSDoanhThu.setBackground(new Color(230, 230, 250));
 		pnlDSDoanhThu.setBounds(672, 0, 694, 564);
 		pnlThongTinDoanhThu.add(pnlDSDoanhThu);
 		pnlDSDoanhThu.setLayout(null);
@@ -415,12 +412,13 @@ public class GD_ThongKe extends JPanel {
 		pnlDSDoanhThu.add(scrHoaDon);
 
 		btnXemChiTietHoaDonDoanhThu = new JButton("Xem chi tiết hóa đơn");
+		btnXemChiTietHoaDonDoanhThu.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconMatMo.png")));
 		btnXemChiTietHoaDonDoanhThu.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
 		btnXemChiTietHoaDonDoanhThu.setForeground(new Color(0, 0, 0));
 		btnXemChiTietHoaDonDoanhThu.setBackground(new Color(144, 238, 144));
 		btnXemChiTietHoaDonDoanhThu.setFocusable(false);
 //		btnXemChiTietHoaDonDoanhThu.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconNhinMK.png")));
-		btnXemChiTietHoaDonDoanhThu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnXemChiTietHoaDonDoanhThu.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTietHoaDonDoanhThu.setBounds(468, 507, 216, 35);
 		pnlDSDoanhThu.add(btnXemChiTietHoaDonDoanhThu);
 
@@ -428,7 +426,7 @@ public class GD_ThongKe extends JPanel {
 		 * Thong ke luong nhan vien
 		 */
 		pnlThongKeLuongNhanVien = new JPanel();
-		pnlThongKeLuongNhanVien.setBackground(new Color(255, 192, 203));
+		pnlThongKeLuongNhanVien.setBackground(new Color(230, 230, 250));
 		pnlThongKeLuongNhanVien.setBorder(null);
 		tabThongKe.addTab("Lương nhân viên", null, pnlThongKeLuongNhanVien, null);
 		pnlThongKeLuongNhanVien.setLayout(null);
@@ -438,7 +436,7 @@ public class GD_ThongKe extends JPanel {
 		lblTieuDeLuongNhanVien.setForeground(Color.BLACK);
 		lblTieuDeLuongNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		lblTieuDeLuongNhanVien.setBorder(null);
-		lblTieuDeLuongNhanVien.setBackground(Color.WHITE);
+		lblTieuDeLuongNhanVien.setBackground(new Color(230, 230, 250));
 		lblTieuDeLuongNhanVien.setBounds(0, 0, 1365, 50);
 		pnlThongKeLuongNhanVien.add(lblTieuDeLuongNhanVien);
 
@@ -457,7 +455,7 @@ public class GD_ThongKe extends JPanel {
 		pnlTimKiemLuong = new JPanel();
 		pnlTimKiemLuong.setLayout(null);
 		pnlTimKiemLuong.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlTimKiemLuong.setBackground(new Color(176, 196, 222));
+		pnlTimKiemLuong.setBackground(new Color(230, 230, 250));
 		pnlTimKiemLuong.setBounds(0, 0, 672, 56);
 		pnlChiTietLuongNhanVien.add(pnlTimKiemLuong);
 
@@ -484,12 +482,13 @@ public class GD_ThongKe extends JPanel {
 		pnlTimKiemLuong.add(chonNamNhanVien);
 
 		btnTimKiemLuong = new JButton("Tìm kiếm");
-		btnTimKiemLuong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTimKiemLuong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
+		btnTimKiemLuong.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiemLuong.setBackground(new Color(144, 238, 144));
 		btnTimKiemLuong.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemLuong.setFocusable(false);
 //		btnTimKiemLuong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
-		btnTimKiemLuong.setBounds(542, 10, 120, 35);
+		btnTimKiemLuong.setBounds(512, 10, 150, 35);
 		pnlTimKiemLuong.add(btnTimKiemLuong);
 
 		lblTongTienLuong = new JLabel("Tổng tiền lương:");
@@ -542,7 +541,7 @@ public class GD_ThongKe extends JPanel {
 
 		pnlDSLuongNhanVien = new JPanel();
 		pnlDSLuongNhanVien.setBorder(new MatteBorder(1, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlDSLuongNhanVien.setBackground(new Color(176, 196, 222));
+		pnlDSLuongNhanVien.setBackground(new Color(230, 230, 250));
 		pnlDSLuongNhanVien.setBounds(672, 0, 694, 617);
 		pnlThongKeLuongNhanVienNho.add(pnlDSLuongNhanVien);
 		pnlDSLuongNhanVien.setLayout(null);
@@ -556,10 +555,11 @@ public class GD_ThongKe extends JPanel {
 		pnlDSLuongNhanVien.add(scrNhanVien);
 
 		btnXemChiTietChamCong = new JButton("Xem chi tiết chấm công");
+		btnXemChiTietChamCong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconMatMo.png")));
 		btnXemChiTietChamCong.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 //		btnXemChiTietChamCong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconNhinMK.png")));
 		btnXemChiTietChamCong.setForeground(Color.BLACK);
-		btnXemChiTietChamCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnXemChiTietChamCong.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTietChamCong.setFocusable(false);
 		btnXemChiTietChamCong.setBackground(new Color(144, 238, 144));
 		btnXemChiTietChamCong.setBounds(468, 571, 216, 35);
@@ -570,7 +570,7 @@ public class GD_ThongKe extends JPanel {
 		 */
 
 		pnlThongKeKhachHang = new JPanel();
-		pnlThongKeKhachHang.setBackground(new Color(255, 192, 203));
+		pnlThongKeKhachHang.setBackground(new Color(230, 230, 250));
 		pnlThongKeKhachHang.setToolTipText("");
 		pnlThongKeKhachHang.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		tabThongKe.addTab("Số lần đặt phòng của khách hàng", null, pnlThongKeKhachHang, null);
@@ -600,7 +600,7 @@ public class GD_ThongKe extends JPanel {
 		pnlTimKiemKhachHang = new JPanel();
 		pnlTimKiemKhachHang.setLayout(null);
 		pnlTimKiemKhachHang.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlTimKiemKhachHang.setBackground(new Color(176, 196, 222));
+		pnlTimKiemKhachHang.setBackground(new Color(230, 230, 250));
 		pnlTimKiemKhachHang.setBounds(0, 0, 672, 56);
 		pnlChiTietKhachHang.add(pnlTimKiemKhachHang);
 
@@ -623,12 +623,13 @@ public class GD_ThongKe extends JPanel {
 		pnlTimKiemKhachHang.add(lblChonNamKhachHang);
 
 		btnTimKiemKhachHang = new JButton("Tìm kiếm");
-		btnTimKiemKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
+		btnTimKiemKhachHang.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiemKhachHang.setFocusable(false);
 		btnTimKiemKhachHang.setBackground(new Color(144, 238, 144));
 		btnTimKiemKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 //		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
-		btnTimKiemKhachHang.setBounds(542, 10, 120, 35);
+		btnTimKiemKhachHang.setBounds(512, 11, 150, 35);
 		pnlTimKiemKhachHang.add(btnTimKiemKhachHang);
 
 		chonNamKhachHang = new JYearChooser();
@@ -673,7 +674,7 @@ public class GD_ThongKe extends JPanel {
 
 		pnlDSKhachHang = new JPanel();
 		pnlDSKhachHang.setBorder(new MatteBorder(1, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlDSKhachHang.setBackground(new Color(176, 196, 222));
+		pnlDSKhachHang.setBackground(new Color(230, 230, 250));
 		pnlDSKhachHang.setBounds(672, 0, 694, 617);
 		pnlThongKeKhachHangNho.add(pnlDSKhachHang);
 		pnlDSKhachHang.setLayout(null);
@@ -690,10 +691,11 @@ public class GD_ThongKe extends JPanel {
 		pnlDSKhachHang.add(scrKhachHang);
 
 		btnXemChiTietHoaDonKhachHang = new JButton("Xem chi tiết hóa đơn");
+		btnXemChiTietHoaDonKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconMatMo.png")));
 		btnXemChiTietHoaDonKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 //		btnXemChiTietHoaDonKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconNhinMK.png")));
 		btnXemChiTietHoaDonKhachHang.setForeground(Color.BLACK);
-		btnXemChiTietHoaDonKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnXemChiTietHoaDonKhachHang.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTietHoaDonKhachHang.setFocusable(false);
 		btnXemChiTietHoaDonKhachHang.setBackground(new Color(144, 238, 144));
 		btnXemChiTietHoaDonKhachHang.setBounds(468, 571, 216, 35);

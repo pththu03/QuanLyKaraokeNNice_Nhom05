@@ -22,12 +22,14 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import controller.DatDichVuController;
 //import controller.DatDichVuController;
 //import dao.DatDichVuDAO;
 //import dao.QuanLyDichVuDAO;
 //import dao.QuanLyPhongDAO;
 import entities.DichVuEntity;
 import entities.PhongEntity;
+
 public class GD_DatDichVu extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -88,16 +90,11 @@ public class GD_DatDichVu extends JPanel {
 	private List<DichVuEntity> listDichVu;
 	private List<PhongEntity> listPhong;
 
-//	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-//	private QuanLyDichVuDAO quanLyDichVuDAO = new QuanLyDichVuDAO();
-//	private DatDichVuDAO datDichVuDAO = new DatDichVuDAO();
-//	private DatDichVuController controller;
 	private PhongEntity phongEntity;
 
 	public GD_DatDichVu() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
+		setBounds(0, 0, 1365, 694);
 
 		JPanel panel_DatDichVu = new JPanel();
 		panel_DatDichVu.setBounds(0, 0, 1365, 694);
@@ -113,19 +110,19 @@ public class GD_DatDichVu extends JPanel {
 
 		pnlTimKiem = new JPanel();
 		pnlTimKiem.setBorder(null);
-		pnlTimKiem.setBackground(new Color(204, 204, 255));
+		pnlTimKiem.setBackground(new Color(230, 230, 250));
 		pnlTimKiem.setBounds(0, 0, 672, 195);
 		panel_DichVu.add(pnlTimKiem);
 		pnlTimKiem.setLayout(null);
 
 		lblTimTheoTenDichVu = new JLabel("Tên dịch vụ:");
 		lblTimTheoTenDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblTimTheoTenDichVu.setBounds(345, 30, 80, 25);
+		lblTimTheoTenDichVu.setBounds(345, 30, 87, 25);
 		pnlTimKiem.add(lblTimTheoTenDichVu);
 
 		lblTimKiemTheoGiaDichVu = new JLabel("Giá dịch vụ:");
 		lblTimKiemTheoGiaDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblTimKiemTheoGiaDichVu.setBounds(30, 30, 76, 25);
+		lblTimKiemTheoGiaDichVu.setBounds(30, 30, 90, 25);
 		pnlTimKiem.add(lblTimKiemTheoGiaDichVu);
 
 		txtTimKiemTheoTenDichVu = new JTextField();
@@ -150,21 +147,21 @@ public class GD_DatDichVu extends JPanel {
 		txtGiaDichVuToiDa.setColumns(10);
 
 		btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconTimKiem.png")));
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnTimKiem.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiem.setBackground(new Color(144, 238, 144));
 		btnTimKiem.setFocusable(false);
-		btnTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		btnTimKiem.setBounds(522, 130, 120, 35);
+		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnTimKiem.setBounds(492, 130, 150, 35);
 		pnlTimKiem.add(btnTimKiem);
 
 		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconLamMoi.png")));
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setFocusable(false);
 		btnLamMoi.setBackground(new Color(144, 238, 144));
-//		btnLamMoi.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconLamMoi3.png")));
-		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnLamMoi.setBounds(371, 130, 120, 35);
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnLamMoi.setBounds(309, 131, 150, 35);
 		pnlTimKiem.add(btnLamMoi);
 
 		lblTimTheoLoaiDichVu = new JLabel("Loại dịch vụ:");
@@ -174,12 +171,13 @@ public class GD_DatDichVu extends JPanel {
 
 		cmbmodelTimLoaiDichVu = new DefaultComboBoxModel<>(new String[] { "Tất cả", "Đồ uống", "Món ăn", "Tiệc" });
 		cmbTimLoaiDichVu = new JComboBox<String>(cmbmodelTimLoaiDichVu);
+		cmbTimLoaiDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		cmbTimLoaiDichVu.setBounds(442, 80, 200, 30);
 		pnlTimKiem.add(cmbTimLoaiDichVu);
 
 		pnlDanhSachDichVu = new JPanel();
 		pnlDanhSachDichVu.setBorder(null);
-		pnlDanhSachDichVu.setBackground(new Color(250, 240, 230));
+		pnlDanhSachDichVu.setBackground(new Color(230, 230, 250));
 		pnlDanhSachDichVu.setBounds(0, 195, 672, 318);
 		panel_DichVu.add(pnlDanhSachDichVu);
 		pnlDanhSachDichVu.setLayout(null);
@@ -202,7 +200,7 @@ public class GD_DatDichVu extends JPanel {
 
 		pnlThongTinDichVu = new JPanel();
 		pnlThongTinDichVu.setBorder(null);
-		pnlThongTinDichVu.setBackground(new Color(204, 204, 255));
+		pnlThongTinDichVu.setBackground(new Color(230, 230, 250));
 		pnlThongTinDichVu.setBounds(0, 513, 672, 181);
 		panel_DichVu.add(pnlThongTinDichVu);
 		pnlThongTinDichVu.setLayout(null);
@@ -249,12 +247,12 @@ public class GD_DatDichVu extends JPanel {
 		txtNhapSoLuong.setColumns(10);
 
 		btnThem = new JButton("Thêm");
+		btnThem.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconThem.png")));
 		btnThem.setFocusable(false);
 		btnThem.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnThem.setBackground(new Color(144, 238, 144));
-//		btnThem.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconThem3.png")));
-		btnThem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnThem.setBounds(521, 130, 120, 35);
+		btnThem.setBackground(new Color(255, 128, 128));
+		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnThem.setBounds(491, 130, 150, 35);
 		pnlThongTinDichVu.add(btnThem);
 
 		cmbmodelLoaiDichVu = new DefaultComboBoxModel<>(new String[] { " ", "Đồ uống", "Món ăn", "Tiệc" });
@@ -264,7 +262,7 @@ public class GD_DatDichVu extends JPanel {
 
 		pnlChiTietDatDichVu = new JPanel();
 		pnlChiTietDatDichVu.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlChiTietDatDichVu.setBackground(new Color(255, 192, 203));
+		pnlChiTietDatDichVu.setBackground(new Color(230, 230, 250));
 		pnlChiTietDatDichVu.setBounds(672, 0, 694, 694);
 		panel_DatDichVu.add(pnlChiTietDatDichVu);
 		pnlChiTietDatDichVu.setLayout(null);
@@ -315,39 +313,39 @@ public class GD_DatDichVu extends JPanel {
 		tblChiTietDatDichVu.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 
 		btnXoaTatCa = new JButton("Xóa toàn bộ");
+		btnXoaTatCa.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconHuy.png")));
 		btnXoaTatCa.setFocusable(false);
 		btnXoaTatCa.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnXoaTatCa.setBackground(new Color(144, 238, 144));
-//		btnXoaTatCa.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconXoa3.png")));
-		btnXoaTatCa.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnXoaTatCa.setBounds(360, 621, 135, 33);
+		btnXoaTatCa.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnXoaTatCa.setBounds(354, 621, 150, 35);
 		pnlChiTietDatDichVu.add(btnXoaTatCa);
 
 		btnChinhSua = new JButton("Chỉnh sửa");
+		btnChinhSua.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setFocusable(false);
 		btnChinhSua.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
-		btnChinhSua.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//		btnChinhSua.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconChinhSua1.png")));
-		btnChinhSua.setBounds(30, 621, 135, 33);
+		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnChinhSua.setBounds(18, 621, 150, 35);
 		pnlChiTietDatDichVu.add(btnChinhSua);
 
 		btnXoaDaChon = new JButton("Xóa đã chọn");
+		btnXoaDaChon.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconXoa1.png")));
 		btnXoaDaChon.setFocusable(false);
 		btnXoaDaChon.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnXoaDaChon.setBackground(new Color(144, 238, 144));
-		btnXoaDaChon.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//		btnXoaDaChon.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconHuy2.png")));
-		btnXoaDaChon.setBounds(195, 621, 135, 33);
+		btnXoaDaChon.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnXoaDaChon.setBounds(186, 621, 150, 35);
 		pnlChiTietDatDichVu.add(btnXoaDaChon);
 
 		btnDat = new JButton("Đặt dịch vụ");
+		btnDat.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconChon.png")));
 		btnDat.setFocusable(false);
 		btnDat.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDat.setBackground(new Color(144, 238, 144));
-		btnDat.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//		btnDat.setIcon(new ImageIcon(GD_DatDichVu.class.getResource("/images/iconChon1.png")));
-		btnDat.setBounds(525, 621, 135, 33);
+		btnDat.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnDat.setBounds(522, 621, 150, 35);
 		pnlChiTietDatDichVu.add(btnDat);
 
 		lblChonPhong = new JLabel("Chọn phòng:");
@@ -360,17 +358,53 @@ public class GD_DatDichVu extends JPanel {
 		cmbChonPhong.setBounds(134, 101, 200, 30);
 		pnlChiTietDatDichVu.add(cmbChonPhong);
 
-//		controller = new DatDichVuController(this);
-//		btnTimKiem.addActionListener(controller);
-//		btnThem.addActionListener(controller);
-//		btnXoaTatCa.addActionListener(controller);
-//		btnXoaDaChon.addActionListener(controller);
-//		btnChinhSua.addActionListener(controller);
-//		btnDat.addActionListener(controller);
-//		btnLamMoi.addActionListener(controller);
-//		tblChiTietDatDichVu.addMouseListener(controller);
-//		tblDichVu.addMouseListener(controller);
-//		cmbChonPhong.addItemListener(controller);
+		DatDichVuController controller = new DatDichVuController(this);
+		btnTimKiem.addActionListener(controller);
+		btnThem.addActionListener(controller);
+		btnXoaTatCa.addActionListener(controller);
+		btnXoaDaChon.addActionListener(controller);
+		btnChinhSua.addActionListener(controller);
+		btnDat.addActionListener(controller);
+		btnLamMoi.addActionListener(controller);
+		tblChiTietDatDichVu.addMouseListener(controller);
+		tblDichVu.addMouseListener(controller);
+		cmbChonPhong.addItemListener(controller);
+	}
+
+	public void hienThiThongTin() {
+
+	}
+
+	public void chonSoPhong() {
+
+	}
+
+	public void chonLamMoi() {
+
+	}
+
+	public void chonTimKiem() {
+
+	}
+
+	public void chonThem() {
+
+	}
+
+	public void chonXoaDaChon() {
+
+	}
+
+	public void chonXoaTatCa() {
+
+	}
+
+	public void chonChinhSua() {
+
+	}
+
+	public void chonDat() {
+
 	}
 
 }

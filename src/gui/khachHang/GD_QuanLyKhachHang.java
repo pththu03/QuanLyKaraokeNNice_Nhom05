@@ -21,6 +21,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import entities.KhachHangEntity;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GD_QuanLyKhachHang extends JPanel {
 
@@ -71,9 +73,8 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 	public GD_QuanLyKhachHang() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
-
+		setBounds(0, 0, 1365, 694);
+		
 		pnlKhachHang = new JPanel();
 		pnlKhachHang.setBackground(new Color(211, 211, 211));
 		pnlKhachHang.setBounds(0, 0, 1365, 694);
@@ -82,8 +83,8 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 		pnlChucNang = new JPanel();
 		pnlChucNang.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlChucNang.setBackground(new Color(250, 240, 230));
-		pnlChucNang.setBounds(672, 1, 694, 693);
+		pnlChucNang.setBackground(new Color(230, 230, 250));
+		pnlChucNang.setBounds(0, 370, 1365, 324);
 		pnlKhachHang.add(pnlChucNang);
 		pnlChucNang.setLayout(null);
 
@@ -92,89 +93,107 @@ public class GD_QuanLyKhachHang extends JPanel {
 		tblmdelKhachHang = new DefaultTableModel(cols_KhachHang, 0);
 		tblKhachHang = new JTable(tblmdelKhachHang);
 		scrKhachHang = new JScrollPane(tblKhachHang);
-		scrKhachHang.setBounds(10, 89, 674, 593);
+		scrKhachHang.setBounds(30, 58, 1305, 256);
 		pnlChucNang.add(scrKhachHang);
 
 		lblDanhSchKhch = new JLabel("Danh sách khách hàng");
 		lblDanhSchKhch.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDanhSchKhch.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblDanhSchKhch.setBounds(0, 24, 694, 40);
+		lblDanhSchKhch.setBounds(0, 10, 1365, 40);
 		pnlChucNang.add(lblDanhSchKhch);
 
 		pnlTimKiem = new JPanel();
-		pnlTimKiem.setBounds(0, 519, 672, 175);
+		pnlTimKiem.setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 0)));
+		pnlTimKiem.setBounds(0, 0, 1365, 137);
 		pnlKhachHang.add(pnlTimKiem);
-		pnlTimKiem.setBackground(new Color(204, 204, 255));
+		pnlTimKiem.setBackground(new Color(230, 230, 250));
 		pnlTimKiem.setLayout(null);
 
 		lblSDT = new JLabel("Số điện thoại:");
-		lblSDT.setBounds(22, 71, 110, 25);
+		lblSDT.setBounds(380, 30, 110, 30);
 		pnlTimKiem.add(lblSDT);
 		lblSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem.png")));
+		btnTimKiem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnTimKiem.setFocusable(false);
 		btnTimKiem.setBackground(new Color(144, 238, 144));
-		btnTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 //		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem1.png")));
-		btnTimKiem.setBounds(510, 122, 120, 35);
+		btnTimKiem.setBounds(1185, 85, 150, 35);
 		pnlTimKiem.add(btnTimKiem);
 
 		txtSoDienThoai = new JTextField();
 		txtSoDienThoai.setColumns(10);
-		txtSoDienThoai.setBounds(135, 70, 171, 27);
+		txtSoDienThoai.setBounds(480, 30, 200, 30);
 		pnlTimKiem.add(txtSoDienThoai);
 
 		lblTenKH = new JLabel("Tên khách hàng:");
 		lblTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTenKH.setBounds(22, 24, 110, 20);
+		lblTenKH.setBounds(30, 30, 110, 30);
 		pnlTimKiem.add(lblTenKH);
 
 		txtTenKhachHang = new JTextField();
 		txtTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtTenKhachHang.setColumns(10);
-		txtTenKhachHang.setBounds(135, 21, 178, 27);
+		txtTenKhachHang.setBounds(140, 30, 200, 30);
 		pnlTimKiem.add(txtTenKhachHang);
 
 		JPanel pnlTimTheoSoLanDatPhong = new JPanel();
-		pnlTimTheoSoLanDatPhong.setBackground(new Color(204, 204, 255));
+		pnlTimTheoSoLanDatPhong.setBackground(new Color(230, 230, 250));
 		pnlTimTheoSoLanDatPhong.setBorder(new TitledBorder(null, "S\u1ED1 l\u1EA7n \u0111\u1EB7t ph\u00F2ng",
 				TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		pnlTimTheoSoLanDatPhong.setBounds(350, 11, 280, 100);
+		pnlTimTheoSoLanDatPhong.setBounds(725, 15, 610, 60);
 		pnlTimKiem.add(pnlTimTheoSoLanDatPhong);
 		pnlTimTheoSoLanDatPhong.setLayout(null);
 
 		JLabel lblSoLanDatPhongTu = new JLabel("Từ:");
 		lblSoLanDatPhongTu.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSoLanDatPhongTu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSoLanDatPhongTu.setBounds(21, 21, 40, 27);
+		lblSoLanDatPhongTu.setBounds(21, 20, 40, 30);
 		pnlTimTheoSoLanDatPhong.add(lblSoLanDatPhongTu);
 
 		JLabel lblSoLanDatPhongDen = new JLabel("Đến:");
 		lblSoLanDatPhongDen.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSoLanDatPhongDen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSoLanDatPhongDen.setBounds(21, 60, 54, 27);
+		lblSoLanDatPhongDen.setBounds(300, 19, 54, 30);
 		pnlTimTheoSoLanDatPhong.add(lblSoLanDatPhongDen);
 
 		txtSoLanDatPhongTu = new JTextField();
 		txtSoLanDatPhongTu.setColumns(10);
-		txtSoLanDatPhongTu.setBounds(71, 21, 178, 27);
+		txtSoLanDatPhongTu.setBounds(60, 20, 200, 30);
 		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongTu);
 
 		txtSoLanDatPhongDen = new JTextField();
 		txtSoLanDatPhongDen.setColumns(10);
-		txtSoLanDatPhongDen.setBounds(71, 59, 178, 27);
+		txtSoLanDatPhongDen.setBounds(350, 20, 200, 30);
 		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongDen);
+		
+				btnLamMoi = new JButton("Làm mới");
+				btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
+				btnLamMoi.setBounds(1000, 85, 150, 35);
+				pnlTimKiem.add(btnLamMoi);
+				//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi3.png")));
+						btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+						btnLamMoi.setFocusable(false);
+						btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+						btnLamMoi.setBackground(new Color(144, 238, 144));
 
 		JPanel pnlThongTin = new JPanel();
-		pnlThongTin.setBackground(new Color(255, 192, 203));
-		pnlThongTin.setBounds(0, 1, 672, 519);
+		pnlThongTin.setBorder(null);
+		pnlThongTin.setBackground(new Color(230, 230, 250));
+		pnlThongTin.setBounds(0, 137, 1365, 233);
 		pnlKhachHang.add(pnlThongTin);
 		pnlThongTin.setLayout(null);
 
-		lblMaKhachHang = new JLabel("Mã Khách Hàng :");
-		lblMaKhachHang.setBounds(80, 106, 112, 25);
+		lblMaKhachHang = new JLabel("Mã Khách Hàng:");
+		lblMaKhachHang.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblMaKhachHang.setBounds(27, 70, 112, 30);
 		pnlThongTin.add(lblMaKhachHang);
 		lblMaKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
@@ -182,52 +201,56 @@ public class GD_QuanLyKhachHang extends JPanel {
 		txtMaKH.setDisabledTextColor(Color.BLACK);
 		txtMaKH.setForeground(Color.BLACK);
 		txtMaKH.setBackground(Color.WHITE);
-		txtMaKH.setBounds(228, 105, 351, 27);
+		txtMaKH.setBounds(150, 70, 290, 30);
 		pnlThongTin.add(txtMaKH);
 		txtMaKH.setEnabled(false);
 		txtMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtMaKH.setColumns(10);
 
-		lblTenKhachHang = new JLabel("Tên Khách Hàng :");
-		lblTenKhachHang.setBounds(80, 156, 112, 25);
+		lblTenKhachHang = new JLabel("Tên Khách Hàng:");
+		lblTenKhachHang.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblTenKhachHang.setBounds(466, 70, 112, 30);
 		pnlThongTin.add(lblTenKhachHang);
 		lblTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtTenKH = new JTextField();
-		txtTenKH.setBounds(228, 155, 351, 27);
+		txtTenKH.setBounds(585, 70, 290, 30);
 		pnlThongTin.add(txtTenKH);
 		txtTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtTenKH.setColumns(10);
 
-		lblNamSinh = new JLabel("Năm Sinh :");
-		lblNamSinh.setBounds(80, 206, 99, 25);
+		lblNamSinh = new JLabel("Năm Sinh:");
+		lblNamSinh.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNamSinh.setBounds(40, 120, 99, 30);
 		pnlThongTin.add(lblNamSinh);
 		lblNamSinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtSDT = new JTextField();
-		txtSDT.setBounds(228, 255, 351, 27);
+		txtSDT.setBounds(585, 120, 290, 30);
 		pnlThongTin.add(txtSDT);
 		txtSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSDT.setColumns(10);
 
-		lblSoDienThoai = new JLabel("Số Điện Thoại :");
-		lblSoDienThoai.setBounds(80, 256, 99, 25);
+		lblSoDienThoai = new JLabel("Số Điện Thoại:");
+		lblSoDienThoai.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblSoDienThoai.setBounds(479, 120, 99, 30);
 		pnlThongTin.add(lblSoDienThoai);
 		lblSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtNamSinh = new JTextField();
-		txtNamSinh.setBounds(228, 205, 351, 27);
+		txtNamSinh.setBounds(150, 120, 290, 30);
 		pnlThongTin.add(txtNamSinh);
 		txtNamSinh.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtNamSinh.setColumns(10);
 
 		lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(80, 306, 59, 25);
+		lblEmail.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblEmail.setBounds(978, 120, 59, 30);
 		pnlThongTin.add(lblEmail);
 		lblEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
 		txtEmail = new JTextField();
-		txtEmail.setBounds(228, 305, 351, 27);
+		txtEmail.setBounds(1045, 120, 290, 30);
 		pnlThongTin.add(txtEmail);
 		txtEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtEmail.setColumns(10);
@@ -235,47 +258,41 @@ public class GD_QuanLyKhachHang extends JPanel {
 		lblKhachHang = new JLabel("Thông Tin Khách Hàng");
 		lblKhachHang.setHorizontalAlignment(SwingConstants.CENTER);
 		lblKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 22));
-		lblKhachHang.setBounds(0, 34, 672, 61);
+		lblKhachHang.setBounds(0, 0, 1365, 60);
 		pnlThongTin.add(lblKhachHang);
 
 		btnChinhSua = new JButton("Chỉnh Sửa");
-		btnChinhSua.setBounds(425, 411, 120, 35);
+		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconChinhSua1.png")));
+		btnChinhSua.setBounds(1185, 170, 150, 35);
 		pnlThongTin.add(btnChinhSua);
 		btnChinhSua.setFocusable(false);
 //		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
-		btnChinhSua.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 
 		btnThem = new JButton("Thêm");
-		btnThem.setBounds(279, 411, 120, 35);
+		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem.png")));
+		btnThem.setBounds(1000, 170, 150, 35);
 		pnlThongTin.add(btnThem);
 //		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem3.png")));
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setBackground(new Color(144, 238, 144));
-		btnThem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
 
 		txtSLDatPhong = new JTextField();
 		txtSLDatPhong.setBackground(Color.WHITE);
 		txtSLDatPhong.setEditable(false);
 		txtSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSLDatPhong.setColumns(10);
-		txtSLDatPhong.setBounds(228, 355, 351, 27);
+		txtSLDatPhong.setBounds(1045, 70, 290, 30);
 		pnlThongTin.add(txtSLDatPhong);
 
-		lblSLDatPhong = new JLabel("Số lượng đặt phòng:");
+		lblSLDatPhong = new JLabel("Số lần đặt phòng:");
+		lblSLDatPhong.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblSLDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSLDatPhong.setBounds(80, 356, 129, 25);
+		lblSLDatPhong.setBounds(897, 70, 140, 30);
 		pnlThongTin.add(lblSLDatPhong);
-
-		btnLamMoi = new JButton("Làm mới");
-//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi3.png")));
-		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnLamMoi.setFocusable(false);
-		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnLamMoi.setBackground(new Color(144, 238, 144));
-		btnLamMoi.setBounds(133, 411, 120, 35);
-		pnlThongTin.add(btnLamMoi);
 
 //		controller = new QuanLyKhachHangController(this);
 //		btnThem.addActionListener(controller);

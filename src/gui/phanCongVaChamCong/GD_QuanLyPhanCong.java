@@ -24,13 +24,11 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
-//import controller.PhanCongController;
-//import dao.PhanCongDAO;
-//import dao.QuanLyCaTrucDAO;
-//import dao.QuanLyNhanVienDAO;
 import entities.CaTrucEntity;
 import entities.NhanVienEntity;
 import entities.PhieuPhanCongEntity;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GD_QuanLyPhanCong extends JPanel {
 
@@ -38,24 +36,20 @@ public class GD_QuanLyPhanCong extends JPanel {
 	// JPanel
 	private JPanel pnlPhanCong;
 	private JPanel pnlChiTietPhanCong;
-	private JPanel pnlBangPhanCong;
+	private JPanel pnlDanhSachPhanCong;
 	// JtextField
 	private JTextField txtMaPC;
-	private JTextField txtTenNV;
-	private JTextField txtCaTruc;
 	// Jlabel
 	private JLabel lblChiTietPhanCong;
 	private JLabel lblMaPC;
 	private JLabel lblNgay;
-	private JLabel lblMaNV;
-	private JLabel lblHoVaTen;
-	private JLabel lblMaCaLam;
+	private JLabel lblNhanVien;
 	private JLabel lblCaTruc;
 	private JLabel lblDsPhanCong;
 	// JcomboBox
-	public JComboBox<String> cmbMaNV;
+	public JComboBox<String> cmbNhanVien;
 	private DefaultComboBoxModel<String> cmbmodelMaNV;
-	public JComboBox<String> cmbMaCaTruc;
+	public JComboBox<String> cmbCaTruc;
 	private DefaultComboBoxModel<String> cmbmodelCaTruc;
 	// Jtable
 	private JTable tblPhanCong;
@@ -79,8 +73,7 @@ public class GD_QuanLyPhanCong extends JPanel {
 
 	public GD_QuanLyPhanCong() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
+		setBounds(0, 0, 1365, 694);
 		
 		pnlPhanCong = new JPanel();
 		pnlPhanCong.setBackground(new Color(255, 255, 255));
@@ -89,21 +82,21 @@ public class GD_QuanLyPhanCong extends JPanel {
 		pnlPhanCong.setLayout(null);
 
 		pnlChiTietPhanCong = new JPanel();
-		pnlChiTietPhanCong.setBorder(new MatteBorder(0, 0, 0, 1, (Color) new Color(0, 0, 0)));
-		pnlChiTietPhanCong.setBackground(new Color(255, 192, 203));
-		pnlChiTietPhanCong.setBounds(0, 0, 672, 694);
+		pnlChiTietPhanCong.setBorder(null);
+		pnlChiTietPhanCong.setBackground(new Color(230, 230, 250));
+		pnlChiTietPhanCong.setBounds(0, 0, 1365, 290);
 		pnlPhanCong.add(pnlChiTietPhanCong);
 		pnlChiTietPhanCong.setLayout(null);
 
 		lblChiTietPhanCong = new JLabel(" Chi tiết Phân Công");
 		lblChiTietPhanCong.setHorizontalAlignment(SwingConstants.CENTER);
-		lblChiTietPhanCong.setBounds(0, 140, 672, 40);
+		lblChiTietPhanCong.setBounds(0, 0, 1365, 60);
 		lblChiTietPhanCong.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		pnlChiTietPhanCong.add(lblChiTietPhanCong);
 
-		lblMaPC = new JLabel("Mã PC:");
+		lblMaPC = new JLabel("Mã Phân Công:");
 		lblMaPC.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblMaPC.setBounds(90, 211, 80, 30);
+		lblMaPC.setBounds(206, 70, 110, 30);
 		pnlChiTietPhanCong.add(lblMaPC);
 
 		txtMaPC = new JTextField();
@@ -113,107 +106,92 @@ public class GD_QuanLyPhanCong extends JPanel {
 		txtMaPC.setSelectedTextColor(Color.BLACK);
 		txtMaPC.setSelectionColor(Color.BLACK);
 		txtMaPC.setEnabled(false);
-		txtMaPC.setBounds(170, 211, 422, 30);
+		txtMaPC.setBounds(330, 70, 290, 30);
 		pnlChiTietPhanCong.add(txtMaPC);
 		txtMaPC.setColumns(10);
 
 		lblNgay = new JLabel("Ngày:");
 		lblNgay.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblNgay.setBounds(90, 261, 80, 30);
+		lblNgay.setBounds(758, 70, 80, 30);
 		pnlChiTietPhanCong.add(lblNgay);
 
 		dchNgay = new JDateChooser();
 		dchNgay.setDateFormatString("dd/MM/yyyy");
-		dchNgay.setBounds(170, 261, 422, 30);
+		dchNgay.setBounds(815, 70, 290, 30);
 		pnlChiTietPhanCong.add(dchNgay);
 
-		lblMaNV = new JLabel("Mã NV:");
-		lblMaNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblMaNV.setBounds(90, 311, 80, 30);
-		pnlChiTietPhanCong.add(lblMaNV);
+		lblNhanVien = new JLabel("Mã Nhân Viên:");
+		lblNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblNhanVien.setBounds(206, 120, 110, 30);
+		pnlChiTietPhanCong.add(lblNhanVien);
 
 		cmbmodelMaNV = new DefaultComboBoxModel<>();
 		cmbmodelMaNV.addElement("");
-		cmbMaNV = new JComboBox<>(cmbmodelMaNV);
-		cmbMaNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cmbMaNV.setBounds(170, 311, 422, 30);
-		pnlChiTietPhanCong.add(cmbMaNV);
+		cmbNhanVien = new JComboBox<>(cmbmodelMaNV);
+		cmbNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		cmbNhanVien.setBounds(330, 120, 290, 30);
+		pnlChiTietPhanCong.add(cmbNhanVien);
 
-		lblHoVaTen = new JLabel("Họ và tên:");
-		lblHoVaTen.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblHoVaTen.setBounds(90, 361, 80, 30);
-		pnlChiTietPhanCong.add(lblHoVaTen);
-
-		txtTenNV = new JTextField();
-		txtTenNV.setEnabled(false);
-		txtTenNV.setBackground(Color.WHITE);
-		txtTenNV.setDisabledTextColor(Color.BLACK);
-		txtTenNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTenNV.setBounds(170, 361, 422, 30);
-		pnlChiTietPhanCong.add(txtTenNV);
-		txtTenNV.setColumns(10);
-
-		lblMaCaLam = new JLabel("Mã ca trực:");
-		lblMaCaLam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblMaCaLam.setBounds(90, 411, 80, 30);
-		pnlChiTietPhanCong.add(lblMaCaLam);
+		lblCaTruc = new JLabel("Mã ca trực:");
+		lblCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblCaTruc.setBounds(725, 120, 80, 30);
+		pnlChiTietPhanCong.add(lblCaTruc);
 
 		cmbmodelCaTruc = new DefaultComboBoxModel<>();
 		cmbmodelCaTruc.addElement("");
-		cmbMaCaTruc = new JComboBox<>(cmbmodelCaTruc);
-		cmbMaCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		cmbMaCaTruc.setBounds(170, 411, 160, 30);
-		pnlChiTietPhanCong.add(cmbMaCaTruc);
-
-		lblCaTruc = new JLabel("Ca trực:");
-		lblCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblCaTruc.setBounds(372, 411, 60, 30);
-		pnlChiTietPhanCong.add(lblCaTruc);
-
-		txtCaTruc = new JTextField();
-		txtCaTruc.setDisabledTextColor(Color.BLACK);
-		txtCaTruc.setBackground(Color.WHITE);
-		txtCaTruc.setEnabled(false);
-		txtCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtCaTruc.setBounds(432, 411, 160, 30);
-		pnlChiTietPhanCong.add(txtCaTruc);
-		txtCaTruc.setColumns(10);
+		cmbCaTruc = new JComboBox<>(cmbmodelCaTruc);
+		cmbCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		cmbCaTruc.setBounds(815, 120, 290, 30);
+		pnlChiTietPhanCong.add(cmbCaTruc);
 
 		btnThem = new JButton("Thêm");
+		btnThem.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconThem.png")));
 //		btnThem.setIcon(new ImageIcon(GD_PhanCong.class.getResource("/images/iconThem3.png")));
 		btnThem.setForeground(Color.BLACK);
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setFocusPainted(false);
 		btnThem.setBackground(new Color(144, 238, 144));
-		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		btnThem.setBounds(140, 493, 120, 35);
+		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnThem.setBounds(279, 230, 150, 35);
 		pnlChiTietPhanCong.add(btnThem);
 
 		btnXoa = new JButton("Xóa");
+		btnXoa.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconXoa.png")));
 //		btnXoa.setIcon(new ImageIcon(GD_PhanCong.class.getResource("/images/iconXoa3.png")));
 		btnXoa.setForeground(Color.BLACK);
 		btnXoa.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnXoa.setBackground(new Color(144, 238, 144));
 		btnXoa.setFocusPainted(false);
-		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		btnXoa.setBounds(290, 493, 120, 35);
+		btnXoa.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnXoa.setBounds(480, 230, 150, 35);
 		pnlChiTietPhanCong.add(btnXoa);
 
 		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconLamMoi.png")));
 //		btnLamMoi.setIcon(new ImageIcon(GD_PhanCong.class.getResource("/images/iconLamMoi3.png")));
 		btnLamMoi.setForeground(Color.BLACK);
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setBackground(new Color(144, 238, 144));
 		btnLamMoi.setFocusPainted(false);
-		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		btnLamMoi.setBounds(440, 493, 120, 35);
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnLamMoi.setBounds(882, 230, 150, 35);
 		pnlChiTietPhanCong.add(btnLamMoi);
+		
+		JButton btnChinhSua = new JButton("Chỉnh sửa");
+		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconChinhSua1.png")));
+		btnChinhSua.setForeground(Color.BLACK);
+		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnChinhSua.setFocusPainted(false);
+		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnChinhSua.setBackground(new Color(144, 238, 144));
+		btnChinhSua.setBounds(681, 230, 150, 35);
+		pnlChiTietPhanCong.add(btnChinhSua);
 
-		pnlBangPhanCong = new JPanel();
-		pnlBangPhanCong.setBackground(new Color(250, 240, 230));
-		pnlBangPhanCong.setBounds(672, 0, 694, 694);
-		pnlPhanCong.add(pnlBangPhanCong);
-		pnlBangPhanCong.setLayout(null);
+		pnlDanhSachPhanCong = new JPanel();
+		pnlDanhSachPhanCong.setBackground(new Color(230, 230, 250));
+		pnlDanhSachPhanCong.setBounds(0, 290, 1365, 404);
+		pnlPhanCong.add(pnlDanhSachPhanCong);
+		pnlDanhSachPhanCong.setLayout(null);
 
 		String[] cols = { "STT", "Mã PC", "Họ và tên", "Ca trực", "Ngày" };
 		tblmodelPhanCong = new DefaultTableModel(cols, 0);
@@ -221,8 +199,8 @@ public class GD_QuanLyPhanCong extends JPanel {
 		tblPhanCong.setAutoCreateRowSorter(true);
 		tblPhanCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		scrPhanCong = new JScrollPane(tblPhanCong);
-		scrPhanCong.setBounds(10, 77, 674, 606);
-		pnlBangPhanCong.add(scrPhanCong);
+		scrPhanCong.setBounds(30, 70, 1305, 320);
+		pnlDanhSachPhanCong.add(scrPhanCong);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -237,8 +215,8 @@ public class GD_QuanLyPhanCong extends JPanel {
 		lblDsPhanCong = new JLabel("Danh sách phân công");
 		lblDsPhanCong.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDsPhanCong.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblDsPhanCong.setBounds(0, 15, 694, 50);
-		pnlBangPhanCong.add(lblDsPhanCong);
+		lblDsPhanCong.setBounds(0, 10, 1365, 50);
+		pnlDanhSachPhanCong.add(lblDsPhanCong);
 
 //		controller = new PhanCongController(this);
 //		btnLamMoi.addActionListener(controller);

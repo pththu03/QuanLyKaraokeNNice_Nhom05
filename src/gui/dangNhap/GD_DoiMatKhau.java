@@ -17,6 +17,7 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
 
+import controller.DoiMatKhauController;
 //import controller.DoiMatKhauController;
 //import dao.QuanLyNhanVienDAO;
 import entities.NhanVienEntity;
@@ -46,8 +47,6 @@ public class GD_DoiMatKhau extends JDialog {
 	public JButton btnThoat;
 
 	private NhanVienEntity nhanVienEntity = new NhanVienEntity();
-//	private DoiMatKhauController controller;
-//	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
 
 	public GD_DoiMatKhau(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
@@ -74,11 +73,11 @@ public class GD_DoiMatKhau extends JDialog {
 		pnlDoiMatKhau.add(txtMatKhauCu);
 
 		btnMatKhauCu = new JButton("");
+		btnMatKhauCu.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatNham.png")));
 		btnMatKhauCu.setBorder(null);
 		btnMatKhauCu.setFocusPainted(false);
 		btnMatKhauCu.setBackground(new Color(230, 230, 250));
 		btnMatKhauCu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//		btnMatKhauCu.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconNhinMK1.png")));
 		btnMatKhauCu.setBounds(336, 66, 30, 30);
 		pnlDoiMatKhau.add(btnMatKhauCu);
 
@@ -94,6 +93,7 @@ public class GD_DoiMatKhau extends JDialog {
 		pnlDoiMatKhau.add(txtMatKhauMoi);
 
 		btnMatKhauMoi = new JButton("");
+		btnMatKhauMoi.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatNham.png")));
 		btnMatKhauMoi.setFocusPainted(false);
 		btnMatKhauMoi.setBackground(new Color(230, 230, 250));
 		btnMatKhauMoi.setBorder(null);
@@ -114,6 +114,7 @@ public class GD_DoiMatKhau extends JDialog {
 		pnlDoiMatKhau.add(txtNhapLaiMK);
 
 		btnNhapLaiMK = new JButton("");
+		btnNhapLaiMK.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatNham.png")));
 		btnNhapLaiMK.setFocusPainted(false);
 		btnNhapLaiMK.setBackground(new Color(230, 230, 250));
 		btnNhapLaiMK.setBorder(null);
@@ -134,7 +135,7 @@ public class GD_DoiMatKhau extends JDialog {
 		pnlTacVu.setLayout(null);
 
 		btnDoiMatKhau = new JButton("Đổi mật khẩu");
-		btnDoiMatKhau.setBounds(230, 5, 120, 26);
+		btnDoiMatKhau.setBounds(140, 5, 120, 35);
 		btnDoiMatKhau.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDoiMatKhau.setBackground(new Color(144, 238, 144));
 		btnDoiMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -144,20 +145,41 @@ public class GD_DoiMatKhau extends JDialog {
 		getRootPane().setDefaultButton(btnDoiMatKhau);
 
 		btnThoat = new JButton("Thoát");
-		btnThoat.setBounds(370, 5, 50, 26);
+		btnThoat.setBounds(284, 5, 120, 35);
 		btnThoat.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThoat.setBackground(new Color(144, 238, 144));
 		btnThoat.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnThoat.setFocusPainted(false);
 		btnThoat.setActionCommand("Cancel");
 		pnlTacVu.add(btnThoat);
+		
+		DoiMatKhauController controller = new DoiMatKhauController(this);
+		btnDoiMatKhau.addActionListener(controller);
+		btnThoat.addActionListener(controller);
+		btnMatKhauCu.addActionListener(controller);
+		btnMatKhauMoi.addActionListener(controller);
+		btnNhapLaiMK.addActionListener(controller);
 
-//		controller = new DoiMatKhauController(this);
-//		btnDoiMatKhau.addActionListener(controller);
-//		btnMatKhauCu.addActionListener(controller);
-//		btnMatKhauMoi.addActionListener(controller);
-//		btnNhapLaiMK.addActionListener(controller);
-//		btnThoat.addActionListener(controller);
+	}
+	
+	public void chonDoiMatKhau() {
+		
+	}
+	
+	public void chonThoat() {
+		
+	}
+	
+	public void chonXemMatKhauCu() {
+		
+	}
+	
+	public void chonXemMatKhauMoi() {
+		
+	}
+	
+	public void chonXemLaiMatKhau() {
+		
 	}
 
 }

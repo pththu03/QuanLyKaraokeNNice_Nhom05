@@ -19,8 +19,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
-//import controller.QuanLyCaTrucController;
-//import dao.QuanLyCaTrucDAO;
+import controller.QuanLyCaTrucController;
 import entities.CaTrucEntity;
 
 public class GD_QuanLyCaTruc extends JPanel {
@@ -50,92 +49,122 @@ public class GD_QuanLyCaTruc extends JPanel {
 	// JScrollPane
 	private JScrollPane scrDsCaTruc;
 
-//	private QuanLyCaTrucController controller;
 	private List<CaTrucEntity> list;
-//	private QuanLyCaTrucDAO quanLyCaTrucDAO = new QuanLyCaTrucDAO();
-	private JButton btnLamMoi;
+	public JButton btnLamMoi;
+	public JButton btnChinhSua;
+	public JButton btnXoa;
+	public JButton btnThem;
 
 	public GD_QuanLyCaTruc() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
-		
+		setBounds(0, 0, 1365, 694);
+
 		pnlCaTruc = new JPanel();
-		pnlCaTruc.setBackground(new Color(255, 192, 203));
-		pnlCaTruc.setBounds(0, 0, 672, 694);
+		pnlCaTruc.setBackground(new Color(230, 230, 250));
+		pnlCaTruc.setBounds(0, 0, 1365, 239);
 		add(pnlCaTruc);
 		pnlCaTruc.setLayout(null);
 
 		lblChiTietCaTruc = new JLabel("Chi tiết ca trực");
 		lblChiTietCaTruc.setHorizontalAlignment(SwingConstants.CENTER);
 		lblChiTietCaTruc.setFont(new Font("Segoe UI", Font.BOLD, 27));
-		lblChiTietCaTruc.setBounds(0, 160, 672, 40);
+		lblChiTietCaTruc.setBounds(0, 0, 1365, 60);
 		pnlCaTruc.add(lblChiTietCaTruc);
 
 		lblMaCaTruc = new JLabel("Mã ca trực:");
 		lblMaCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblMaCaTruc.setBounds(110, 235, 90, 30);
+		lblMaCaTruc.setBounds(213, 70, 90, 30);
 		pnlCaTruc.add(lblMaCaTruc);
 
 		txtMaCaTruc = new JTextField();
+		txtMaCaTruc.setDisabledTextColor(Color.BLACK);
+		txtMaCaTruc.setBackground(Color.WHITE);
+		txtMaCaTruc.setEditable(false);
 		txtMaCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtMaCaTruc.setBounds(200, 235, 352, 30);
+		txtMaCaTruc.setBounds(300, 70, 352, 30);
 		pnlCaTruc.add(txtMaCaTruc);
 		txtMaCaTruc.setColumns(10);
 
-		lblTenCaTruc = new JLabel("Ca trực:");
+		lblTenCaTruc = new JLabel("Tên ca trực:");
 		lblTenCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTenCaTruc.setBounds(110, 295, 90, 30);
+		lblTenCaTruc.setBounds(700, 71, 90, 30);
 		pnlCaTruc.add(lblTenCaTruc);
 
 		txtCaTruc = new JTextField();
 		txtCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtCaTruc.setBounds(200, 295, 352, 30);
+		txtCaTruc.setBounds(800, 70, 352, 30);
 		pnlCaTruc.add(txtCaTruc);
 		txtCaTruc.setColumns(10);
 
 		lblGioBD = new JLabel("Giờ bắt đầu:");
 		lblGioBD.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblGioBD.setBounds(110, 355, 90, 30);
+		lblGioBD.setBounds(213, 120, 90, 30);
 		pnlCaTruc.add(lblGioBD);
 
 		txtGioBD = new JTextField();
 		txtGioBD.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGioBD.setBounds(200, 355, 352, 30);
+		txtGioBD.setBounds(300, 120, 352, 30);
 		pnlCaTruc.add(txtGioBD);
 		txtGioBD.setColumns(10);
 
 		lblGioKT = new JLabel("Giờ kết thúc:");
 		lblGioKT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblGioKT.setBounds(110, 415, 90, 30);
+		lblGioKT.setBounds(700, 120, 90, 30);
 		pnlCaTruc.add(lblGioKT);
 
 		txtGioKT = new JTextField();
 		txtGioKT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtGioKT.setBounds(200, 415, 352, 30);
+		txtGioKT.setBounds(800, 120, 352, 30);
 		pnlCaTruc.add(txtGioKT);
 		txtGioKT.setColumns(10);
-		
+
 		btnLamMoi = new JButton("Làm mới\r\n");
-//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyCaTruc.class.getResource("/images/iconLamMoi3.png")));
-		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyCaTruc.class.getResource("/images/iconLamMoi.png")));
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnLamMoi.setFocusable(false);
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setBackground(new Color(144, 238, 144));
-		btnLamMoi.setBounds(432, 475, 120, 35);
+		btnLamMoi.setBounds(882, 180, 150, 35);
 		pnlCaTruc.add(btnLamMoi);
+
+		btnChinhSua = new JButton("Chỉnh sửa");
+		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyCaTruc.class.getResource("/images/iconChinhSua1.png")));
+		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnChinhSua.setFocusable(false);
+		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnChinhSua.setBackground(new Color(144, 238, 144));
+		btnChinhSua.setBounds(681, 180, 150, 35);
+		pnlCaTruc.add(btnChinhSua);
+
+		btnXoa = new JButton("Xóa");
+		btnXoa.setIcon(new ImageIcon(GD_QuanLyCaTruc.class.getResource("/images/iconXoa.png")));
+		btnXoa.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnXoa.setFocusable(false);
+		btnXoa.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnXoa.setBackground(new Color(144, 238, 144));
+		btnXoa.setBounds(480, 180, 150, 35);
+		pnlCaTruc.add(btnXoa);
+
+		btnThem = new JButton("Thêm");
+		btnThem.setIcon(new ImageIcon(GD_QuanLyCaTruc.class.getResource("/images/iconThem.png")));
+		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnThem.setFocusable(false);
+		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnThem.setBackground(new Color(144, 238, 144));
+		btnThem.setBounds(279, 180, 150, 35);
+		pnlCaTruc.add(btnThem);
 
 		pnlDsCaTruc = new JPanel();
 		pnlDsCaTruc.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlDsCaTruc.setBackground(new Color(250, 240, 230));
-		pnlDsCaTruc.setBounds(672, 0, 694, 694);
+		pnlDsCaTruc.setBackground(new Color(230, 230, 250));
+		pnlDsCaTruc.setBounds(0, 239, 1365, 455);
 		add(pnlDsCaTruc);
 		pnlDsCaTruc.setLayout(null);
 
 		lblDsCaTruc = new JLabel("Danh sách ca trực");
 		lblDsCaTruc.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDsCaTruc.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblDsCaTruc.setBounds(0, 15, 694, 40);
+		lblDsCaTruc.setBounds(0, 10, 1365, 40);
 		pnlDsCaTruc.add(lblDsCaTruc);
 
 		String[] colsCaTruc = { "STT", "Mã CT", "Ca trực", "Giờ bắt đầu", "Giờ kết thúc" };
@@ -143,11 +172,36 @@ public class GD_QuanLyCaTruc extends JPanel {
 		tblDsCaTruc = new JTable(tblmodelDanhSachPhong);
 		tblDsCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		scrDsCaTruc = new JScrollPane(tblDsCaTruc);
-		scrDsCaTruc.setBounds(10, 65, 674, 618);
+		scrDsCaTruc.setBounds(30, 60, 1305, 380);
 		pnlDsCaTruc.add(scrDsCaTruc);
 
-//		controller = new QuanLyCaTrucController(this);
-//		tblDsCaTruc.addMouseListener(controller);
+		QuanLyCaTrucController controller = new QuanLyCaTrucController(this);
+		btnLamMoi.addActionListener(controller);
+		btnThem.addActionListener(controller);
+		btnXoa.addActionListener(controller);
+		btnChinhSua.addActionListener(controller);
+		tblDsCaTruc.addMouseListener(controller);
+
+	}
+
+	public void chonLamMoi() {
+
+	}
+
+	public void chonThem() {
+
+	}
+
+	public void chonXoa() {
+
+	}
+
+	public void chonChinhSua() {
+
+	}
+
+	public void hienThiThongTin() {
+
 	}
 
 }

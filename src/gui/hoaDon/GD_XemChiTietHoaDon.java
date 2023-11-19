@@ -39,39 +39,34 @@ public class GD_XemChiTietHoaDon extends JFrame {
 	public JButton btnThoat;
 	public JButton btnLamMoi;
 
-//	private ChiTietHoaDonController controller;
 	private HoaDonEntity hoaDonEntity;
 	private JTextField txtSoPhong;
 
 	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
 	private List<ChiTietDichVuEntity> listChiTietDichVu;
-//	private QuanLyChiTietHoaDonDAO quanLyChiTietHoaDonDAO = new QuanLyChiTietHoaDonDAO();
-//	private QuanLyChiTietDichVuDAO quanLyChiTietDichVuDAO = new QuanLyChiTietDichVuDAO();
-//	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-//	private QuanLyDichVuDAO quanLyDichVuDAO = new QuanLyDichVuDAO();
 
 	/**
 	 * Create the frame.
 	 */
 	public GD_XemChiTietHoaDon(HoaDonEntity hoaDonEntity) {
+		setBackground(new Color(230, 230, 250));
 		this.hoaDonEntity = hoaDonEntity;
 //		setIconImage(Toolkit.getDefaultToolkit().getImage(GD_ChiTietHoaDon.class.getResource("/images/iconLogo1.png")));
 		setTitle("Xem chi tiết hóa đơn");
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
 		setLocationRelativeTo(null);
 		pnlContent = new JPanel();
-		pnlContent.setBackground(SystemColor.controlHighlight);
+		pnlContent.setBackground(new Color(230, 230, 250));
 		pnlContent.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(pnlContent);
 		pnlContent.setLayout(null);
+		setSize(903, 476);
 
 		JPanel pnlChiTietPhong = new JPanel();
 		pnlChiTietPhong.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Danh sách phòng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		pnlChiTietPhong.setBackground(SystemColor.inactiveCaption);
+		pnlChiTietPhong.setBackground(new Color(230, 230, 250));
 		pnlChiTietPhong.setBounds(10, 11, 873, 180);
 		pnlContent.add(pnlChiTietPhong);
 		pnlChiTietPhong.setLayout(null);
@@ -87,7 +82,7 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		JPanel pnlChiTietDichVu = new JPanel();
 		pnlChiTietDichVu.setBorder(
 				new TitledBorder(null, "Danh sách dịch vụ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		pnlChiTietDichVu.setBackground(SystemColor.inactiveCaption);
+		pnlChiTietDichVu.setBackground(new Color(230, 230, 250));
 		pnlChiTietDichVu.setBounds(10, 216, 873, 229);
 		pnlContent.add(pnlChiTietDichVu);
 		pnlChiTietDichVu.setLayout(null);

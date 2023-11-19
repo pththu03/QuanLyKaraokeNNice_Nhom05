@@ -77,7 +77,7 @@ public class GD_DangNhap extends JFrame {
 		setSize(544, 483);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(204, 204, 255));
+		contentPane.setBackground(new Color(230, 230, 250));
 		contentPane.setForeground(new Color(70, 130, 180));
 
 		setContentPane(contentPane);
@@ -87,7 +87,7 @@ public class GD_DangNhap extends JFrame {
 		lblDangNhap.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDangNhap.setForeground(SystemColor.desktop);
 		lblDangNhap.setFont(new Font("Cambria", Font.BOLD, 40));
-		lblDangNhap.setBounds(253, 74, 208, 47);
+		lblDangNhap.setBounds(226, 74, 235, 47);
 		contentPane.add(lblDangNhap);
 
 		txtSoDienThoai = new JTextField();
@@ -148,10 +148,10 @@ public class GD_DangNhap extends JFrame {
 		contentPane.add(lblLogo);
 		
 		JButton btnNewButton = new JButton("");
-		btnNewButton.setBackground(new Color(204, 204, 255));
+		btnNewButton.setBackground(new Color(230, 230, 250));
 		btnNewButton.setBorder(null);
 		btnNewButton.setFocusable(false);
-		btnNewButton.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconMatMo.png")));
+		btnNewButton.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconMatNham.png")));
 		btnNewButton.setBounds(421, 253, 40, 35);
 		contentPane.add(btnNewButton);
 

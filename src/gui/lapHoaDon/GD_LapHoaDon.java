@@ -46,11 +46,8 @@ import util.TimeFormatter;
 public class GD_LapHoaDon extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTextField txtTimKiemTheoSDT;
 	private JTable tblHoaDon;
 	private DefaultTableModel tblmodelHoaDon;
-	public JButton btnLamMoi;
-	public JButton btnTimKiem;
 	public JButton btnLapHoaDon;
 	public JButton btnXemChiTiet;
 	private JCheckBox chkXuatHoaDon;
@@ -73,10 +70,14 @@ public class GD_LapHoaDon extends JPanel {
 	private JLabel lblTenKhachHang;
 	private JPanel pnlChiTietLapHoaDon;
 	private JScrollPane scrDSHoaDon;
-	private JLabel lblTimKiemTheoSDT;
 	private JLabel lblChiTietLapHoaDon;
 
 	private HoaDonEntity hoaDonEntity;
+	private JPanel pnlTimKiem;
+	private JLabel lblTimKiemTheoSDT;
+	private JTextField textField;
+	private JButton btnTimKiem;
+	private JButton btnLamMoi;
 //	private LapHoaDonController controller;
 //	private List<HoaDonEntity> listHoaDon;
 //	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
@@ -109,46 +110,10 @@ public class GD_LapHoaDon extends JPanel {
 
 		JPanel pnlDSHoaDon = new JPanel();
 		pnlDSHoaDon.setBorder(null);
-		pnlDSHoaDon.setBackground(new Color(250, 240, 230));
-		pnlDSHoaDon.setBounds(0, 0, 672, 616);
+		pnlDSHoaDon.setBackground(new Color(230, 230, 250));
+		pnlDSHoaDon.setBounds(0, 144, 672, 472);
 		pnlChinh.add(pnlDSHoaDon);
 		pnlDSHoaDon.setLayout(null);
-
-		JPanel pnlTimKiem = new JPanel();
-		pnlTimKiem.setBorder(null);
-		pnlTimKiem.setBackground(new Color(204, 204, 255));
-		pnlTimKiem.setBounds(0, 0, 672, 144);
-		pnlDSHoaDon.add(pnlTimKiem);
-		pnlTimKiem.setLayout(null);
-
-		lblTimKiemTheoSDT = new JLabel("SĐT Khách hàng:");
-		lblTimKiemTheoSDT.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		lblTimKiemTheoSDT.setBounds(80, 30, 120, 30);
-		pnlTimKiem.add(lblTimKiemTheoSDT);
-
-		txtTimKiemTheoSDT = new JTextField();
-		txtTimKiemTheoSDT.setFont(new Font("Segoe UI", Font.PLAIN, 15));
-		txtTimKiemTheoSDT.setBounds(210, 30, 308, 30);
-		pnlTimKiem.add(txtTimKiemTheoSDT);
-		txtTimKiemTheoSDT.setColumns(10);
-
-		btnTimKiem = new JButton("Tìm kiếm");
-		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnTimKiem.setBackground(new Color(144, 238, 144));
-		btnTimKiem.setFocusable(false);
-		btnTimKiem.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnTimKiem.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconTimKiem1.png")));
-		btnTimKiem.setBounds(398, 80, 120, 35);
-		pnlTimKiem.add(btnTimKiem);
-
-		btnLamMoi = new JButton("Làm mới");
-		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnLamMoi.setFocusable(false);
-		btnLamMoi.setBackground(new Color(144, 238, 144));
-		btnLamMoi.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconLamMoi3.png")));
-		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		btnLamMoi.setBounds(249, 80, 120, 35);
-		pnlTimKiem.add(btnLamMoi);
 
 		String[] cols_DSHoaDon = { "STT", "Mã HD", "Tên khách hàng", "Số điện thoại khách hàng", "Số lượng phòng",
 				"Tổng tiền" };
@@ -156,7 +121,7 @@ public class GD_LapHoaDon extends JPanel {
 		tblHoaDon = new JTable(tblmodelHoaDon);
 		tblHoaDon.setAutoCreateRowSorter(true);
 		scrDSHoaDon = new JScrollPane(tblHoaDon);
-		scrDSHoaDon.setBounds(10, 154, 652, 451);
+		scrDSHoaDon.setBounds(10, 10, 652, 451);
 		pnlDSHoaDon.add(scrDSHoaDon);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -171,7 +136,7 @@ public class GD_LapHoaDon extends JPanel {
 
 		pnlChiTietLapHoaDon = new JPanel();
 		pnlChiTietLapHoaDon.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlChiTietLapHoaDon.setBackground(new Color(255, 192, 203));
+		pnlChiTietLapHoaDon.setBackground(new Color(230, 230, 250));
 		pnlChiTietLapHoaDon.setBounds(672, 0, 694, 616);
 		pnlChinh.add(pnlChiTietLapHoaDon);
 		pnlChiTietLapHoaDon.setLayout(null);
@@ -202,6 +167,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblTienTraKhach);
 
 		txtTenKhachHang = new JTextField();
+		txtTenKhachHang.setDisabledTextColor(Color.BLACK);
 		txtTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTenKhachHang.setBorder(null);
 		txtTenKhachHang.setEditable(false);
@@ -210,6 +176,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtTenKhachHang.setColumns(10);
 
 		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setDisabledTextColor(Color.BLACK);
 		txtSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtSoDienThoai.setBorder(null);
 		txtSoDienThoai.setEditable(false);
@@ -218,6 +185,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtSoDienThoai.setColumns(10);
 
 		txtTienDichVu = new JTextField();
+		txtTienDichVu.setDisabledTextColor(Color.BLACK);
 		txtTienDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTienDichVu.setBorder(null);
 		txtTienDichVu.setEditable(false);
@@ -246,6 +214,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblSoLuongPhong);
 
 		txtSoLuongPhong = new JTextField();
+		txtSoLuongPhong.setDisabledTextColor(Color.BLACK);
 		txtSoLuongPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtSoLuongPhong.setBorder(null);
 		txtSoLuongPhong.setEditable(false);
@@ -259,6 +228,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblTongTien);
 
 		txtTongTien = new JTextField();
+		txtTongTien.setDisabledTextColor(Color.BLACK);
 		txtTongTien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTongTien.setBorder(null);
 		txtTongTien.setEditable(false);
@@ -267,17 +237,18 @@ public class GD_LapHoaDon extends JPanel {
 		txtTongTien.setColumns(10);
 
 		btnLapHoaDon = new JButton("Lập hóa đơn");
+		btnLapHoaDon.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconTick.png")));
 		btnLapHoaDon.setMnemonic(KeyEvent.VK_ENTER);
 		btnLapHoaDon.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnLapHoaDon.setBackground(new Color(144, 238, 144));
+		btnLapHoaDon.setBackground(new Color(255, 128, 128));
 		btnLapHoaDon.setFocusable(false);
-		btnLapHoaDon.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconTick.png")));
-		btnLapHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+//		btnLapHoaDon.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconTick.png")));
+		btnLapHoaDon.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnLapHoaDon.setBounds(450, 550, 195, 39);
 		pnlChiTietLapHoaDon.add(btnLapHoaDon);
 
 		chkXuatHoaDon = new JCheckBox("Xuất hóa đơn");
-		chkXuatHoaDon.setBackground(new Color(255, 192, 203));
+		chkXuatHoaDon.setBackground(new Color(230, 230, 250));
 		chkXuatHoaDon.setFocusable(false);
 		chkXuatHoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 11));
 		chkXuatHoaDon.setBounds(330, 559, 97, 25);
@@ -290,13 +261,50 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblChiTietLapHoaDon);
 
 		btnXemChiTiet = new JButton("Xem chi tiết hóa đơn");
-		btnXemChiTiet.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconNhinMK.png")));
-		btnXemChiTiet.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		btnXemChiTiet.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconMatMo.png")));
+//		btnXemChiTiet.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconNhinMK.png")));
+		btnXemChiTiet.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTiet.setFocusable(false);
 		btnXemChiTiet.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnXemChiTiet.setBackground(new Color(144, 238, 144));
 		btnXemChiTiet.setBounds(450, 482, 195, 39);
 		pnlChiTietLapHoaDon.add(btnXemChiTiet);
+
+		pnlTimKiem = new JPanel();
+		pnlTimKiem.setLayout(null);
+		pnlTimKiem.setBorder(null);
+		pnlTimKiem.setBackground(new Color(230, 230, 250));
+		pnlTimKiem.setBounds(0, 0, 672, 144);
+		pnlChinh.add(pnlTimKiem);
+
+		lblTimKiemTheoSDT = new JLabel("SĐT Khách hàng:");
+		lblTimKiemTheoSDT.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		lblTimKiemTheoSDT.setBounds(80, 30, 120, 30);
+		pnlTimKiem.add(lblTimKiemTheoSDT);
+
+		textField = new JTextField();
+		textField.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+		textField.setColumns(10);
+		textField.setBounds(210, 30, 382, 30);
+		pnlTimKiem.add(textField);
+
+		btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconTimKiem.png")));
+		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnTimKiem.setFocusable(false);
+		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnTimKiem.setBackground(new Color(144, 238, 144));
+		btnTimKiem.setBounds(442, 80, 150, 35);
+		pnlTimKiem.add(btnTimKiem);
+
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconLamMoi.png")));
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnLamMoi.setFocusable(false);
+		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLamMoi.setBackground(new Color(144, 238, 144));
+		btnLamMoi.setBounds(249, 80, 150, 35);
+		pnlTimKiem.add(btnLamMoi);
 
 		pnlChanTrang = new JPanel();
 		pnlChanTrang.setBorder(null);
@@ -330,13 +338,6 @@ public class GD_LapHoaDon extends JPanel {
 		});
 		ngayHT.start();
 		pnlChanTrang.add(lblNgayHienTai);
-
-//		controller = new LapHoaDonController(this);
-//		btnLamMoi.addActionListener(controller);
-//		btnLapHoaDon.addActionListener(controller);
-//		btnTimKiem.addActionListener(controller);
-//		btnXemChiTiet.addActionListener(controller);
-//		tblHoaDon.addMouseListener(controller);
 		txtTienNhan.addKeyListener(new KeyListener() {
 
 			@Override
@@ -356,5 +357,4 @@ public class GD_LapHoaDon extends JPanel {
 		});
 
 	}
-
 }

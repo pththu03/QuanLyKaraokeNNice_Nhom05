@@ -47,15 +47,12 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 	public JButton btnDoiMatKhau;
 	public JButton btnChinhSua;
 
-//	private QuanLyTaiKhoanController controller;
 	private NhanVienEntity nhanVienEntity = new NhanVienEntity();
-//	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
 
 	public GD_QuanLyTaiKhoan(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
+		setBounds(0, 0, 1365, 694);
 
 		pnlTaiKhoan = new JPanel();
 		pnlTaiKhoan.setBackground(new Color(230, 230, 250));
@@ -64,7 +61,8 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		pnlTaiKhoan.setLayout(null);
 
 		lblAnhDaiDien = new JLabel("");
-		lblAnhDaiDien.setBounds(377, 198, 180, 180);
+		lblAnhDaiDien.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconAvatar.png")));
+		lblAnhDaiDien.setBounds(357, 198, 200, 200);
 		pnlTaiKhoan.add(lblAnhDaiDien);
 //		ImageIcon icon = new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/avatar_default.png"));
 //		Image image = icon.getImage();
@@ -73,7 +71,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 //		lblAnhDaiDien.setIcon(icon);
 
 		lblMaNV = new JLabel("Mã nhân viên:");
-		lblMaNV.setBounds(747, 198, 110, 30);
+		lblMaNV.setBounds(746, 198, 110, 30);
 		lblMaNV.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		pnlTaiKhoan.add(lblMaNV);
 
@@ -89,7 +87,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtMaNV.setColumns(10);
 
 		lblHoVaTen = new JLabel("Họ và tên:");
-		lblHoVaTen.setBounds(747, 248, 110, 30);
+		lblHoVaTen.setBounds(746, 248, 110, 30);
 		lblHoVaTen.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		pnlTaiKhoan.add(lblHoVaTen);
 
@@ -105,7 +103,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtHoVaTen.setColumns(10);
 
 		lblChucVu = new JLabel("Chức vụ:");
-		lblChucVu.setBounds(747, 298, 110, 30);
+		lblChucVu.setBounds(746, 298, 110, 30);
 		lblChucVu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		pnlTaiKhoan.add(lblChucVu);
 
@@ -121,7 +119,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtChucVu.setColumns(10);
 
 		lblSoDienThoai = new JLabel("Số điện thoại:");
-		lblSoDienThoai.setBounds(747, 348, 110, 30);
+		lblSoDienThoai.setBounds(746, 348, 110, 30);
 		lblSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		pnlTaiKhoan.add(lblSoDienThoai);
 
@@ -135,7 +133,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtSoDienThoai.setColumns(10);
 
 		lblCCCD = new JLabel("CCCD/CMND:");
-		lblCCCD.setBounds(747, 398, 110, 30);
+		lblCCCD.setBounds(746, 398, 110, 30);
 		lblCCCD.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		pnlTaiKhoan.add(lblCCCD);
 
@@ -151,7 +149,7 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtCCCD.setColumns(10);
 
 		lblEmail = new JLabel("Email:");
-		lblEmail.setBounds(747, 448, 110, 30);
+		lblEmail.setBounds(746, 448, 110, 30);
 		lblEmail.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		pnlTaiKhoan.add(lblEmail);
 
@@ -171,33 +169,36 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		pnlTaiKhoan.add(lblThongTinCaNhan);
 
 		btnDoiMatKhau = new JButton("Đổi mật khẩu");
+		btnDoiMatKhau.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconLamMoi.png")));
 //		btnDoiMatKhau.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconLamMoi3.png")));
-		btnDoiMatKhau.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnDoiMatKhau.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnDoiMatKhau.setForeground(new Color(0, 0, 0));
 		btnDoiMatKhau.setBackground(new Color(144, 238, 144));
 		btnDoiMatKhau.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDoiMatKhau.setFocusPainted(false);
-		btnDoiMatKhau.setBounds(312, 433, 130, 35);
+		btnDoiMatKhau.setBounds(270, 433, 150, 35);
 		pnlTaiKhoan.add(btnDoiMatKhau);
 
 		btnDangXuat = new JButton("Đăng xuất");
+		btnDangXuat.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconDangXuat.png")));
 //		btnDangXuat.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconDangXuat1.png")));
-		btnDangXuat.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnDangXuat.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnDangXuat.setForeground(new Color(0, 0, 0));
 		btnDangXuat.setBackground(new Color(144, 238, 144));
 		btnDangXuat.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnDangXuat.setFocusPainted(false);
-		btnDangXuat.setBounds(497, 433, 130, 35);
+		btnDangXuat.setBounds(470, 433, 150, 35);
 		pnlTaiKhoan.add(btnDangXuat);
 
 		btnChinhSua = new JButton("Chỉnh sửa");
+		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconChinhSua1.png")));
 //		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setForeground(new Color(0, 0, 0));
-		btnChinhSua.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChinhSua.setFocusPainted(false);
 		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
-		btnChinhSua.setBounds(1027, 508, 130, 35);
+		btnChinhSua.setBounds(1007, 507, 150, 35);
 		pnlTaiKhoan.add(btnChinhSua);
 
 		lblNamSinh = new JLabel("Năm sinh:");
