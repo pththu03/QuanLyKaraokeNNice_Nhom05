@@ -28,6 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JYearChooser;
 
+import controller.ThongKeController;
 import entities.ChiTietHoaDonEntity;
 import entities.HoaDonEntity;
 import entities.KhachHangEntity;
@@ -141,18 +142,16 @@ public class GD_ThongKe extends JPanel {
 	/**
 	 * 
 	 */
+	private ButtonGroup grpDoanhThu;
 	public JRadioButton radTheoNgay;
 	public JRadioButton radTheoThang;
 	public JRadioButton radTheoNam;
-	private ButtonGroup grpDoanhThu;
 	public JButton btnTimKiemDoanhThuNgay;
 	public JButton btnTimKiemDoanhThuThang; // button chọn tìm kiếm doanh thu thao tháng
 	public JButton btnTimKiemDoanhThuNam;
 	public JButton btnXemChiTietHoaDonDoanhThu;
-
 	public JButton btnTimKiemLuong;
 	public JButton btnXemChiTietChamCong;
-
 	public JButton btnTimKiemKhachHang;
 	public JButton btnXemChiTietHoaDonKhachHang;
 
@@ -163,15 +162,6 @@ public class GD_ThongKe extends JPanel {
 	private List<NhanVienEntity> listNhanVien;
 	private List<KhachHangEntity> listKhachHang;
 	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
-
-//	private ThongKeDAO thongKeDAO = new ThongKeDAO();
-//	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
-//	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
-//	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
-//	private QuanLyChiTietHoaDonDAO quanLyChiTietHoaDonDAO = new QuanLyChiTietHoaDonDAO();
-//	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-//	private LapHoaDonDAO lapHoaDonDAO = new LapHoaDonDAO();
-//	private ThongKeController controller;
 
 	private HoaDonEntity hoaDonEntity;
 	private NhanVienEntity nhanVienEntity;
@@ -287,24 +277,23 @@ public class GD_ThongKe extends JPanel {
 		btnTimKiemDoanhThuNgay.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemDoanhThuNgay.setFocusable(false);
 		btnTimKiemDoanhThuNgay.setBackground(new Color(144, 238, 144));
-//		btnTimKiemDoanhThuNgay.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemDoanhThuNgay.setBounds(511, 10, 150, 35);
 		pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNgay);
 
 		btnTimKiemDoanhThuThang = new JButton("Tìm kiếm");
+		btnTimKiemDoanhThuThang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
 		btnTimKiemDoanhThuThang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnTimKiemDoanhThuThang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemDoanhThuThang.setFocusable(false);
 		btnTimKiemDoanhThuThang.setBackground(new Color(144, 238, 144));
-//		btnTimKiemDoanhThuThang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemDoanhThuThang.setBounds(542, 12, 120, 35);
 
 		btnTimKiemDoanhThuNam = new JButton("Tìm kiếm");
+		btnTimKiemDoanhThuNam.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
 		btnTimKiemDoanhThuNam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnTimKiemDoanhThuNam.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemDoanhThuNam.setFocusable(false);
 		btnTimKiemDoanhThuNam.setBackground(new Color(144, 238, 144));
-//		btnTimKiemDoanhThuNam.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemDoanhThuNam.setBounds(542, 12, 120, 35);
 
 		lblchonThangDoanhThu = new JLabel("Chọn tháng:");
@@ -417,7 +406,6 @@ public class GD_ThongKe extends JPanel {
 		btnXemChiTietHoaDonDoanhThu.setForeground(new Color(0, 0, 0));
 		btnXemChiTietHoaDonDoanhThu.setBackground(new Color(144, 238, 144));
 		btnXemChiTietHoaDonDoanhThu.setFocusable(false);
-//		btnXemChiTietHoaDonDoanhThu.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconNhinMK.png")));
 		btnXemChiTietHoaDonDoanhThu.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTietHoaDonDoanhThu.setBounds(468, 507, 216, 35);
 		pnlDSDoanhThu.add(btnXemChiTietHoaDonDoanhThu);
@@ -487,7 +475,6 @@ public class GD_ThongKe extends JPanel {
 		btnTimKiemLuong.setBackground(new Color(144, 238, 144));
 		btnTimKiemLuong.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemLuong.setFocusable(false);
-//		btnTimKiemLuong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemLuong.setBounds(512, 10, 150, 35);
 		pnlTimKiemLuong.add(btnTimKiemLuong);
 
@@ -557,7 +544,6 @@ public class GD_ThongKe extends JPanel {
 		btnXemChiTietChamCong = new JButton("Xem chi tiết chấm công");
 		btnXemChiTietChamCong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconMatMo.png")));
 		btnXemChiTietChamCong.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnXemChiTietChamCong.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconNhinMK.png")));
 		btnXemChiTietChamCong.setForeground(Color.BLACK);
 		btnXemChiTietChamCong.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTietChamCong.setFocusable(false);
@@ -628,7 +614,6 @@ public class GD_ThongKe extends JPanel {
 		btnTimKiemKhachHang.setFocusable(false);
 		btnTimKiemKhachHang.setBackground(new Color(144, 238, 144));
 		btnTimKiemKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemKhachHang.setBounds(512, 11, 150, 35);
 		pnlTimKiemKhachHang.add(btnTimKiemKhachHang);
 
@@ -693,7 +678,6 @@ public class GD_ThongKe extends JPanel {
 		btnXemChiTietHoaDonKhachHang = new JButton("Xem chi tiết hóa đơn");
 		btnXemChiTietHoaDonKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconMatMo.png")));
 		btnXemChiTietHoaDonKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnXemChiTietHoaDonKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconNhinMK.png")));
 		btnXemChiTietHoaDonKhachHang.setForeground(Color.BLACK);
 		btnXemChiTietHoaDonKhachHang.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTietHoaDonKhachHang.setFocusable(false);
@@ -718,22 +702,77 @@ public class GD_ThongKe extends JPanel {
 		tblHoaDon.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);
 		tblNhanVien.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);
 
-//		controller = new ThongKeController(this);
-//		radTheoNgay.addActionListener(controller);
-//		radTheoThang.addActionListener(controller);
-//		radTheoNam.addActionListener(controller);
-//		btnTimKiemDoanhThuNgay.addActionListener(controller);
-//		btnTimKiemDoanhThuThang.addActionListener(controller);
-//		btnTimKiemDoanhThuNam.addActionListener(controller);
-//		btnTimKiemLuong.addActionListener(controller);
-//		btnTimKiemKhachHang.addActionListener(controller);
-//		btnXemChiTietHoaDonDoanhThu.addActionListener(controller);
-//		btnXemChiTietChamCong.addActionListener(controller);
-//		btnXemChiTietHoaDonKhachHang.addActionListener(controller);
-//		tblHoaDon.addMouseListener(controller);
-//		tblNhanVien.addMouseListener(controller);
-//		tblKhachHang.addMouseListener(controller);
+		ThongKeController controller = new ThongKeController(this);
+		radTheoNgay.addActionListener(controller);
+		radTheoThang.addActionListener(controller);
+		radTheoNam.addActionListener(controller);
+		btnTimKiemDoanhThuNgay.addActionListener(controller);
+		btnTimKiemDoanhThuThang.addActionListener(controller);
+		btnTimKiemDoanhThuNam.addActionListener(controller);
+		btnTimKiemLuong.addActionListener(controller);
+		btnTimKiemKhachHang.addActionListener(controller);
+		btnXemChiTietHoaDonDoanhThu.addActionListener(controller);
+		btnXemChiTietChamCong.addActionListener(controller);
+		btnXemChiTietHoaDonKhachHang.addActionListener(controller);
+		tblHoaDon.addMouseListener(controller);
+		tblNhanVien.addMouseListener(controller);
+		tblKhachHang.addMouseListener(controller);
 
+	}
+
+	public void chonTheoNgay() {
+
+	}
+
+	public void chonTheoThang() {
+
+	}
+
+	public void chonTheoNam() {
+
+	}
+
+	public void hienThiThongTinDoanhThu() {
+
+	}
+
+	public void hienThiThongTinLuongNhanVien() {
+
+	}
+
+	public void hienThiThongTinKhachHang() {
+
+	}
+
+	public void chonTimKiemDoanhThuNgay() {
+
+	}
+
+	public void chonTimKiemDoanhThuThang() {
+
+	}
+
+	public void chonTimKiemDoanhThuNam() {
+
+	}
+
+	public void chonTimKiemLuong() {
+
+	}
+
+	public void chonTimKiemKhachHang() {
+
+	}
+
+	public void chonXemChiTietDoanhThu() {
+
+	}
+
+	public void chonXemChiTietChamCong() {
+
+	}
+
+	public void chonXemChiTietKhachHang() {
 
 	}
 

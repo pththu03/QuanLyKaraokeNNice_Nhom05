@@ -39,11 +39,9 @@ public class GD_QuanLyChamCong extends JPanel {
 	private JScrollPane scrChamCong;
 	private DefaultTableModel tblmodelChamCong;
 	private JTable tblChamCong;
-	public JButton btnLuu;
 	private JPanel pnlChamCong;
 	private JPanel pnlChucNang;
 	private JLabel lblChamCong;
-//	private ChamCongController controller;
 	private JPanel pnlNgayGio;
 	private JLabel lblNgayChamCong;
 	private JLabel lblGioChamCong;
@@ -57,12 +55,12 @@ public class GD_QuanLyChamCong extends JPanel {
 	private JTextField txtTenNV;
 	private JLabel lblCaTruc;
 	private JLabel lblTenNV;
-	private JCheckBox chkVang;
+	public JCheckBox chkVang;
+	public JButton btnLuu;
 
 	public GD_QuanLyChamCong() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
+		setBounds(0, 0, 1365, 694);
 
 		pnlChamCong = new JPanel();
 		pnlChamCong.setBackground(UIManager.getColor("Button.light"));
@@ -77,8 +75,6 @@ public class GD_QuanLyChamCong extends JPanel {
 		pnlChucNang.setLayout(null);
 
 		btnLuu = new JButton("Lưu");
-//		btnLuu.setIcon(new ImageIcon(GD_ChamCong.class.getResource("/images/iconTick.png")));
-		btnLuu.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLuu.setFocusable(false);
 		btnLuu.setBackground(new Color(144, 238, 144));
 		btnLuu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -178,5 +174,18 @@ public class GD_QuanLyChamCong extends JPanel {
 //		tblChamCong.addMouseListener(controller);
 //		chkVang.addActionListener(controller);
 	}
+	
+	public void hienThiThongTin() {
+		
+	}
+	
+	public void chonLuu() {
+		
+	}
+	
+	public void chonVang() {
+		
+	}
+	
 
 }

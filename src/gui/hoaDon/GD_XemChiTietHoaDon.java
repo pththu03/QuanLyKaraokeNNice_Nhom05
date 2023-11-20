@@ -22,6 +22,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.XemChiTietHoaDonController;
 import entities.ChiTietDichVuEntity;
 import entities.ChiTietHoaDonEntity;
 import entities.HoaDonEntity;
@@ -51,7 +52,6 @@ public class GD_XemChiTietHoaDon extends JFrame {
 	public GD_XemChiTietHoaDon(HoaDonEntity hoaDonEntity) {
 		setBackground(new Color(230, 230, 250));
 		this.hoaDonEntity = hoaDonEntity;
-//		setIconImage(Toolkit.getDefaultToolkit().getImage(GD_ChiTietHoaDon.class.getResource("/images/iconLogo1.png")));
 		setTitle("Xem chi tiết hóa đơn");
 		setLocationRelativeTo(null);
 		pnlContent = new JPanel();
@@ -112,7 +112,6 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		btnThoat.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThoat.setBackground(new Color(144, 238, 144));
 		btnThoat.setFocusable(false);
-//		btnThoat.setIcon(new ImageIcon(GD_ChiTietHoaDon.class.getResource("/images/iconDangXuat1.png")));
 		btnThoat.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnThoat.setBounds(750, 456, 120, 35);
 		pnlContent.add(btnThoat);
@@ -121,14 +120,25 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setBackground(new Color(144, 238, 144));
 		btnLamMoi.setFocusable(false);
-//		btnLamMoi.setIcon(new ImageIcon(GD_ChiTietHoaDon.class.getResource("/images/iconLamMoi3.png")));
 		btnLamMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnLamMoi.setBounds(610, 456, 120, 35);
 		pnlContent.add(btnLamMoi);
 
-//		controller = new ChiTietHoaDonController(this);
-//		btnLamMoi.addActionListener(controller);
-//		btnThoat.addActionListener(controller);
-//		tblPhong.addMouseListener(controller);
+		XemChiTietHoaDonController controller = new XemChiTietHoaDonController(this);
+		btnLamMoi.addActionListener(controller);
+		btnThoat.addActionListener(controller);
+		tblPhong.addMouseListener(controller);
+	}
+
+	public void chonPhong() {
+
+	}
+
+	public void chonLamMoi() {
+
+	}
+
+	public void chonThoat() {
+
 	}
 }

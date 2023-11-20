@@ -357,6 +357,7 @@ public class GD_QuanLyDichVu extends JPanel {
 		btnThemLoaiDichVu.addActionListener(controller);
 		btnXoaLoaiDichVu.addActionListener(controller);
 		btnChinhSuaLoaiDichVu.addActionListener(controller);
+		tblDichVu.addMouseListener(controller);
 	}
 
 	public void hienThiThongTin() {

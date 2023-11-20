@@ -16,6 +16,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.SoftBevelBorder;
 
+import controller.QuanLyTaiKhoanController;
 //import controller.QuanLyTaiKhoanController;
 //import dao.QuanLyNhanVienDAO;
 import entities.NhanVienEntity;
@@ -64,11 +65,6 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		lblAnhDaiDien.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconAvatar.png")));
 		lblAnhDaiDien.setBounds(357, 198, 200, 200);
 		pnlTaiKhoan.add(lblAnhDaiDien);
-//		ImageIcon icon = new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/avatar_default.png"));
-//		Image image = icon.getImage();
-//		Image scaledImage = image.getScaledInstance(180, 180, Image.SCALE_SMOOTH);
-//		icon = new ImageIcon(scaledImage);
-//		lblAnhDaiDien.setIcon(icon);
 
 		lblMaNV = new JLabel("Mã nhân viên:");
 		lblMaNV.setBounds(746, 198, 110, 30);
@@ -170,7 +166,6 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 
 		btnDoiMatKhau = new JButton("Đổi mật khẩu");
 		btnDoiMatKhau.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconLamMoi.png")));
-//		btnDoiMatKhau.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconLamMoi3.png")));
 		btnDoiMatKhau.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnDoiMatKhau.setForeground(new Color(0, 0, 0));
 		btnDoiMatKhau.setBackground(new Color(144, 238, 144));
@@ -181,7 +176,6 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 
 		btnDangXuat = new JButton("Đăng xuất");
 		btnDangXuat.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconDangXuat.png")));
-//		btnDangXuat.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconDangXuat1.png")));
 		btnDangXuat.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnDangXuat.setForeground(new Color(0, 0, 0));
 		btnDangXuat.setBackground(new Color(144, 238, 144));
@@ -192,7 +186,6 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 
 		btnChinhSua = new JButton("Chỉnh sửa");
 		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconChinhSua1.png")));
-//		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setForeground(new Color(0, 0, 0));
 		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChinhSua.setFocusPainted(false);
@@ -217,10 +210,22 @@ public class GD_QuanLyTaiKhoan extends JPanel {
 		txtNamSinh.setBounds(1047, 298, 110, 30);
 		pnlTaiKhoan.add(txtNamSinh);
 
-//		controller = new QuanLyTaiKhoanController(this);
-//		btnDangXuat.addActionListener(controller);
-//		btnChinhSua.addActionListener(controller);
-//		btnDoiMatKhau.addActionListener(controller);
+		QuanLyTaiKhoanController controller = new QuanLyTaiKhoanController(this);
+		btnDangXuat.addActionListener(controller);
+		btnChinhSua.addActionListener(controller);
+		btnDoiMatKhau.addActionListener(controller);
+	}
+
+	public void chonChinhSua() {
+
+	}
+
+	public void chonDangXuat() {
+
+	}
+
+	public void chonDoiMatKhau() {
+
 	}
 
 }

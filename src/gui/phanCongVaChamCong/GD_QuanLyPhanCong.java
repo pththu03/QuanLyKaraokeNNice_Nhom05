@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import controller.QuanLyPhanCongController;
 import entities.CaTrucEntity;
 import entities.NhanVienEntity;
 import entities.PhieuPhanCongEntity;
@@ -62,7 +63,7 @@ public class GD_QuanLyPhanCong extends JPanel {
 	public JButton btnThem;
 	public JButton btnXoa;
 	public JButton btnLamMoi;
-//	private PhanCongController controller;
+	public JButton btnChinhSua;
 
 //	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
 //	private PhanCongDAO phanCongDAO = new PhanCongDAO();
@@ -74,7 +75,7 @@ public class GD_QuanLyPhanCong extends JPanel {
 	public GD_QuanLyPhanCong() {
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
-		
+
 		pnlPhanCong = new JPanel();
 		pnlPhanCong.setBackground(new Color(255, 255, 255));
 		pnlPhanCong.setBounds(0, 0, 1365, 694);
@@ -146,7 +147,6 @@ public class GD_QuanLyPhanCong extends JPanel {
 
 		btnThem = new JButton("Thêm");
 		btnThem.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconThem.png")));
-//		btnThem.setIcon(new ImageIcon(GD_PhanCong.class.getResource("/images/iconThem3.png")));
 		btnThem.setForeground(Color.BLACK);
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setFocusPainted(false);
@@ -157,7 +157,6 @@ public class GD_QuanLyPhanCong extends JPanel {
 
 		btnXoa = new JButton("Xóa");
 		btnXoa.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconXoa.png")));
-//		btnXoa.setIcon(new ImageIcon(GD_PhanCong.class.getResource("/images/iconXoa3.png")));
 		btnXoa.setForeground(Color.BLACK);
 		btnXoa.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnXoa.setBackground(new Color(144, 238, 144));
@@ -168,7 +167,6 @@ public class GD_QuanLyPhanCong extends JPanel {
 
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconLamMoi.png")));
-//		btnLamMoi.setIcon(new ImageIcon(GD_PhanCong.class.getResource("/images/iconLamMoi3.png")));
 		btnLamMoi.setForeground(Color.BLACK);
 		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLamMoi.setBackground(new Color(144, 238, 144));
@@ -176,8 +174,8 @@ public class GD_QuanLyPhanCong extends JPanel {
 		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnLamMoi.setBounds(882, 230, 150, 35);
 		pnlChiTietPhanCong.add(btnLamMoi);
-		
-		JButton btnChinhSua = new JButton("Chỉnh sửa");
+
+		btnChinhSua = new JButton("Chỉnh sửa");
 		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyPhanCong.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setForeground(Color.BLACK);
 		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -218,13 +216,33 @@ public class GD_QuanLyPhanCong extends JPanel {
 		lblDsPhanCong.setBounds(0, 10, 1365, 50);
 		pnlDanhSachPhanCong.add(lblDsPhanCong);
 
-//		controller = new PhanCongController(this);
-//		btnLamMoi.addActionListener(controller);
-//		btnThem.addActionListener(controller);
-//		btnXoa.addActionListener(controller);
-//		tblPhanCong.addMouseListener(controller);
+		QuanLyPhanCongController controller = new QuanLyPhanCongController(this);
+		btnLamMoi.addActionListener(controller);
+		btnThem.addActionListener(controller);
+		btnXoa.addActionListener(controller);
+		tblPhanCong.addMouseListener(controller);
 //		cmbMaCaTruc.addActionListener(controller);
 //		cmbMaNV.addActionListener(controller);
+
+	}
+
+	public void hienThiThongTin() {
+
+	}
+
+	public void chonLamMoi() {
+
+	}
+
+	public void chonThem() {
+
+	}
+
+	public void chonXoa() {
+
+	}
+
+	public void chonChinhSua() {
 
 	}
 }

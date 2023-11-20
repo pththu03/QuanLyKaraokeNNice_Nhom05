@@ -25,6 +25,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import controller.QuanLyNhanVienController;
 //import controller.QuanLyNhanVienController;
 //import dao.QuanLyNhanVienDAO;
 import entities.NhanVienEntity;
@@ -86,16 +87,10 @@ public class GD_QuanLyNhanVien extends JPanel {
 	private JRadioButton radDangLamViec;
 	private ButtonGroup grpTrangThai;
 
-//	private QuanLyNhanVienController controller;
-	// dao
-//	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
-//	private List<NhanVienEntity> listNhanVien;
-
 	public GD_QuanLyNhanVien() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
-
+		setBounds(0, 0, 1365, 694);
+		
 		pnlQuanLyNhanVien = new JPanel();
 		pnlQuanLyNhanVien.setBounds(0, 0, 1365, 694);
 		add(pnlQuanLyNhanVien);
@@ -184,7 +179,6 @@ public class GD_QuanLyNhanVien extends JPanel {
 		btnThem.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconThem.png")));
 		btnThem.setBounds(970, 220, 150, 35);
 		pnlThongTinNhanVien.add(btnThem);
-//		btnThem.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconThem3.png")));
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setForeground(Color.BLACK);
@@ -195,13 +189,11 @@ public class GD_QuanLyNhanVien extends JPanel {
 		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBounds(1163, 220, 150, 35);
 		pnlThongTinNhanVien.add(btnChinhSua);
-//		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
 		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnChinhSua.setForeground(Color.BLACK);
 		btnChinhSua.setFocusPainted(false);
 		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
-//		lblAnhDaiDien.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/avatar_default_!.png")));
 
 		txtSDT = new JTextField();
 		txtSDT.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -261,10 +253,6 @@ public class GD_QuanLyNhanVien extends JPanel {
 		pnlTimKiem.setBounds(0, 0, 1365, 137);
 		pnlQuanLyNhanVien.add(pnlTimKiem);
 		pnlTimKiem.setLayout(null);
-//		ImageIcon icon = new ImageIcon(GD_QuanLyTaiKhoan.class.getResource("/images/avatar_default.png"));
-//		Image image = icon.getImage();
-//		Image scaledImage = image.getScaledInstance(130, 130, Image.SCALE_SMOOTH);
-//		icon = new ImageIcon(scaledImage);
 
 		lblTimTheoChucVu = new JLabel("Chức vụ:");
 		lblTimTheoChucVu.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -291,15 +279,10 @@ public class GD_QuanLyNhanVien extends JPanel {
 
 		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconTimKiem.png")));
-		btnTimKiem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnTimKiem.setBackground(new Color(144, 238, 144));
 		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiem.setFocusPainted(false);
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiem.setBounds(1185, 85, 150, 35);
 		pnlTimKiem.add(btnTimKiem);
 
@@ -324,17 +307,16 @@ public class GD_QuanLyNhanVien extends JPanel {
 		cmbTimTheoTrangThai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		cmbTimTheoTrangThai.setBounds(1135, 30, 200, 30);
 		pnlTimKiem.add(cmbTimTheoTrangThai);
-		
-				btnLamMoi = new JButton("Làm mới");
-				btnLamMoi.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconLamMoi.png")));
-				btnLamMoi.setBounds(1000, 86, 150, 35);
-				pnlTimKiem.add(btnLamMoi);
-				//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconLamMoi3.png")));
-						btnLamMoi.setBackground(new Color(144, 238, 144));
-						btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-						btnLamMoi.setForeground(Color.BLACK);
-						btnLamMoi.setFocusPainted(false);
-						btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyNhanVien.class.getResource("/images/iconLamMoi.png")));
+		btnLamMoi.setBounds(1000, 86, 150, 35);
+		pnlTimKiem.add(btnLamMoi);
+		btnLamMoi.setBackground(new Color(144, 238, 144));
+		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLamMoi.setForeground(Color.BLACK);
+		btnLamMoi.setFocusPainted(false);
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
 
 		pnlDSNhanVien = new JPanel();
 		pnlDSNhanVien.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
@@ -371,11 +353,32 @@ public class GD_QuanLyNhanVien extends JPanel {
 		lblDSNhanVien.setBounds(0, 10, 1365, 40);
 		pnlDSNhanVien.add(lblDSNhanVien);
 
-//		controller = new QuanLyNhanVienController(this);
-//		btnTimKiem.addActionListener(controller);
-//		btnThem.addActionListener(controller);
-//		btnChinhSua.addActionListener(controller);
-//		btnLamMoi.addActionListener(controller);
-//		tblNhanVien.addMouseListener(controller);
+		QuanLyNhanVienController controller = new QuanLyNhanVienController(this);
+		btnTimKiem.addActionListener(controller);
+		btnThem.addActionListener(controller);
+		btnChinhSua.addActionListener(controller);
+		btnLamMoi.addActionListener(controller);
+		tblNhanVien.addMouseListener(controller);
 	}
+	
+	public void hienThiThongTin() {
+		
+	}
+	
+	public void chonLamMoi() {
+		
+	}
+	
+	public void chonTimKiem() {
+		
+	}
+	
+	public void chonThem() {
+		
+	}
+	
+	public void chonChinhSua() {
+		
+	}
+	
 }

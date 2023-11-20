@@ -20,6 +20,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import controller.QuanLyKhachHangController;
 import entities.KhachHangEntity;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -53,16 +54,10 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JLabel lblTenKH;
 
 	// JButton
-	public JButton btnChinhSua;
-	public JButton btnTimKiem;
-	public JButton btnThem;
-	public JButton btnLamMoi;
 
 	// JScrollPane
 	private JScrollPane scrKhachHang;
 	private DefaultTableModel tblmdelKhachHang;
-//	private QuanLyKhachHangController controller;
-//	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
 	private List<KhachHangEntity> list;
 	private JTextField txtSLDatPhong;
 	private JLabel lblSLDatPhong;
@@ -71,10 +66,15 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JTextField txtSoLanDatPhongTu;
 	private JTextField txtSoLanDatPhongDen;
 
+	public JButton btnChinhSua;
+	public JButton btnTimKiem;
+	public JButton btnThem;
+	public JButton btnLamMoi;
+
 	public GD_QuanLyKhachHang() {
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
-		
+
 		pnlKhachHang = new JPanel();
 		pnlKhachHang.setBackground(new Color(211, 211, 211));
 		pnlKhachHang.setBounds(0, 0, 1365, 694);
@@ -116,15 +116,10 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem.png")));
-		btnTimKiem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		btnTimKiem.setFocusable(false);
 		btnTimKiem.setBackground(new Color(144, 238, 144));
 		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiem.setBounds(1185, 85, 150, 35);
 		pnlTimKiem.add(btnTimKiem);
 
@@ -173,16 +168,15 @@ public class GD_QuanLyKhachHang extends JPanel {
 		txtSoLanDatPhongDen.setColumns(10);
 		txtSoLanDatPhongDen.setBounds(350, 20, 200, 30);
 		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongDen);
-		
-				btnLamMoi = new JButton("Làm mới");
-				btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
-				btnLamMoi.setBounds(1000, 85, 150, 35);
-				pnlTimKiem.add(btnLamMoi);
-				//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi3.png")));
-						btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
-						btnLamMoi.setFocusable(false);
-						btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-						btnLamMoi.setBackground(new Color(144, 238, 144));
+
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
+		btnLamMoi.setBounds(1000, 85, 150, 35);
+		pnlTimKiem.add(btnLamMoi);
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnLamMoi.setFocusable(false);
+		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLamMoi.setBackground(new Color(144, 238, 144));
 
 		JPanel pnlThongTin = new JPanel();
 		pnlThongTin.setBorder(null);
@@ -266,7 +260,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnChinhSua.setBounds(1185, 170, 150, 35);
 		pnlThongTin.add(btnChinhSua);
 		btnChinhSua.setFocusable(false);
-//		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
 		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -275,7 +268,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem.png")));
 		btnThem.setBounds(1000, 170, 150, 35);
 		pnlThongTin.add(btnThem);
-//		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem3.png")));
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -294,13 +286,32 @@ public class GD_QuanLyKhachHang extends JPanel {
 		lblSLDatPhong.setBounds(897, 70, 140, 30);
 		pnlThongTin.add(lblSLDatPhong);
 
-//		controller = new QuanLyKhachHangController(this);
-//		btnThem.addActionListener(controller);
-//		btnChinhSua.addActionListener(controller);
-//		btnTimKiem.addActionListener(controller);
-//		btnLamMoi.addActionListener(controller);
-//		tblKhachHang.addMouseListener(controller);
+		QuanLyKhachHangController controller = new QuanLyKhachHangController(this);
+		btnThem.addActionListener(controller);
+		btnChinhSua.addActionListener(controller);
+		btnTimKiem.addActionListener(controller);
+		btnLamMoi.addActionListener(controller);
+		tblKhachHang.addMouseListener(controller);
 
 	}
 
+	public void hienThiThongTin() {
+
+	}
+
+	public void chonLamMoi() {
+
+	}
+
+	public void chonTimKiem() {
+
+	}
+
+	public void chonThem() {
+
+	}
+
+	public void chonChinhSua() {
+
+	}
 }

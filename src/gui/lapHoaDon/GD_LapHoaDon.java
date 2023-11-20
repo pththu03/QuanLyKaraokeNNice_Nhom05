@@ -28,6 +28,7 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import controller.LapHoaDonController;
 //import controller.LapHoaDonController;
 //import dao.LapHoaDonDAO;
 //import dao.QuanLyChiTietDichVuDAO;
@@ -46,11 +47,7 @@ import util.TimeFormatter;
 public class GD_LapHoaDon extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JTable tblHoaDon;
-	private DefaultTableModel tblmodelHoaDon;
-	public JButton btnLapHoaDon;
-	public JButton btnXemChiTiet;
-	private JCheckBox chkXuatHoaDon;
+
 	private JTextField txtTenKhachHang;
 	private JTextField txtSoDienThoai;
 	private JTextField txtTienDichVu;
@@ -76,8 +73,16 @@ public class GD_LapHoaDon extends JPanel {
 	private JPanel pnlTimKiem;
 	private JLabel lblTimKiemTheoSDT;
 	private JTextField textField;
-	private JButton btnTimKiem;
-	private JButton btnLamMoi;
+
+	private JTable tblHoaDon;
+	private DefaultTableModel tblmodelHoaDon;
+	private JCheckBox chkXuatHoaDon;
+
+	public JButton btnTimKiem;
+	public JButton btnLamMoi;
+	public JButton btnLapHoaDon;
+	public JButton btnXemChiTiet;
+
 //	private LapHoaDonController controller;
 //	private List<HoaDonEntity> listHoaDon;
 //	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
@@ -94,8 +99,7 @@ public class GD_LapHoaDon extends JPanel {
 
 	public GD_LapHoaDon() {
 		setLayout(null);
-		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-		setBounds(0, 0, (int) screen.getWidth(), (int) screen.getHeight());
+		setBounds(0, 0, 1365, 694);
 
 		JPanel pnlLapHoaDon = new JPanel();
 		pnlLapHoaDon.setBounds(0, 0, 1365, 694);
@@ -242,7 +246,6 @@ public class GD_LapHoaDon extends JPanel {
 		btnLapHoaDon.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnLapHoaDon.setBackground(new Color(255, 128, 128));
 		btnLapHoaDon.setFocusable(false);
-//		btnLapHoaDon.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconTick.png")));
 		btnLapHoaDon.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnLapHoaDon.setBounds(450, 550, 195, 39);
 		pnlChiTietLapHoaDon.add(btnLapHoaDon);
@@ -262,7 +265,6 @@ public class GD_LapHoaDon extends JPanel {
 
 		btnXemChiTiet = new JButton("Xem chi tiết hóa đơn");
 		btnXemChiTiet.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconMatMo.png")));
-//		btnXemChiTiet.setIcon(new ImageIcon(GD_LapHoaDon.class.getResource("/images/iconNhinMK.png")));
 		btnXemChiTiet.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnXemChiTiet.setFocusable(false);
 		btnXemChiTiet.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -355,6 +357,33 @@ public class GD_LapHoaDon extends JPanel {
 
 			}
 		});
+
+		LapHoaDonController controller = new LapHoaDonController(this);
+		btnLamMoi.addActionListener(controller);
+		btnTimKiem.addActionListener(controller);
+		btnXemChiTiet.addActionListener(controller);
+		btnLapHoaDon.addActionListener(controller);
+		tblHoaDon.addMouseListener(controller);
+
+	}
+
+	public void hienThiThongTin() {
+
+	}
+
+	public void chonLamMoi() {
+
+	}
+
+	public void chonTimKiem() {
+
+	}
+
+	public void chonXemChiTiet() {
+
+	}
+
+	public void chonLapHoaDon() {
 
 	}
 }
