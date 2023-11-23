@@ -1,8 +1,6 @@
 package gui.dangNhap;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Toolkit;
 
@@ -10,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
@@ -18,8 +17,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
 
 import controller.DoiMatKhauController;
-//import controller.DoiMatKhauController;
-//import dao.QuanLyNhanVienDAO;
+import dao.QuanLyNhanVienDAO;
 import entities.NhanVienEntity;
 
 public class GD_DoiMatKhau extends JDialog {
@@ -47,6 +45,7 @@ public class GD_DoiMatKhau extends JDialog {
 	public JButton btnThoat;
 
 	private NhanVienEntity nhanVienEntity = new NhanVienEntity();
+	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
 
 	public GD_DoiMatKhau(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
@@ -98,7 +97,6 @@ public class GD_DoiMatKhau extends JDialog {
 		btnMatKhauMoi.setBackground(new Color(230, 230, 250));
 		btnMatKhauMoi.setBorder(null);
 		btnMatKhauMoi.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//		btnMatKhauMoi.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconNhinMK1.png")));
 		btnMatKhauMoi.setBounds(336, 116, 30, 30);
 		pnlDoiMatKhau.add(btnMatKhauMoi);
 
@@ -119,7 +117,6 @@ public class GD_DoiMatKhau extends JDialog {
 		btnNhapLaiMK.setBackground(new Color(230, 230, 250));
 		btnNhapLaiMK.setBorder(null);
 		btnNhapLaiMK.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-//		btnNhapLaiMK.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconNhinMK1.png")));
 		btnNhapLaiMK.setBounds(336, 166, 30, 30);
 		pnlDoiMatKhau.add(btnNhapLaiMK);
 
@@ -152,7 +149,7 @@ public class GD_DoiMatKhau extends JDialog {
 		btnThoat.setFocusPainted(false);
 		btnThoat.setActionCommand("Cancel");
 		pnlTacVu.add(btnThoat);
-		
+
 		DoiMatKhauController controller = new DoiMatKhauController(this);
 		btnDoiMatKhau.addActionListener(controller);
 		btnThoat.addActionListener(controller);
@@ -161,25 +158,82 @@ public class GD_DoiMatKhau extends JDialog {
 		btnNhapLaiMK.addActionListener(controller);
 
 	}
-	
-	public void chonDoiMatKhau() {
-		
-	}
-	
+
+	private boolean xemMKCu = false;
+	private boolean xemMKMoi = false;
+	private boolean xemLaiMK = false;
+
 	public void chonThoat() {
-		
+		this.dispose();
 	}
-	
+
+	public void chonDoiMatKhau() {
+		if (kiemTraMatKhau()) {
+			String matKhauMoi = new String(txtMatKhauMoi.getPassword());
+			if (quanLyNhanVienDAO.doiMatKhau(matKhauMoi, nhanVienEntity.getSoDienThoai())) {
+				JOptionPane.showMessageDialog(this, "Đổi mật khẩu thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				chonThoat();
+			} else {
+				JOptionPane.showMessageDialog(this, "Đổi mật khẩu không thành công", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+		}
+	}
+
 	public void chonXemMatKhauCu() {
-		
+		xemMKCu = !xemMKCu;
+		if (xemMKCu) {
+			btnMatKhauCu.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatMo.png")));
+			txtMatKhauCu.setEchoChar((char) 0);
+		} else {
+			btnMatKhauCu.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatNham.png")));
+			txtMatKhauCu.setEchoChar('•');
+		}
 	}
-	
+
 	public void chonXemMatKhauMoi() {
-		
+		xemMKMoi = !xemMKMoi;
+		if (xemMKMoi) {
+			btnMatKhauMoi.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatMo.png")));
+			txtMatKhauMoi.setEchoChar((char) 0);
+		} else {
+			btnMatKhauMoi.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatNham.png")));
+			txtMatKhauMoi.setEchoChar('•');
+		}
 	}
-	
+
 	public void chonXemLaiMatKhau() {
-		
+		xemLaiMK = !xemLaiMK;
+		if (xemLaiMK) {
+			btnNhapLaiMK.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatMo.png")));
+			txtNhapLaiMK.setEchoChar((char) 0);
+		} else {
+			btnNhapLaiMK.setIcon(new ImageIcon(GD_DoiMatKhau.class.getResource("/images/iconMatNham.png")));
+			txtNhapLaiMK.setEchoChar('•');
+		}
+	}
+
+	private boolean kiemTraMatKhau() {
+		String mkCu = new String(txtMatKhauCu.getPassword());
+		String mkMoi = new String(txtMatKhauMoi.getPassword());
+		String nhapLaiMKMoi = new String(txtNhapLaiMK.getPassword());
+
+		if (mkCu.isEmpty() || mkMoi.isEmpty() || nhapLaiMKMoi.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống");
+			return false;
+		} else if (mkMoi.equals(mkCu) == true) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải khác mật khẩu hiện tại");
+			return false;
+		} else if (nhapLaiMKMoi.equals(mkMoi) == false) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu không giống nhau!");
+			return false;
+		} else if (!mkMoi.matches("^[a-zA-Z][0-9a-zA-Z]{7}$")) {
+			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải có ít nhất 8 kí tự và bắt đầu bằng chữ!");
+			return false;
+		}
+		return true;
 	}
 
 }

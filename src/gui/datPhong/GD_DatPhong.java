@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -48,6 +49,10 @@ import util.DateFormatter;
 import util.TimeFormatter;
 import javax.swing.border.SoftBevelBorder;
 import com.toedter.calendar.JDateChooser;
+
+import controller.DatPhongController;
+import dao.QuanLyPhongDAO;
+
 import java.awt.SystemColor;
 
 public class GD_DatPhong extends JPanel {
@@ -113,6 +118,7 @@ public class GD_DatPhong extends JPanel {
 	private DefaultComboBoxModel<Integer> cmbmodelGioTraPhong;
 	private DefaultComboBoxModel<Integer> cmbmodelPhutTraPhong;
 
+	private JDateChooser chonNgayDatTruoc;
 	private ButtonGroup grpDatPhong;
 	public JRadioButton radDatPhongNgay;
 	public JRadioButton radDatPhongTruoc;
@@ -128,6 +134,7 @@ public class GD_DatPhong extends JPanel {
 	public JButton btnXoaPhongDaChon;
 	public JButton btnChonPhong;
 	public JButton btnHuyPhongDatTruoc;
+	public JButton btnNhanPhong;
 
 	private JScrollPane scrDSPhong;
 	private JScrollPane scrDSPhongDaChon;
@@ -137,23 +144,16 @@ public class GD_DatPhong extends JPanel {
 	private DefaultTableModel tblmodelPhong;
 	private DefaultTableModel tblmodelPhongDaChon;
 
-//	private DatPhongController controller;
-
 	private List<PhongEntity> listPhong;
 	private List<KhachHangEntity> listKhachHang;
 
-//	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-//	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
-//	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
-//	private QuanLyChiTietHoaDonDAO quanLyChiTietHoaDonDAO = new QuanLyChiTietHoaDonDAO();
-//	private DatPhongDAO datPhongDAO = new DatPhongDAO();
+	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
 
 	private NhanVienEntity nhanVienEntity;
 	private KhachHangEntity khachHangEntity;
 
 	private String maPhongCu = null;
 	private String maPhongMoi = null;
-	private JButton btnNhanPhong;
 
 	public GD_DatPhong(NhanVienEntity nhanVienEntity) {
 		this.nhanVienEntity = nhanVienEntity;
@@ -231,7 +231,6 @@ public class GD_DatPhong extends JPanel {
 		btnTimKiemPhong.setBackground(new Color(144, 238, 144));
 		btnTimKiemPhong.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemPhong.setFocusable(false);
-//		btnTimKiemPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemPhong.setBounds(492, 110, 150, 35);
 		pnlTimKiem.add(btnTimKiemPhong);
 
@@ -251,7 +250,6 @@ public class GD_DatPhong extends JPanel {
 		btnLamMoi.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconLamMoi.png")));
 		btnLamMoi.setMnemonic(KeyEvent.VK_R);
 		btnLamMoi.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnLamMoi.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconLamMoi3.png")));
 		btnLamMoi.setFocusable(false);
 		btnLamMoi.setBackground(new Color(144, 238, 144));
 		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -321,7 +319,6 @@ public class GD_DatPhong extends JPanel {
 		btnChonPhong = new JButton("Chọn phòng");
 		btnChonPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconThem2.png")));
 		pnlButtonChucNang.add(btnChonPhong);
-//		btnChonPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconThem3.png")));
 		btnChonPhong.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChonPhong.setFocusable(false);
 		btnChonPhong.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -329,7 +326,6 @@ public class GD_DatPhong extends JPanel {
 
 		btnNhanPhong = new JButton("Nhận phòng");
 		btnNhanPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconChon.png")));
-//		btnNhanPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconTick1.png")));
 		btnNhanPhong.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnNhanPhong.setFocusable(false);
 		btnNhanPhong.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -339,7 +335,6 @@ public class GD_DatPhong extends JPanel {
 		btnDoiPhong = new JButton("Đổi phòng");
 		btnDoiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconChinhSua2.png")));
 		pnlButtonChucNang.add(btnDoiPhong);
-//		btnDoiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconDoi.png")));
 		btnDoiPhong.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnDoiPhong.setFocusable(false);
 		btnDoiPhong.setBackground(new Color(255, 128, 128));
@@ -348,7 +343,6 @@ public class GD_DatPhong extends JPanel {
 		btnXoaPhongDaChon = new JButton("Xóa đã chọn");
 		btnXoaPhongDaChon.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconXoa1.png")));
 		pnlButtonChucNang.add(btnXoaPhongDaChon);
-//		btnXoaPhongDaChon.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconXoa3.png")));
 		btnXoaPhongDaChon.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnXoaPhongDaChon.setFocusable(false);
 		btnXoaPhongDaChon.setBackground(new Color(255, 128, 128));
@@ -357,7 +351,6 @@ public class GD_DatPhong extends JPanel {
 		btnHuyPhongDatTruoc = new JButton("Hủy đặt trước");
 		btnHuyPhongDatTruoc.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconHuy.png")));
 		pnlButtonChucNang.add(btnHuyPhongDatTruoc);
-//		btnHuyPhongDatTruoc.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconChon1.png")));
 		btnHuyPhongDatTruoc.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnHuyPhongDatTruoc.setFocusable(false);
 		btnHuyPhongDatTruoc.setBorder(new BevelBorder(BevelBorder.RAISED));
@@ -461,7 +454,6 @@ public class GD_DatPhong extends JPanel {
 
 		lblImgChuThichPhongTrong = new JLabel("");
 		lblImgChuThichPhongTrong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongTrong.png")));
-//		lblImgChuThichPhongTrong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongTrong.png")));
 		lblImgChuThichPhongTrong.setBounds(70, 7, 40, 40);
 		pnlChanTrang.add(lblImgChuThichPhongTrong);
 
@@ -472,7 +464,6 @@ public class GD_DatPhong extends JPanel {
 
 		lblImgChuThichPhongCho = new JLabel("");
 		lblImgChuThichPhongCho.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDatTruoc.png")));
-//		lblImgChuThichPhongCho.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongCho.png")));
 		lblImgChuThichPhongCho.setBounds(198, 7, 40, 40);
 		pnlChanTrang.add(lblImgChuThichPhongCho);
 
@@ -482,9 +473,8 @@ public class GD_DatPhong extends JPanel {
 		pnlChanTrang.add(lblChuThichPhongCho);
 
 		lblImgChuThichPhongDangSuDung = new JLabel("");
-		lblImgChuThichPhongDangSuDung.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDangSuDung.png")));
-//		lblImgChuThichPhongDangSuDung
-//				.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDangSuDung.png")));
+		lblImgChuThichPhongDangSuDung
+				.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDangSuDung.png")));
 		lblImgChuThichPhongDangSuDung.setBounds(326, 7, 40, 40);
 		pnlChanTrang.add(lblImgChuThichPhongDangSuDung);
 
@@ -495,7 +485,6 @@ public class GD_DatPhong extends JPanel {
 
 		lblImgChuThichPhongVIP = new JLabel("");
 		lblImgChuThichPhongVIP.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconVIP.png")));
-//		lblImgChuThichPhongVIP.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconVuongMien1.png")));
 		lblImgChuThichPhongVIP.setBounds(454, 7, 40, 40);
 		pnlChanTrang.add(lblImgChuThichPhongVIP);
 
@@ -531,8 +520,8 @@ public class GD_DatPhong extends JPanel {
 		pnlChanTrang.add(lblGioHienTai);
 
 		lblVIP = new JLabel("");
-//		lblVIP.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconVuongMien.png")));
-		lblVIP.setBounds(506, 118, 60, 53);
+		lblVIP.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconVIP1.png")));
+		lblVIP.setBounds(506, 113, 60, 53);
 		lblVIP.setVisible(false);
 		pnlChiTietDatPhong.add(lblVIP);
 
@@ -584,7 +573,6 @@ public class GD_DatPhong extends JPanel {
 
 		lblImgTrangThaiPhong = new JLabel("");
 		lblImgTrangThaiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhong2.png")));
-//		lblImgTrangThaiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhong5.png")));
 		lblImgTrangThaiPhong.setBounds(458, 124, 180, 180);
 		pnlChiTietDatPhong.add(lblImgTrangThaiPhong);
 
@@ -615,7 +603,6 @@ public class GD_DatPhong extends JPanel {
 		btnTimKiemKhachHang.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconTimKiem.png")));
 		btnTimKiemKhachHang.setMnemonic(KeyEvent.VK_F);
-//		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiemKhachHang.setFocusable(false);
 		btnTimKiemKhachHang.setBackground(new Color(144, 238, 144));
 		btnTimKiemKhachHang.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -646,38 +633,176 @@ public class GD_DatPhong extends JPanel {
 		btnDatPhong = new JButton("Đặt phòng");
 		btnDatPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconTick.png")));
 		btnDatPhong.setMnemonic(KeyEvent.VK_ENTER);
-//		btnDatPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconDatPhong1.png")));
 		btnDatPhong.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnDatPhong.setFocusable(false);
 		btnDatPhong.setBackground(new Color(144, 238, 144));
 		btnDatPhong.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnDatPhong.setBounds(437, 550, 150, 40);
 		pnlChiTietDatPhong.add(btnDatPhong);
-		
+
 		JLabel lblNewLabel = new JLabel("Chọn ngày:");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setBounds(87, 370, 73, 25);
 		pnlChiTietDatPhong.add(lblNewLabel);
-		
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setDateFormatString("dd-MM-yyyy");
-		dateChooser.setBounds(200, 370, 200, 25);
-		pnlChiTietDatPhong.add(dateChooser);
 
-//		controller = new DatPhongController(this);
-//		radDatPhongNgay.addActionListener(controller);
-//		radDatPhongTruoc.addActionListener(controller);
-//		btnTimKiemKhachHang.addActionListener(controller);
-//		btnDatPhong.addActionListener(controller);
-//		btnNhanPhong.addActionListener(controller);
-//		btnTimKiemPhong.addActionListener(controller);
-//		btnLamMoi.addActionListener(controller);
-//		btnDoiPhong.addActionListener(controller);
-//		btnHuyPhongDatTruoc.addActionListener(controller);
-//		btnChonPhong.addActionListener(controller);
-//		tblPhong.addMouseListener(controller);
-//		tblPhongDaChon.addMouseListener(controller);
+		chonNgayDatTruoc = new JDateChooser();
+		chonNgayDatTruoc.setDateFormatString("dd-MM-yyyy");
+		chonNgayDatTruoc.setBounds(200, 370, 200, 25);
+		pnlChiTietDatPhong.add(chonNgayDatTruoc);
+
+		DatPhongController controller = new DatPhongController(this);
+		radDatPhongNgay.addActionListener(controller);
+		radDatPhongTruoc.addActionListener(controller);
+		btnLamMoi.addActionListener(controller);
+		btnTimKiemPhong.addActionListener(controller);
+		btnTimKiemKhachHang.addActionListener(controller);
+		btnChonPhong.addActionListener(controller);
+		btnNhanPhong.addActionListener(controller);
+		btnXoaPhongDaChon.addActionListener(controller);
+		btnDoiPhong.addActionListener(controller);
+		btnHuyPhongDatTruoc.addActionListener(controller);
+		btnDatPhong.addActionListener(controller);
+		tblPhong.addMouseListener(controller);
+		tblPhongDaChon.addMouseListener(controller);
+
+		loadData();
+	}
+
+	private void loadData() {
+		tblPhong.removeAll();
+		tblPhong.setRowSelectionAllowed(false);
+		tblmodelPhong.setRowCount(0);
+		listPhong = new ArrayList<>();
+		listPhong = quanLyPhongDAO.duyetDanhSach();
+
+		int stt = 1;
+		for (PhongEntity phongEntity : listPhong) {
+			boolean kiemTra = true;
+			for (int i = 0; i < tblPhongDaChon.getRowCount(); i++) {
+				if (phongEntity.getMaPhong().equalsIgnoreCase(tblmodelPhongDaChon.getValueAt(i, 1).toString())) {
+					kiemTra = false;
+					break;
+				}
+			}
+			if (kiemTra) {
+				tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
+						phongEntity.getLoaiPhong().getTenLoaiPhong(), phongEntity.getSucChua(),
+						phongEntity.getTrangThai() });
+			}
+		}
+	}
+
+	/****************** CHỌN ĐẶT PHÒNG NGAY ******************/
+	public void chonDatPhongNgay() {
+		cmbGioNhanPhong.setEnabled(false);
+		cmbPhutNhanPhong.setEnabled(false);
+		chonNgayDatTruoc.setEnabled(false);
+	}
+
+	/****************** CHỌN ĐẶT PHÒNG TRƯỚC ******************/
+	public void chonDatPhongTruoc() {
+		cmbGioNhanPhong.setEnabled(true);
+		cmbPhutNhanPhong.setEnabled(true);
+		chonNgayDatTruoc.setEnabled(true);
+	}
+
+	/****************** HIỂN THỊ THÔNG TIN PHÒNG ******************/
+	public void hienThiThongTinPhong() {
+		int row = tblPhong.getSelectedRow();
+		if (row >= 0) {
+			String loaiPhong = tblPhong.getValueAt(row, 3).toString();
+			String trangThai = "Trống";
+			txtSoPhong.setText(tblPhong.getValueAt(row, 2).toString());
+			txtLoaiPhong.setText(loaiPhong);
+			txtSucChua.setText(tblPhong.getValueAt(row, 4).toString());
+			lblImgTrangThaiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongTrong1.png")));
+			if (trangThai.equalsIgnoreCase("Đang sử dụng")) {
+				lblImgTrangThaiPhong
+						.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDangSuDung1.png")));
+			} else if (trangThai.equalsIgnoreCase("Đặt trước")) {
+				lblImgTrangThaiPhong
+						.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhongDatTruoc1.png")));
+			}
+			if (loaiPhong.equalsIgnoreCase("VIP")) {
+				lblVIP.setVisible(true);
+			} else {
+				lblVIP.setVisible(false);
+			}
+		}
+	}
+
+	/****************** HIỂN THỊ THÔNG TIN PHÒNG ĐÃ CHỌN ******************/
+	public void hienThiThongTinPhongDaChon() {
+		int row = tblPhong.getSelectedRow();
+		if (row >= 0) {
+			String loaiPhong = tblPhong.getValueAt(row, 3).toString();
+			txtSoPhong.setText(tblPhong.getValueAt(row, 2).toString());
+			txtLoaiPhong.setText(loaiPhong);
+			txtSucChua.setText(tblPhong.getValueAt(row, 4).toString());
+			if (loaiPhong.equalsIgnoreCase("VIP")) {
+				lblVIP.setVisible(true);
+			} else {
+				lblVIP.setVisible(false);
+			}
+		}
+	}
+
+	/****************** LÀM MỚI ******************/
+	public void chonLamMoi() {
+		txtSoPhong.setText("");
+		txtLoaiPhong.setText("");
+		txtSucChua.setText("");
+		txtTenKhachHang.setText("");
+		txtTimKiemTheoSoPhong.setText("");
+		txtSDTKhachHang.setText("");
+		radDatPhongNgay.setSelected(true);
+		cmbGioNhanPhong.setSelectedIndex(0);
+		cmbGioTraPhong.setSelectedIndex(0);
+		cmbTimKiemTheoLoaiPhong.setSelectedIndex(0);
+		cmbTimKiemTheoSucChua.setSelectedIndex(0);
+		cmbTimKiemTheoTrangThai.setSelectedIndex(0);
+		lblImgTrangThaiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhong2.png")));
+		loadData();
+	}
+
+	/****************** TÌM KIẾM PHÒNG ******************/
+	public void chonTimKiemPhong() {
+
+	}
+
+	/****************** TÌM KIẾM KHÁCH HÀNG ******************/
+	public void chonTimKiemKhachHang() {
+
+	}
+
+	/****************** CHỌN PHÒNG ******************/
+	public void chonChonPhong() {
+
+	}
+
+	/****************** XÓA PHÒNG ĐÃ CHỌN ******************/
+	public void chonXoaPhongDaChon() {
+
+	}
+
+	/****************** NHẬN PHÒNG ******************/
+	public void chonNhanPhong() {
+
+	}
+
+	/****************** ĐỔI PHÒNG ******************/
+	public void chonDoiPhong() {
+
+	}
+
+	/****************** HỦY PHÒNG ĐẶT PHÒNG ******************/
+	public void chonHuyPhongDatTruoc() {
+
+	}
+
+	/****************** ĐẶT PHÒNG ******************/
+	public void chonDatPhong() {
 
 	}
 }

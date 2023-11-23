@@ -12,6 +12,11 @@ public class LoaiPhong {
 		this.tenLoaiPhong = tenLoaiPhong;
 	}
 
+	public LoaiPhong(String tenLoaiPhong) {
+		super();
+		this.tenLoaiPhong = tenLoaiPhong;
+	}
+
 	public String getMaLoai() {
 		return maLoai;
 	}
@@ -30,7 +35,7 @@ public class LoaiPhong {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maLoai);
+		return Objects.hash(maLoai, tenLoaiPhong);
 	}
 
 	@Override
@@ -40,7 +45,7 @@ public class LoaiPhong {
 		if (obj == null)
 			return false;
 		LoaiPhong other = (LoaiPhong) obj;
-		return Objects.equals(maLoai, other.maLoai);
+		return Objects.equals(maLoai, other.maLoai) || Objects.equals(tenLoaiPhong, other.tenLoaiPhong);
 	}
 
 	@Override

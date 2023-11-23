@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -13,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -26,9 +28,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 import controller.QuanLyNhanVienController;
-//import controller.QuanLyNhanVienController;
-//import dao.QuanLyNhanVienDAO;
+import dao.QuanLyNhanVienDAO;
 import entities.NhanVienEntity;
+import util.MoneyFormatter;
+import util.PasswordHasher;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -87,10 +91,13 @@ public class GD_QuanLyNhanVien extends JPanel {
 	private JRadioButton radDangLamViec;
 	private ButtonGroup grpTrangThai;
 
+	private List<NhanVienEntity> listNhanVien;
+	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
+
 	public GD_QuanLyNhanVien() {
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
-		
+
 		pnlQuanLyNhanVien = new JPanel();
 		pnlQuanLyNhanVien.setBounds(0, 0, 1365, 694);
 		add(pnlQuanLyNhanVien);
@@ -232,6 +239,7 @@ public class GD_QuanLyNhanVien extends JPanel {
 		radDangLamViec = new JRadioButton("Đang làm việc");
 		radDangLamViec.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		radDangLamViec.setFocusable(false);
+		radDangLamViec.setSelected(true);
 		radDangLamViec.setBackground(new Color(230, 230, 250));
 		radDangLamViec.setBounds(970, 70, 150, 30);
 		pnlThongTinNhanVien.add(radDangLamViec);
@@ -342,6 +350,10 @@ public class GD_QuanLyNhanVien extends JPanel {
 		tblNhanVien.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 		tblNhanVien.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
 
+		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
+		tblNhanVien.getColumnModel().getColumn(9).setCellRenderer(rightRenderer);
+
 		tblNhanVien.getColumnModel().getColumn(0).setPreferredWidth(40);
 		tblNhanVien.getColumnModel().getColumn(1).setPreferredWidth(50);
 		tblNhanVien.getColumnModel().getColumn(3).setPreferredWidth(65);
@@ -359,26 +371,391 @@ public class GD_QuanLyNhanVien extends JPanel {
 		btnChinhSua.addActionListener(controller);
 		btnLamMoi.addActionListener(controller);
 		tblNhanVien.addMouseListener(controller);
+
+		loadData();
 	}
-	
+
+	private void loadData() {
+		listNhanVien = new ArrayList<>();
+		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
+		tblNhanVien.removeAll();
+		tblNhanVien.setRowSelectionAllowed(false);
+		tblmodelNhanVien.setRowCount(0);
+
+		int stt = 1;
+		for (NhanVienEntity nhanVienEntity : listNhanVien) {
+			String trangThai = "Đã nghĩ";
+			if (nhanVienEntity.isTrangThai()) {
+				trangThai = "Đang làm việc";
+			}
+			tblmodelNhanVien.addRow(new Object[] { stt++, nhanVienEntity.getMaNhanVien(), nhanVienEntity.getHoTen(),
+					nhanVienEntity.getChucVu(), nhanVienEntity.getNamSinh(), nhanVienEntity.getSoDienThoai(),
+					nhanVienEntity.getcCCD(), nhanVienEntity.getEmail(), trangThai,
+					MoneyFormatter.format(nhanVienEntity.getMucLuong()) });
+		}
+	}
+
 	public void hienThiThongTin() {
-		
+		int row = tblNhanVien.getSelectedRow();
+		if (row >= 0) {
+			NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(tblNhanVien.getValueAt(row, 1).toString());
+			txtMaNhanVien.setText(nhanVienEntity.getMaNhanVien());
+			txtHoVaTen.setText(nhanVienEntity.getHoTen());
+			txtNamSinh.setText(String.valueOf(nhanVienEntity.getNamSinh()));
+			txtCCCD.setText(nhanVienEntity.getcCCD());
+			txtEmail.setText(nhanVienEntity.getEmail());
+			txtSDT.setText(nhanVienEntity.getSoDienThoai());
+			txtTienLuong.setText(String.valueOf(nhanVienEntity.getMucLuong()));
+
+			txtHoVaTen.setEditable(false);
+			txtNamSinh.setEditable(false);
+			txtCCCD.setEditable(false);
+
+			if (nhanVienEntity.isTrangThai()) {
+				radDangLamViec.setSelected(true);
+			} else {
+				radDaNghi.setSelected(true);
+			}
+			if (nhanVienEntity.getChucVu().equals("Quản lí")) {
+				cmbChucVu.setSelectedIndex(1);
+			} else {
+				cmbChucVu.setSelectedIndex(2);
+			}
+		}
 	}
-	
+
 	public void chonLamMoi() {
-		
+		txtMaNhanVien.setText("");
+		txtHoVaTen.setText("");
+		txtNamSinh.setText("");
+		txtCCCD.setText("");
+		txtSDT.setText("");
+		txtEmail.setText("");
+		txtTienLuong.setText("");
+		cmbChucVu.setSelectedIndex(0);
+		cmbTimTheoChucVu.setSelectedIndex(0);
+		cmbTimTheoTrangThai.setSelectedIndex(0);
+		radDangLamViec.setSelected(true);
+		txtTimTheoHoVaTen.setText("");
+		txtTimTheoSoDienThoai.setText("");
+
+		txtHoVaTen.setEditable(true);
+		txtNamSinh.setEditable(true);
+		txtCCCD.setEditable(true);
+
+		loadData();
 	}
-	
+
 	public void chonTimKiem() {
-		
+		if (kiemTraDuLieuTim()) {
+			String hoTen = txtTimTheoHoVaTen.getText().trim();
+			String soDienThoai = txtTimTheoSoDienThoai.getText().trim();
+			String chucVu = cmbTimTheoChucVu.getSelectedItem().toString();
+			String trangThai = cmbmodelTimTheoTrangThai.getSelectedItem().toString();
+
+			tblNhanVien.removeAll();
+			tblmodelNhanVien.setRowCount(0);
+			listNhanVien = new ArrayList<>();
+			listNhanVien = quanLyNhanVienDAO.timKiem(hoTen, soDienThoai, chucVu, trangThai);
+
+			int stt = 1;
+			for (NhanVienEntity nhanVienEntity : listNhanVien) {
+				
+				trangThai = "Đã nghỉ";
+				if (nhanVienEntity.isTrangThai()) {
+					trangThai = "Đang làm việc";
+				}
+				tblmodelNhanVien.addRow(new Object[] { stt++, nhanVienEntity.getMaNhanVien(), nhanVienEntity.getHoTen(),
+						nhanVienEntity.getChucVu(), nhanVienEntity.getNamSinh(), nhanVienEntity.getSoDienThoai(),
+						nhanVienEntity.getcCCD(), nhanVienEntity.getEmail(), trangThai,
+						MoneyFormatter.format(nhanVienEntity.getMucLuong()) });
+			}
+		}
 	}
-	
+
 	public void chonThem() {
-		
+		if (kiemTraDuLieuThem()) {
+			String hoTen = txtHoVaTen.getText();
+			String cccd = txtCCCD.getText();
+			String sdt = txtSDT.getText();
+			String email = txtEmail.getText();
+			String chucVu = cmbChucVu.getSelectedItem().toString();
+			String password = "12345678";
+			int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
+			double mucLuong = Double.parseDouble(txtTienLuong.getText().trim());
+			boolean trangThai = true;
+
+			NhanVienEntity nhanVienEntity = new NhanVienEntity(hoTen, sdt, email, cccd,
+					PasswordHasher.hashPassword(password), namSinh, mucLuong, chucVu, trangThai);
+			if (quanLyNhanVienDAO.them(nhanVienEntity)) {
+				JOptionPane.showMessageDialog(this, "Thêm thành công");
+				chonLamMoi();
+			} else {
+				JOptionPane.showMessageDialog(this, "Thêm thất bại");
+				return;
+			}
+		}
+		return;
 	}
-	
+
 	public void chonChinhSua() {
-		
+		int row = tblNhanVien.getSelectedRow();
+		if (row >= 0) {
+			if (kiemTraDuLieuChinhSua()) {
+				String maNV = txtMaNhanVien.getText().trim();
+				String sdt = txtSDT.getText();
+				String email = txtEmail.getText();
+				String chucVu = cmbChucVu.getSelectedItem().toString();
+				double mucLuong = Double.parseDouble(txtTienLuong.getText().trim());
+				boolean trangThai = true;
+				if (radDaNghi.isSelected()) {
+					trangThai = false;
+				}
+				NhanVienEntity nhanVienEntity = new NhanVienEntity(maNV, "", sdt, email, "", "", 0, mucLuong, chucVu,
+						trangThai);
+				if (quanLyNhanVienDAO.chinhSua(nhanVienEntity)) {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin thành công");
+					chonLamMoi();
+				} else {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin thất bại");
+					return;
+				}
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Hãy chọn nhân viên cần chỉnh sửa");
+			return;
+		}
 	}
-	
+
+	private boolean kiemTraDuLieuThem() {
+		if (!kiemTraHoTen()) {
+			return false;
+		}
+
+		if (!kiemTraNamSinh()) {
+			return false;
+		}
+
+		if (!kiemtraCCCD()) {
+			return false;
+		}
+
+		if (!kiemTraSoDienThoaiThem()) {
+			return false;
+		}
+
+		if (!kiemTraEmail()) {
+			return false;
+		}
+
+		if (!kiemTraChucVu()) {
+			return false;
+		}
+
+		if (!kiemTraLuong()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean kiemTraDuLieuChinhSua() {
+		if (!kiemTraSoDienThoaiChinhSua()) {
+			return false;
+		}
+
+		if (!kiemTraEmail()) {
+			return false;
+		}
+
+		if (!kiemTraChucVu()) {
+			return false;
+		}
+
+		if (!kiemTraLuong()) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraDuLieuTim() {
+		String soDienThoai = txtTimTheoSoDienThoai.getText().trim();
+		if (soDienThoai.length() > 0) {
+			if (!(soDienThoai.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại chưa đủ 10 ký số", "Nhắc nhở",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtTimTheoSoDienThoai.requestFocus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean kiemTraHoTen() {
+		if (!(txtHoVaTen.getText().trim().length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Họ tên không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtHoVaTen.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemtraCCCD() {
+		listNhanVien = new ArrayList<>();
+		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
+		String cccd = txtCCCD.getText().trim();
+		if (cccd.length() > 0) {
+			if (!(cccd.length() == 12 && cccd.matches("\\d{12}"))) {
+				JOptionPane.showMessageDialog(this, "Số căn cước công dân phải là 12 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtCCCD.requestFocus();
+				return false;
+			}
+			if (listNhanVien.contains(new NhanVienEntity("", "", "", cccd, "", 0, 0, "", true))) {
+				JOptionPane.showMessageDialog(this, "Số căn cước công dân đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtCCCD.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số căn cước công dân không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtCCCD.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraSoDienThoaiThem() {
+		listNhanVien = new ArrayList<>();
+		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
+		String soDienThoai = txtSDT.getText().trim();
+		if (soDienThoai.length() > 0) {
+			if (!(soDienThoai.length() == 10 && soDienThoai.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (listNhanVien.contains(new NhanVienEntity("", soDienThoai, "", "", "", 0, 0, "", true))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraSoDienThoaiChinhSua() {
+		listNhanVien = new ArrayList<>();
+		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
+		String soDienThoai = txtSDT.getText().trim();
+		if (soDienThoai.length() > 0) {
+			if (!(soDienThoai.length() == 10 && soDienThoai.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (!soDienThoai.equals(listNhanVien.get(tblNhanVien.getSelectedRow()).getSoDienThoai())
+					&& listNhanVien.contains(new NhanVienEntity("", soDienThoai, "", "", "", 0, 0, "", true))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraEmail() {
+		String email = txtEmail.getText().trim();
+		if (email.length() > 0) {
+			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
+				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtEmail.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Email không được để trống");
+			txtEmail.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraNamSinh() {
+		if (txtNamSinh.getText().trim().length() > 0) {
+			try {
+				int nam = Integer.parseInt(txtNamSinh.getText().trim());
+				int tuoi = 2023 - nam;
+				if (!(tuoi >= 18 && tuoi <= 60)) {
+					JOptionPane.showMessageDialog(this, "Nhân viên phải từ 18 đến 60 tuổi", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtNamSinh.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Năm sinh nhập vào  là số nguyên", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtNamSinh.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Năm sinh không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtNamSinh.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraChucVu() {
+		if (cmbChucVu.getSelectedIndex() == 0) {
+			JOptionPane.showMessageDialog(this, "Hãy chọn chức vụ cho nhân viên mới", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			cmbChucVu.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraLuong() {
+		if (txtTienLuong.getText().trim().length() > 0) {
+			try {
+				Double luong = Double.parseDouble(txtTienLuong.getText().trim());
+				if (!(luong >= 28000 && luong <= 35000)) {
+					JOptionPane.showMessageDialog(this, "Mức lương phải từ 28000 đến 35000", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtTienLuong.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Mức lương nhập vào là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtTienLuong.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Mức lương không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtTienLuong.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
 }

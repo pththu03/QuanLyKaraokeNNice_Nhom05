@@ -22,6 +22,8 @@ public class DangNhapController implements ActionListener{
 			giaoDienDangNhap.chonDangNhap();
 		} else if (o.equals(giaoDienDangNhap.btnDanhChoKhachHang)) {
 			giaoDienDangNhap.chonDanhChoKhachHang();
+		} else if(o.equals(giaoDienDangNhap.btnNhinMatKhau)) {
+			giaoDienDangNhap.chonNhinMatKhau();
 		}
 	}
 

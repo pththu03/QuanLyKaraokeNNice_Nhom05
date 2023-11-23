@@ -6,13 +6,13 @@ public class PhongEntity {
 	private String maPhong;
 	private int soPhong;
 	private LoaiPhong loaiPhong;
-	private int trangThai;
+	private String trangThai;
 	private int sucChua;
 
 	public PhongEntity() {
 	}
 
-	public PhongEntity(String maPhong, int soPhong, LoaiPhong loaiPhong, int trangThai, int sucChua) {
+	public PhongEntity(String maPhong, int soPhong, LoaiPhong loaiPhong, String trangThai, int sucChua) {
 		this.maPhong = maPhong;
 		this.soPhong = soPhong;
 		this.loaiPhong = loaiPhong;
@@ -20,7 +20,7 @@ public class PhongEntity {
 		this.sucChua = sucChua;
 	}
 
-	public PhongEntity(int soPhong, LoaiPhong loaiPhong, int trangThai, int sucChua) {
+	public PhongEntity(int soPhong, LoaiPhong loaiPhong, String trangThai, int sucChua) {
 		super();
 		this.soPhong = soPhong;
 		this.loaiPhong = loaiPhong;
@@ -52,11 +52,11 @@ public class PhongEntity {
 		this.loaiPhong = loaiPhong;
 	}
 
-	public int getTrangThai() {
+	public String getTrangThai() {
 		return trangThai;
 	}
 
-	public void setTrangThai(int trangThai) {
+	public void setTrangThai(String trangThai) {
 		this.trangThai = trangThai;
 	}
 
@@ -68,9 +68,10 @@ public class PhongEntity {
 		this.sucChua = sucChua;
 	}
 
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(maPhong);
+		return Objects.hash(maPhong, soPhong);
 	}
 
 	@Override
@@ -80,7 +81,7 @@ public class PhongEntity {
 		if (obj == null)
 			return false;
 		PhongEntity other = (PhongEntity) obj;
-		return Objects.equals(maPhong, other.maPhong);
+		return Objects.equals(maPhong, other.maPhong) || soPhong == other.soPhong;
 	}
 
 	@Override

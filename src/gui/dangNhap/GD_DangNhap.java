@@ -58,6 +58,7 @@ public class GD_DangNhap extends JFrame {
 	public JButton btnDangNhap;
 	public JButton btnThoat;
 	public JButton btnDanhChoKhachHang;
+	public JButton btnNhinMatKhau;
 
 	// JLabel
 	private JLabel lblSĐT;
@@ -68,6 +69,8 @@ public class GD_DangNhap extends JFrame {
 	private DangNhapController controller;
 	private List<NhanVienEntity> listNhanVien;
 	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
+
+	private NhanVienEntity nhanVienEntity;
 
 	public GD_DangNhap() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GD_DangNhap.class.getResource("/images/iconLogo.png")));
@@ -141,41 +144,39 @@ public class GD_DangNhap extends JFrame {
 		pwd.setBounds(164, 253, 258, 35);
 		pwd.requestFocus();
 		contentPane.add(pwd);
-		
+
 		JLabel lblLogo = new JLabel("");
 		lblLogo.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconLogo1.png")));
 		lblLogo.setBounds(66, 46, 150, 100);
 		contentPane.add(lblLogo);
-		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setBackground(new Color(230, 230, 250));
-		btnNewButton.setBorder(null);
-		btnNewButton.setFocusable(false);
-		btnNewButton.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconMatNham.png")));
-		btnNewButton.setBounds(421, 253, 40, 35);
-		contentPane.add(btnNewButton);
+
+		btnNhinMatKhau = new JButton("");
+		btnNhinMatKhau.setBackground(new Color(230, 230, 250));
+		btnNhinMatKhau.setBorder(null);
+		btnNhinMatKhau.setFocusable(false);
+		btnNhinMatKhau.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconMatNham.png")));
+		btnNhinMatKhau.setBounds(421, 253, 40, 35);
+		contentPane.add(btnNhinMatKhau);
 
 		controller = new DangNhapController(this);
 		btnDangNhap.addActionListener(controller);
 		btnDanhChoKhachHang.addActionListener(controller);
 		btnThoat.addActionListener(controller);
+		btnNhinMatKhau.addActionListener(controller);
 	}
 
 	/************ ĐĂNG NHẬP ****************/
 	public void chonDangNhap() {
 		if (kiemTraDuLieuNhap()) {
 			@SuppressWarnings("deprecation")
-			String password = PasswordHasher.hashPassword(pwd.getText().trim());
+			String password = pwd.getText().trim();
 			String soDienThoai = txtSoDienThoai.getText().trim();
-			listNhanVien = new ArrayList<>();
-			listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
-			for (NhanVienEntity nhanVienEntity : listNhanVien) {
-				if (nhanVienEntity.getSoDienThoai().equals(soDienThoai)
-						&& nhanVienEntity.getPassword().equals(password)) {
-					new GD_TrangChu(nhanVienEntity).setVisible(true);
-					this.dispose();
-					return;
-				}
+			nhanVienEntity = quanLyNhanVienDAO.timTheoSoDienThoaiVaPassword(soDienThoai, password);
+
+			if (nhanVienEntity != null) {
+				new GD_TrangChu(nhanVienEntity).setVisible(true);
+				this.dispose();
+				return;
 			}
 			JOptionPane.showMessageDialog(this, "Mật khẩu hoặc số điện thoại không hợp lệ");
 			return;
@@ -194,6 +195,19 @@ public class GD_DangNhap extends JFrame {
 	public void chonDanhChoKhachHang() {
 		new GD_TimKiemPhong().setVisible(true);
 		this.dispose();
+	}
+
+	/*********** CHỌN NHÌN MẬT KHẨU ****************/
+
+	public void chonNhinMatKhau() {
+		String urlIcon = btnNhinMatKhau.getIcon().toString();
+		if (urlIcon.contains("iconMatNham")) {
+			btnNhinMatKhau.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconMatMo.png")));
+			pwd.setEchoChar((char) 0);
+		} else if (urlIcon.contains("iconMatMo")) {
+			btnNhinMatKhau.setIcon(new ImageIcon(GD_DangNhap.class.getResource("/images/iconMatNham.png")));
+			pwd.setEchoChar('•');
+		}
 	}
 
 	/************ KIỂM TRA DỮ LIỆU NHẬP ****************/

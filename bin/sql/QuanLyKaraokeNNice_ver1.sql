@@ -503,6 +503,8 @@ INSERT INTO [dbo].[NhanVien] ([HoTen], [SoDienThoai], [Email], [CCCD], [Password
 INSERT INTO [dbo].[NhanVien] ([HoTen], [SoDienThoai], [Email], [CCCD], [Password], [NamSinh], [MucLuong], [ChucVu], [TrangThai]) VALUES (N'Nguyễn Tấn Thái Dương', '0356309561', 'duongnguyen1323@gmail.com', '229004994538', 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f', 1998, 31000, N'Tiếp tân', N'Đang làm việc')
 GO
 
+select * from NhanVien
+
 INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Dương Hoàng Lan Anh', '0906809981', 'dhlananh2309@gmail.com', 1998)
 INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Hoàng Anh', '0941727338', 'hoanganh54321.oc@gmail.com', 2000)
 INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lý Nhựt Anh', '0915841171', 'Lynhutanh26@gmail.com', 2000)
@@ -582,9 +584,6 @@ INSERT INTO [dbo].[LoaiDichVu] ([TenLoaiDichVu]) VALUES (N'Tráng miệng')
 INSERT INTO [dbo].[LoaiDichVu] ([TenLoaiDichVu]) VALUES (N'Khai vị')
 GO
 
-
-select * from DichVu
-
 INSERT INTO [dbo].[DichVu] ([TenDichVu], [MaLoaiDichVu], [Gia]) VALUES (N'Nước ép trái cây', 'LDV001', 35000)
 INSERT INTO [dbo].[DichVu] ([TenDichVu], [MaLoaiDichVu], [Gia]) VALUES (N'Nước khoáng', 'LDV001', 20000)
 INSERT INTO [dbo].[DichVu] ([TenDichVu], [MaLoaiDichVu], [Gia]) VALUES (N'Coca-Cola', 'LDV001', 25000)
@@ -625,3 +624,7 @@ INSERT INTO [dbo].[DichVu] ([TenDichVu], [MaLoaiDichVu], [Gia]) VALUES (N'Soup c
 --INSERT INTO [dbo].DichVu  ([TenDichVu], [MaLoaiDichVu], [Gia]) VALUES (N'Tiệc công ty', N'Tiệc', 3000000)
 --INSERT INTO [dbo].DichVu  ([TenDichVu], [MaLoaiDichVu], [Gia]) VALUES (N'Tiệc cầu hôn', N'Tiệc', 3000000)
 GO
+
+
+SELECT * FROM NhanVien
+WHERE SoDienThoai = '0333411964' AND Password = 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f' AND TrangThai = N'Đang làm việc'

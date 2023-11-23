@@ -87,7 +87,7 @@ public class GD_TrangChu extends JFrame {
 		setSize(1365, 746);
 		setTitle("Quản lý hệ thống karaoke NNice");
 		setBackground(Color.WHITE);
-		
+
 		setLocationRelativeTo(null);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.getContentPane().setSize(1365, 746);
@@ -242,12 +242,12 @@ public class GD_TrangChu extends JFrame {
 		pnlNguoiDung.add(pnlThongTinNhanVien);
 		pnlThongTinNhanVien.setLayout(new BoxLayout(pnlThongTinNhanVien, BoxLayout.PAGE_AXIS));
 
-		lblTenNhanVien = new JLabel("Phan Thị Huỳnh Thư");
+		lblTenNhanVien = new JLabel("111");
 		pnlThongTinNhanVien.add(lblTenNhanVien);
 		lblTenNhanVien.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTenNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 
-		lblChucVu = new JLabel("Quản lý");
+		lblChucVu = new JLabel("111");
 		lblChucVu.setHorizontalTextPosition(SwingConstants.RIGHT);
 		pnlThongTinNhanVien.add(lblChucVu);
 		lblChucVu.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -302,6 +302,41 @@ public class GD_TrangChu extends JFrame {
 		mniNhanVien.addActionListener(controller);
 		mniKhachHang.addActionListener(controller);
 		mniCaTruc.addActionListener(controller);
+//		kiemTraQuyen();
+	}
+
+	private void kiemTraQuyen() {
+		if (nhanVienEntity.getChucVu().equalsIgnoreCase("Quản lí")) {
+			mniPhanCong.setEnabled(true);
+			mniChamCong.setEnabled(true);
+			mniThongKe.setEnabled(true);
+			btnNguoiDung.setEnabled(true);
+
+			mniLapHoaDon.setEnabled(true);
+			mniDatDichVu.setEnabled(true);
+			mniDatPhong.setEnabled(true);
+
+			mniPhong.setEnabled(true);
+			mniDichVu.setEnabled(true);
+			mniNhanVien.setEnabled(true);
+			mniKhachHang.setEnabled(true);
+			mniCaTruc.setEnabled(true);
+		} else {
+			mniPhanCong.setEnabled(false);
+			mniChamCong.setEnabled(false);
+			mniThongKe.setEnabled(false);
+			btnNguoiDung.setEnabled(true);
+
+			mniLapHoaDon.setEnabled(true);
+			mniDatDichVu.setEnabled(true);
+			mniDatPhong.setEnabled(true);
+
+			mniPhong.setEnabled(true);
+			mniDichVu.setEnabled(true);
+			mniNhanVien.setEnabled(false);
+			mniKhachHang.setEnabled(true);
+			mniCaTruc.setEnabled(true);
+		}
 	}
 
 	private void clearSelectedMenu() {

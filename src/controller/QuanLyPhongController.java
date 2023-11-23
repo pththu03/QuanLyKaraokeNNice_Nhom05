@@ -16,6 +16,28 @@ public class QuanLyPhongController implements ActionListener, MouseListener {
 	}
 
 	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(giaoDienQuanLyPhong.btnThemLoaiPhong)) {
+			giaoDienQuanLyPhong.chonThemLoaiPhong();
+		} else if (o.equals(giaoDienQuanLyPhong.btnThem)) {
+			giaoDienQuanLyPhong.chonThemPhong();
+		} else if (o.equals(giaoDienQuanLyPhong.btnXoaPhong)) {
+			giaoDienQuanLyPhong.chonXoaPhong();
+		} else if (o.equals(giaoDienQuanLyPhong.btnChinhSuaPhong)) {
+			giaoDienQuanLyPhong.chonSuaPhong();
+		} else if (o.equals(giaoDienQuanLyPhong.btnLamMoi)) {
+			giaoDienQuanLyPhong.chonLamMoi();
+		} else if (o.equals(giaoDienQuanLyPhong.btnTimKiem)) {
+			giaoDienQuanLyPhong.chonTimKiem();
+		} else if (o.equals(giaoDienQuanLyPhong.cmbMaLoaiPhong)) {
+			giaoDienQuanLyPhong.hienThiTenLoaiPhong();
+		} else if (o.equals(giaoDienQuanLyPhong.btnXemLoaiPhong)) {
+			giaoDienQuanLyPhong.chonXemLoaiPhong();
+		}
+	}
+
+	@Override
 	public void mouseClicked(MouseEvent e) {
 		giaoDienQuanLyPhong.hienThiThongTin();
 	}
@@ -42,28 +64,6 @@ public class QuanLyPhongController implements ActionListener, MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		Object o = e.getSource();
-		if (o.equals(giaoDienQuanLyPhong.btnLamMoi)) {
-			giaoDienQuanLyPhong.chonLamMoi();
-		} else if (o.equals(giaoDienQuanLyPhong.btnTimKiem)) {
-			giaoDienQuanLyPhong.chonTimKiem();
-		} else if (o.equals(giaoDienQuanLyPhong.btnThem)) {
-			giaoDienQuanLyPhong.chonThemPhong();
-		} else if (o.equals(giaoDienQuanLyPhong.btnXoaPhong)) {
-			giaoDienQuanLyPhong.chonXoaPhong();
-		} else if (o.equals(giaoDienQuanLyPhong.btnChinhSuaPhong)) {
-			giaoDienQuanLyPhong.chonChinhSuaPhong();
-		} else if (o.equals(giaoDienQuanLyPhong.btnThemLoaiPhong)) {
-			giaoDienQuanLyPhong.chonThemLoaiPhong();
-		} else if (o.equals(giaoDienQuanLyPhong.btnXoaLoaiPhong)) {
-			giaoDienQuanLyPhong.chonXoaLoaiPhong();
-		} else if (o.equals(giaoDienQuanLyPhong.btnSuaLoaiPhong)) {
-			giaoDienQuanLyPhong.chonChinhSuaLoaiPhong();
-		}
 	}
 
 }

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -29,6 +30,7 @@ import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JYearChooser;
 
 import controller.ThongKeController;
+import dao.QuanLyNhanVienDAO;
 import entities.ChiTietHoaDonEntity;
 import entities.HoaDonEntity;
 import entities.KhachHangEntity;
@@ -163,6 +165,8 @@ public class GD_ThongKe extends JPanel {
 	private List<KhachHangEntity> listKhachHang;
 	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
 
+	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
+
 	private HoaDonEntity hoaDonEntity;
 	private NhanVienEntity nhanVienEntity;
 	private KhachHangEntity khachHangEntity;
@@ -282,19 +286,19 @@ public class GD_ThongKe extends JPanel {
 
 		btnTimKiemDoanhThuThang = new JButton("Tìm kiếm");
 		btnTimKiemDoanhThuThang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
-		btnTimKiemDoanhThuThang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTimKiemDoanhThuThang.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiemDoanhThuThang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemDoanhThuThang.setFocusable(false);
 		btnTimKiemDoanhThuThang.setBackground(new Color(144, 238, 144));
-		btnTimKiemDoanhThuThang.setBounds(542, 12, 120, 35);
+		btnTimKiemDoanhThuThang.setBounds(511, 10, 150, 35);
 
 		btnTimKiemDoanhThuNam = new JButton("Tìm kiếm");
 		btnTimKiemDoanhThuNam.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
-		btnTimKiemDoanhThuNam.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		btnTimKiemDoanhThuNam.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiemDoanhThuNam.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnTimKiemDoanhThuNam.setFocusable(false);
 		btnTimKiemDoanhThuNam.setBackground(new Color(144, 238, 144));
-		btnTimKiemDoanhThuNam.setBounds(542, 12, 120, 35);
+		btnTimKiemDoanhThuNam.setBounds(511, 10, 150, 35);
 
 		lblchonThangDoanhThu = new JLabel("Chọn tháng:");
 		lblchonThangDoanhThu.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -718,18 +722,62 @@ public class GD_ThongKe extends JPanel {
 		tblNhanVien.addMouseListener(controller);
 		tblKhachHang.addMouseListener(controller);
 
+		loadDataNhanVien();
+
+	}
+
+	private void loadDataNhanVien() {
+		tblNhanVien.removeAll();
+		tblNhanVien.setRowSelectionAllowed(false);
+		tblmodelNhanVien.setRowCount(0);
+		listNhanVien = new ArrayList<>();
+		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
+
+		int stt = 1;
+		for (NhanVienEntity nhanVienEntity : listNhanVien) {
+			if (nhanVienEntity.isTrangThai()) {
+				tblmodelNhanVien.addRow(new Object[] { stt++, nhanVienEntity.getMaNhanVien(), nhanVienEntity.getHoTen(),
+						nhanVienEntity.getSoDienThoai(), 0, 0, 0 });
+			}
+		}
 	}
 
 	public void chonTheoNgay() {
+		this.pnlTimKiemDoanhThu.removeAll();
+		this.pnlTimKiemDoanhThu.repaint();
+		this.pnlTimKiemDoanhThu.revalidate();
 
+		this.pnlTimKiemDoanhThu.add(lblchonNgayDoanhThu);
+		this.pnlTimKiemDoanhThu.add(chonNgayDoanhThu);
+		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNgay);
+		this.pnlTimKiemDoanhThu.repaint();
+		this.pnlTimKiemDoanhThu.revalidate();
 	}
 
 	public void chonTheoThang() {
+		this.pnlTimKiemDoanhThu.removeAll();
+		this.pnlTimKiemDoanhThu.repaint();
+		this.pnlTimKiemDoanhThu.revalidate();
 
+		this.pnlTimKiemDoanhThu.add(lblchonThangDoanhThu);
+		this.pnlTimKiemDoanhThu.add(cmbThangDoanhThu);
+		this.pnlTimKiemDoanhThu.add(lblchonNamDoanhThuThang);
+		this.pnlTimKiemDoanhThu.add(cmbNamDoanhThuThang);
+		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuThang);
+		this.pnlTimKiemDoanhThu.repaint();
+		this.pnlTimKiemDoanhThu.revalidate();
 	}
 
 	public void chonTheoNam() {
+		this.pnlTimKiemDoanhThu.removeAll();
+		this.pnlTimKiemDoanhThu.repaint();
+		this.pnlTimKiemDoanhThu.revalidate();
 
+		this.pnlTimKiemDoanhThu.add(lblchonNamDoanhThuNam);
+		this.pnlTimKiemDoanhThu.add(cmbNamDoanhThuNam);
+		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNam);
+		this.pnlTimKiemDoanhThu.repaint();
+		this.pnlTimKiemDoanhThu.revalidate();
 	}
 
 	public void hienThiThongTinDoanhThu() {
