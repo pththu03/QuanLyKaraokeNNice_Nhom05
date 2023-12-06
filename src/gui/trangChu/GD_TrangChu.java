@@ -18,11 +18,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-//import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import controller.TrangChuController;
-//import controller.TrangChuController;
 import entities.NhanVienEntity;
 import gui.caTruc.GD_QuanLyCaTruc;
 import gui.datDichVu.GD_DatDichVu;
@@ -41,12 +39,9 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
-import java.awt.Component;
 import java.awt.ComponentOrientation;
-import java.awt.Rectangle;
 import java.awt.Insets;
 import java.awt.Cursor;
-import java.awt.CardLayout;
 
 public class GD_TrangChu extends JFrame {
 
@@ -361,7 +356,7 @@ public class GD_TrangChu extends JFrame {
 	}
 
 	public void chonDanhMucPhong() {
-		this.thayDoiPanelChinh(new GD_QuanLyPhong(), mniPhong);
+		this.thayDoiPanelChinh(new GD_QuanLyPhong(nhanVienEntity), mniPhong);
 	}
 
 	public void chonDanhMucDichVu() {

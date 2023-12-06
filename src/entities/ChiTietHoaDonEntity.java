@@ -30,11 +30,16 @@ public class ChiTietHoaDonEntity {
 		this.listChiTietDatDichVu = listChiTietDatDichVu;
 	}
 
-	public ChiTietHoaDonEntity(ChiTietDatPhongEntity chiTietDatPhong,
-			List<ChiTietDichVuEntity> listChiTietDatDichVu) {
+	public ChiTietHoaDonEntity(ChiTietDatPhongEntity chiTietDatPhong, List<ChiTietDichVuEntity> listChiTietDatDichVu) {
 		super();
 		this.chiTietDatPhong = chiTietDatPhong;
 		this.listChiTietDatDichVu = listChiTietDatDichVu;
+	}
+
+	public ChiTietHoaDonEntity(String maChiTietHoaDon, ChiTietDatPhongEntity chiTietDatPhong) {
+		super();
+		this.maChiTietHoaDon = maChiTietHoaDon;
+		this.chiTietDatPhong = chiTietDatPhong;
 	}
 
 	public String getMaChiTietHoaDon() {

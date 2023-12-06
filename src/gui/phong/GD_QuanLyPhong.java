@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.QuanLyPhongController;
 import dao.QuanLyPhongDAO;
 import entities.LoaiPhong;
+import entities.NhanVienEntity;
 import entities.PhongEntity;
 
 import javax.swing.border.TitledBorder;
@@ -86,8 +87,10 @@ public class GD_QuanLyPhong extends JPanel {
 	private List<LoaiPhong> listLoaiPhong;
 	private QuanLyPhongController controller;
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
+	private NhanVienEntity nhanVienEntity;
 
-	public GD_QuanLyPhong() {
+	public GD_QuanLyPhong(NhanVienEntity nhanVienEntity) {
+		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
 
@@ -392,7 +395,7 @@ public class GD_QuanLyPhong extends JPanel {
 		btnTimKiem.addActionListener(controller);
 		btnXoaPhong.addActionListener(controller);
 		cmbMaLoaiPhong.addActionListener(controller);
-
+//		kiemTraQuyen();
 		loadData();
 	}
 
@@ -406,9 +409,9 @@ public class GD_QuanLyPhong extends JPanel {
 
 		int stt = 1;
 		for (PhongEntity phongEntity : listPhong) {
-			LoaiPhong loaiPhong = quanLyPhongDAO.timTheoMaLoaiPhong(phongEntity.getLoaiPhong().getMaLoai());
 			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
-					loaiPhong.getTenLoaiPhong(), phongEntity.getSucChua(), phongEntity.getTrangThai() });
+					phongEntity.getLoaiPhong().getTenLoaiPhong(), phongEntity.getSucChua(),
+					phongEntity.getTrangThai() });
 		}
 	}
 
@@ -459,7 +462,6 @@ public class GD_QuanLyPhong extends JPanel {
 	public void chonThemLoaiPhong() {
 		if (kiemTraTenLoaiPhong()) {
 			String tenLoaiPhong = txtTenLoaiPhong.getText();
-
 			LoaiPhong loaiPhong = new LoaiPhong(tenLoaiPhong);
 			if (quanLyPhongDAO.themLoaiPhong(loaiPhong)) {
 				JOptionPane.showMessageDialog(this, "Thêm thành công");
@@ -566,7 +568,7 @@ public class GD_QuanLyPhong extends JPanel {
 
 	/***** XEM LOẠI PHÒNG *****/
 	public void chonXemLoaiPhong() {
-		new GD_QuanLyLoaiPhong().setVisible(true);
+		new GD_QuanLyLoaiPhong(nhanVienEntity).setVisible(true);
 	}
 
 	/***** loadCmbLoaiPhong *****/
@@ -832,4 +834,19 @@ public class GD_QuanLyPhong extends JPanel {
 			txtTenLoaiPhong.setText(tenLoai);
 		}
 	}
+
+	/***** KIỂM TRA CHỨC VU *****/
+//	private void kiemTraQuyen() {
+//		if (nhanVienEntity.getChucVu().equalsIgnoreCase("Quản lí")) {
+//			btnThem.setEnabled(true);
+//			btnChinhSuaPhong.setEnabled(true);
+//			btnXoaPhong.setEnabled(true);
+//			btnThemLoaiPhong.setEnabled(true);
+//		} else {
+//			btnThem.setEnabled(false);
+//			btnChinhSuaPhong.setEnabled(false);
+//			btnXoaPhong.setEnabled(false);
+//			btnThemLoaiPhong.setEnabled(false);
+//		}
+//	}
 }

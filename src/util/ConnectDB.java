@@ -23,13 +23,12 @@ public class ConnectDB {
 		} catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "Lỗi kết nối cơ sở dữ liệu");
 			e.printStackTrace();
-		} 
+		}
 		return connect;
 	}
-	
 
 	public static void closeConnect(Connection connect) {
-		if(connect != null) {
+		if (connect != null) {
 			try {
 				connect.close();
 			} catch (SQLException e) {
@@ -38,9 +37,9 @@ public class ConnectDB {
 			}
 		}
 	}
-	
+
 	public static void closeResultSet(ResultSet result) {
-		if(result != null) {
+		if (result != null) {
 			try {
 				result.close();
 			} catch (SQLException e) {
@@ -49,9 +48,9 @@ public class ConnectDB {
 			}
 		}
 	}
-	
+
 	public static void closeStatement(Statement statement) {
-		if(statement != null) {
+		if (statement != null) {
 			try {
 				statement.close();
 			} catch (SQLException e) {
@@ -60,9 +59,9 @@ public class ConnectDB {
 			}
 		}
 	}
-	
+
 	public static void closePreStatement(PreparedStatement statement) {
-		if(statement != null) {
+		if (statement != null) {
 			try {
 				statement.close();
 			} catch (SQLException e) {

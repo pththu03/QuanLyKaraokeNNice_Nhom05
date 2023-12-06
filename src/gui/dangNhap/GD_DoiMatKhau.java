@@ -216,20 +216,20 @@ public class GD_DoiMatKhau extends JDialog {
 	}
 
 	private boolean kiemTraMatKhau() {
-		String mkCu = new String(txtMatKhauCu.getPassword());
-		String mkMoi = new String(txtMatKhauMoi.getPassword());
-		String nhapLaiMKMoi = new String(txtNhapLaiMK.getPassword());
+		String matKhauCu = new String(txtMatKhauCu.getPassword());
+		String matKhauMoi = new String(txtMatKhauMoi.getPassword());
+		String nhapLaiMatKhauMoi = new String(txtNhapLaiMK.getPassword());
 
-		if (mkCu.isEmpty() || mkMoi.isEmpty() || nhapLaiMKMoi.isEmpty()) {
+		if (matKhauCu.isEmpty() || matKhauMoi.isEmpty() || matKhauMoi.isEmpty()) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu không được để trống");
 			return false;
-		} else if (mkMoi.equals(mkCu) == true) {
+		} else if (matKhauMoi.equals(matKhauCu) == true) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải khác mật khẩu hiện tại");
 			return false;
-		} else if (nhapLaiMKMoi.equals(mkMoi) == false) {
+		} else if (nhapLaiMatKhauMoi.equals(matKhauMoi) == false) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu không giống nhau!");
 			return false;
-		} else if (!mkMoi.matches("^[a-zA-Z][0-9a-zA-Z]{7}$")) {
+		} else if (!matKhauMoi.matches("^[a-zA-Z][0-9a-zA-Z]{7}$")) {
 			JOptionPane.showMessageDialog(this, "Mật khẩu mới phải có ít nhất 8 kí tự và bắt đầu bằng chữ!");
 			return false;
 		}

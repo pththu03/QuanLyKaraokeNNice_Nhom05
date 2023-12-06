@@ -20,8 +20,6 @@ public class QuanLyChamCongController implements ActionListener, MouseListener {
 		Object o = e.getSource();
 		if (o.equals(giaoDienChamCong.btnLuu)) {
 			giaoDienChamCong.chonLuu();
-		} else if (o.equals(giaoDienChamCong.chkVang)) {
-			giaoDienChamCong.chonVang();
 		}
 	}
 

@@ -19,7 +19,7 @@ public class DatDichVuController implements ActionListener, MouseListener, ItemL
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		giaoDienDatDichVu.chonSoPhong();
+		giaoDienDatDichVu.chonPhong();
 
 	}
 

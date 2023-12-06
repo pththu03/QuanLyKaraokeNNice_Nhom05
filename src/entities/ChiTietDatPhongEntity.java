@@ -1,5 +1,6 @@
 package entities;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -8,25 +9,29 @@ public class ChiTietDatPhongEntity {
 	private PhongEntity phong;
 	private LocalTime gioNhanPhong;
 	private LocalTime gioTraPhong;
+	private LocalDate ngayNhanPhong;
 
 	public ChiTietDatPhongEntity() {
 		super();
 	}
 
 	public ChiTietDatPhongEntity(String maChiTietDatPhong, PhongEntity phong, LocalTime gioNhanPhong,
-			LocalTime gioTraPhong) {
+			LocalTime gioTraPhong, LocalDate ngayNhanPhong) {
 		super();
 		this.maChiTietDatPhong = maChiTietDatPhong;
 		this.phong = phong;
 		this.gioNhanPhong = gioNhanPhong;
 		this.gioTraPhong = gioTraPhong;
+		this.ngayNhanPhong = ngayNhanPhong;
 	}
 
-	public ChiTietDatPhongEntity(PhongEntity phong, LocalTime gioNhanPhong, LocalTime gioTraPhong) {
+	public ChiTietDatPhongEntity(PhongEntity phong, LocalTime gioNhanPhong, LocalTime gioTraPhong,
+			LocalDate ngayNhanPhong) {
 		super();
 		this.phong = phong;
 		this.gioNhanPhong = gioNhanPhong;
 		this.gioTraPhong = gioTraPhong;
+		this.ngayNhanPhong = ngayNhanPhong;
 	}
 
 	public String getMaChiTietDatPhong() {
@@ -61,6 +66,14 @@ public class ChiTietDatPhongEntity {
 		this.gioTraPhong = gioTraPhong;
 	}
 
+	public LocalDate getNgayNhanPhong() {
+		return ngayNhanPhong;
+	}
+
+	public void setNgayNhanPhong(LocalDate ngayNhanPhong) {
+		this.ngayNhanPhong = ngayNhanPhong;
+	}
+
 	public double tinhTienHat() {
 		double tienHat = 0;
 		return tienHat;
@@ -84,7 +97,7 @@ public class ChiTietDatPhongEntity {
 	@Override
 	public String toString() {
 		return "ChiTietDatPhongEntity [maChiTietDatPhong=" + maChiTietDatPhong + ", phong=" + phong + ", gioNhanPhong="
-				+ gioNhanPhong + ", gioTraPhong=" + gioTraPhong + "]";
+				+ gioNhanPhong + ", gioTraPhong=" + gioTraPhong + ", ngayNhanPhong=" + ngayNhanPhong + "]";
 	}
 
 }

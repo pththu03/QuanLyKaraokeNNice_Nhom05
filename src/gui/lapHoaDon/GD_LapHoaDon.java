@@ -119,8 +119,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChinh.add(pnlDSHoaDon);
 		pnlDSHoaDon.setLayout(null);
 
-		String[] cols_DSHoaDon = { "STT", "Mã HD", "Tên khách hàng", "Số điện thoại khách hàng", "Số lượng phòng",
-				"Tổng tiền" };
+		String[] cols_DSHoaDon = { "STT", "Tên khách hàng", "Số điện thoại khách hàng", "Số lượng phòng", "Tổng tiền" };
 		tblmodelHoaDon = new DefaultTableModel(cols_DSHoaDon, 0);
 		tblHoaDon = new JTable(tblmodelHoaDon);
 		tblHoaDon.setAutoCreateRowSorter(true);
@@ -132,11 +131,10 @@ public class GD_LapHoaDon extends JPanel {
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		tblHoaDon.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		tblHoaDon.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		tblHoaDon.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
 
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-		tblHoaDon.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
+		tblHoaDon.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
 
 		pnlChiTietLapHoaDon = new JPanel();
 		pnlChiTietLapHoaDon.setBorder(new MatteBorder(0, 1, 0, 0, (Color) new Color(0, 0, 0)));
@@ -171,6 +169,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblTienTraKhach);
 
 		txtTenKhachHang = new JTextField();
+		txtTenKhachHang.setBackground(Color.WHITE);
 		txtTenKhachHang.setDisabledTextColor(Color.BLACK);
 		txtTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTenKhachHang.setBorder(null);
@@ -180,6 +179,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtTenKhachHang.setColumns(10);
 
 		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setBackground(Color.WHITE);
 		txtSoDienThoai.setDisabledTextColor(Color.BLACK);
 		txtSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtSoDienThoai.setBorder(null);
@@ -189,6 +189,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtSoDienThoai.setColumns(10);
 
 		txtTienDichVu = new JTextField();
+		txtTienDichVu.setBackground(Color.WHITE);
 		txtTienDichVu.setDisabledTextColor(Color.BLACK);
 		txtTienDichVu.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTienDichVu.setBorder(null);
@@ -198,6 +199,7 @@ public class GD_LapHoaDon extends JPanel {
 		txtTienDichVu.setColumns(10);
 
 		txtTienTraKhach = new JTextField();
+		txtTienTraKhach.setBackground(Color.WHITE);
 		txtTienTraKhach.setDisabledTextColor(Color.BLACK);
 		txtTienTraKhach.setEnabled(false);
 		txtTienTraKhach.setFont(new Font("Segoe UI", Font.PLAIN, 15));
@@ -218,6 +220,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblSoLuongPhong);
 
 		txtSoLuongPhong = new JTextField();
+		txtSoLuongPhong.setBackground(Color.WHITE);
 		txtSoLuongPhong.setDisabledTextColor(Color.BLACK);
 		txtSoLuongPhong.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtSoLuongPhong.setBorder(null);
@@ -232,6 +235,7 @@ public class GD_LapHoaDon extends JPanel {
 		pnlChiTietLapHoaDon.add(lblTongTien);
 
 		txtTongTien = new JTextField();
+		txtTongTien.setBackground(Color.WHITE);
 		txtTongTien.setDisabledTextColor(Color.BLACK);
 		txtTongTien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 		txtTongTien.setBorder(null);

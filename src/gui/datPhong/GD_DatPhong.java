@@ -6,13 +6,15 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -21,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -36,6 +39,17 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JDateChooser;
+
+import controller.DatPhongController;
+import dao.DatPhongDAO;
+import dao.QuanLyHoaDonDAO;
+import dao.QuanLyKhachHangDAO;
+import dao.QuanLyPhieuDatPhongDAO;
+import dao.QuanLyPhongDAO;
+import entities.ChiTietDatPhongEntity;
+import entities.ChiTietHoaDonEntity;
+import entities.ChiTietPhieuDatPhongEntity;
 //import controller.DatPhongController;
 //import dao.DatPhongDAO;
 //import dao.QuanLyChiTietHoaDonDAO;
@@ -44,16 +58,12 @@ import javax.swing.table.DefaultTableModel;
 //import dao.QuanLyPhongDAO;
 import entities.KhachHangEntity;
 import entities.NhanVienEntity;
+import entities.PhieuDatPhongEntity;
 import entities.PhongEntity;
+import gui.trangChu.GD_TrangChu;
 import util.DateFormatter;
+import util.SendData;
 import util.TimeFormatter;
-import javax.swing.border.SoftBevelBorder;
-import com.toedter.calendar.JDateChooser;
-
-import controller.DatPhongController;
-import dao.QuanLyPhongDAO;
-
-import java.awt.SystemColor;
 
 public class GD_DatPhong extends JPanel {
 
@@ -126,15 +136,16 @@ public class GD_DatPhong extends JPanel {
 	private Timer ngayHT;
 	private Timer gioHT;
 
-	public JButton btnTimKiemPhong;
 	public JButton btnLamMoi;
+	public JButton btnTimKiemPhong;
 	public JButton btnTimKiemKhachHang;
-	public JButton btnDatPhong;
-	public JButton btnDoiPhong;
-	public JButton btnXoaPhongDaChon;
 	public JButton btnChonPhong;
-	public JButton btnHuyPhongDatTruoc;
 	public JButton btnNhanPhong;
+	public JButton btnXoaPhongDaChon;
+	public JButton btnDoiPhong;
+	public JButton btnHuyPhongDatTruoc;
+	public JButton btnXemDatTruoc;
+	public JButton btnDatPhong;
 
 	private JScrollPane scrDSPhong;
 	private JScrollPane scrDSPhongDaChon;
@@ -148,9 +159,15 @@ public class GD_DatPhong extends JPanel {
 	private List<KhachHangEntity> listKhachHang;
 
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
+	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
+	private DatPhongDAO datPhongDAO = new DatPhongDAO();
+	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
+	private QuanLyPhieuDatPhongDAO quanLyPhieuDatPhongDAO = new QuanLyPhieuDatPhongDAO();
 
-	private NhanVienEntity nhanVienEntity;
-	private KhachHangEntity khachHangEntity;
+	private NhanVienEntity nhanVienEntity = null;
+	private KhachHangEntity khachHangEntity = null;
+	public ChiTietPhieuDatPhongEntity chiTietPhieuDatPhongEntity = null;
+	public ChiTietDatPhongEntity chiTietDatPhongEntity = null;
 
 	private String maPhongCu = null;
 	private String maPhongMoi = null;
@@ -324,6 +341,14 @@ public class GD_DatPhong extends JPanel {
 		btnChonPhong.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnChonPhong.setBackground(new Color(255, 128, 128));
 
+		btnXoaPhongDaChon = new JButton("Xóa đã chọn");
+		btnXoaPhongDaChon.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconXoa1.png")));
+		pnlButtonChucNang.add(btnXoaPhongDaChon);
+		btnXoaPhongDaChon.setBorder(new BevelBorder(BevelBorder.RAISED));
+		btnXoaPhongDaChon.setFocusable(false);
+		btnXoaPhongDaChon.setBackground(new Color(255, 128, 128));
+		btnXoaPhongDaChon.setFont(new Font("Cambria", Font.BOLD, 14));
+
 		btnNhanPhong = new JButton("Nhận phòng");
 		btnNhanPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconChon.png")));
 		btnNhanPhong.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -340,14 +365,6 @@ public class GD_DatPhong extends JPanel {
 		btnDoiPhong.setBackground(new Color(255, 128, 128));
 		btnDoiPhong.setFont(new Font("Cambria", Font.BOLD, 14));
 
-		btnXoaPhongDaChon = new JButton("Xóa đã chọn");
-		btnXoaPhongDaChon.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconXoa1.png")));
-		pnlButtonChucNang.add(btnXoaPhongDaChon);
-		btnXoaPhongDaChon.setBorder(new BevelBorder(BevelBorder.RAISED));
-		btnXoaPhongDaChon.setFocusable(false);
-		btnXoaPhongDaChon.setBackground(new Color(255, 128, 128));
-		btnXoaPhongDaChon.setFont(new Font("Cambria", Font.BOLD, 14));
-
 		btnHuyPhongDatTruoc = new JButton("Hủy đặt trước");
 		btnHuyPhongDatTruoc.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconHuy.png")));
 		pnlButtonChucNang.add(btnHuyPhongDatTruoc);
@@ -355,6 +372,14 @@ public class GD_DatPhong extends JPanel {
 		btnHuyPhongDatTruoc.setFocusable(false);
 		btnHuyPhongDatTruoc.setBorder(new BevelBorder(BevelBorder.RAISED));
 		btnHuyPhongDatTruoc.setBackground(new Color(255, 128, 128));
+
+		btnXemDatTruoc = new JButton("Xem đặt trước");
+		btnXemDatTruoc.setBackground(new Color(255, 128, 128));
+		btnXemDatTruoc.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnXemDatTruoc.setFocusable(false);
+		btnXemDatTruoc.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconMatMo.png")));
+		btnXemDatTruoc.setFont(new Font("Cambria", Font.BOLD, 14));
+		pnlButtonChucNang.add(btnXemDatTruoc);
 
 		Integer[] gioNhanPhong = new Integer[15];
 		for (int i = 0; i <= 14; i++) {
@@ -648,6 +673,8 @@ public class GD_DatPhong extends JPanel {
 
 		chonNgayDatTruoc = new JDateChooser();
 		chonNgayDatTruoc.setDateFormatString("dd-MM-yyyy");
+		chonNgayDatTruoc.setDate(Date.valueOf(LocalDate.now()));
+		chonNgayDatTruoc.setEnabled(false);
 		chonNgayDatTruoc.setBounds(200, 370, 200, 25);
 		pnlChiTietDatPhong.add(chonNgayDatTruoc);
 
@@ -658,10 +685,11 @@ public class GD_DatPhong extends JPanel {
 		btnTimKiemPhong.addActionListener(controller);
 		btnTimKiemKhachHang.addActionListener(controller);
 		btnChonPhong.addActionListener(controller);
-		btnNhanPhong.addActionListener(controller);
 		btnXoaPhongDaChon.addActionListener(controller);
+		btnNhanPhong.addActionListener(controller);
 		btnDoiPhong.addActionListener(controller);
 		btnHuyPhongDatTruoc.addActionListener(controller);
+		btnXemDatTruoc.addActionListener(controller);
 		btnDatPhong.addActionListener(controller);
 		tblPhong.addMouseListener(controller);
 		tblPhongDaChon.addMouseListener(controller);
@@ -695,9 +723,18 @@ public class GD_DatPhong extends JPanel {
 
 	/****************** CHỌN ĐẶT PHÒNG NGAY ******************/
 	public void chonDatPhongNgay() {
+		for (int i = 0; i < tblPhongDaChon.getRowCount(); i++) {
+			PhongEntity phongEntity = quanLyPhongDAO.timTheoMa(tblPhongDaChon.getValueAt(i, 1).toString());
+			if (phongEntity.getTrangThai().equals("Đang sử dụng")) {
+				JOptionPane.showMessageDialog(this, "Danh sách chọn có phòng đang sử dụng.\nKhông thể đặt phòng ngay");
+				radDatPhongTruoc.setSelected(true);
+				return;
+			}
+		}
 		cmbGioNhanPhong.setEnabled(false);
 		cmbPhutNhanPhong.setEnabled(false);
 		chonNgayDatTruoc.setEnabled(false);
+
 	}
 
 	/****************** CHỌN ĐẶT PHÒNG TRƯỚC ******************/
@@ -712,7 +749,7 @@ public class GD_DatPhong extends JPanel {
 		int row = tblPhong.getSelectedRow();
 		if (row >= 0) {
 			String loaiPhong = tblPhong.getValueAt(row, 3).toString();
-			String trangThai = "Trống";
+			String trangThai = tblPhong.getValueAt(row, 5).toString();
 			txtSoPhong.setText(tblPhong.getValueAt(row, 2).toString());
 			txtLoaiPhong.setText(loaiPhong);
 			txtSucChua.setText(tblPhong.getValueAt(row, 4).toString());
@@ -734,12 +771,13 @@ public class GD_DatPhong extends JPanel {
 
 	/****************** HIỂN THỊ THÔNG TIN PHÒNG ĐÃ CHỌN ******************/
 	public void hienThiThongTinPhongDaChon() {
-		int row = tblPhong.getSelectedRow();
+		int row = tblPhongDaChon.getSelectedRow();
 		if (row >= 0) {
-			String loaiPhong = tblPhong.getValueAt(row, 3).toString();
-			txtSoPhong.setText(tblPhong.getValueAt(row, 2).toString());
+			String loaiPhong = tblPhongDaChon.getValueAt(row, 3).toString();
+			txtSoPhong.setText(tblPhongDaChon.getValueAt(row, 2).toString());
 			txtLoaiPhong.setText(loaiPhong);
-			txtSucChua.setText(tblPhong.getValueAt(row, 4).toString());
+			txtSucChua.setText(tblPhongDaChon.getValueAt(row, 4).toString());
+			lblImgTrangThaiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconPhong2.png")));
 			if (loaiPhong.equalsIgnoreCase("VIP")) {
 				lblVIP.setVisible(true);
 			} else {
@@ -757,6 +795,8 @@ public class GD_DatPhong extends JPanel {
 		txtTimKiemTheoSoPhong.setText("");
 		txtSDTKhachHang.setText("");
 		radDatPhongNgay.setSelected(true);
+		chonDatPhongNgay();
+		chonNgayDatTruoc.setDate(Date.valueOf(LocalDate.now()));
 		cmbGioNhanPhong.setSelectedIndex(0);
 		cmbGioTraPhong.setSelectedIndex(0);
 		cmbTimKiemTheoLoaiPhong.setSelectedIndex(0);
@@ -766,43 +806,471 @@ public class GD_DatPhong extends JPanel {
 		loadData();
 	}
 
-	/****************** TÌM KIẾM PHÒNG ******************/
+	/************************************
+	 * TÌM KIẾM PHÒNG
+	 ************************************/
 	public void chonTimKiemPhong() {
+		if (kiemTraSoPhong()) {
+			String trangThai = cmbTimKiemTheoTrangThai.getSelectedItem().toString();
+			String loaiPhong = cmbTimKiemTheoLoaiPhong.getSelectedItem().toString();
+			int soPhong = -1;
+			int sucChua = -1;
+			if (txtTimKiemTheoSoPhong.getText().trim().length() > 0)
+				soPhong = Integer.parseInt(txtTimKiemTheoSoPhong.getText().trim());
 
+			if (cmbTimKiemTheoSucChua.getSelectedIndex() == 1)
+				sucChua = 10;
+			else if (cmbTimKiemTheoSucChua.getSelectedIndex() == 2)
+				sucChua = 20;
+
+			tblPhong.removeAll();
+			tblmodelPhong.setRowCount(0);
+			listPhong = new ArrayList<>();
+			listPhong = datPhongDAO.timPhong(trangThai, loaiPhong, soPhong, sucChua);
+
+			int stt = 1;
+			for (PhongEntity phongEntity : listPhong) {
+				tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
+						phongEntity.getLoaiPhong().getTenLoaiPhong(), phongEntity.getSucChua(),
+						phongEntity.getTrangThai() });
+			}
+
+		}
 	}
 
-	/****************** TÌM KIẾM KHÁCH HÀNG ******************/
+	/************************************
+	 * TÌM KIẾM KHÁCH HÀNG
+	 ************************************/
 	public void chonTimKiemKhachHang() {
-
+		if (kiemTraSoDienThoai()) {
+			String soDienThoai = txtSDTKhachHang.getText().trim();
+			khachHangEntity = quanLyKhachHangDAO.timTheoSoDienThoai(soDienThoai);
+			if (khachHangEntity != null) {
+				txtTenKhachHang.setText(khachHangEntity.getHoTen());
+			} else {
+				if (JOptionPane.showConfirmDialog(this, "Không có khách hàng này. Có muốn thêm khách hàng?",
+						"Thống báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					GD_TrangChu manHinhCha = (GD_TrangChu) this.getTopLevelAncestor();
+					manHinhCha.chonDanhMucKhachHang();
+				}
+			}
+		}
 	}
 
-	/****************** CHỌN PHÒNG ******************/
+	/************************************
+	 * CHỌN PHÒNG
+	 ************************************/
 	public void chonChonPhong() {
-
+		int row = tblPhong.getSelectedRow();
+		if (row >= 0) {
+			String trangThai = tblPhong.getValueAt(row, 5).toString();
+			if (radDatPhongNgay.isSelected()) {
+				if (trangThai.equalsIgnoreCase("Đang sử dụng")) {
+					if (JOptionPane.showConfirmDialog(this,
+							"Phòng này đang được sử dụng.\nHãy chọn phòng khác hoặc chọn đặt trước\n(Chọn Yes để đặt trước)",
+							"Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+						radDatPhongTruoc.setSelected(true);
+						chonDatPhongTruoc();
+					} else {
+						return;
+					}
+				}
+			}
+			if (trangThai.equalsIgnoreCase("Đặt trước")) {
+				if (JOptionPane.showConfirmDialog(this,
+						"Phòng này đã được đặt trước. Không được đặt trùng thời gian \n với các khách hàng đã đặt trước. Có muốn tiếp tục chọn?",
+						"Thông báo", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+					return;
+				}
+			}
+			String maPhong = tblPhong.getValueAt(row, 1).toString();
+			String loaiPhong = tblPhong.getValueAt(row, 3).toString();
+			int soPhong = Integer.parseInt(tblPhong.getValueAt(row, 2).toString());
+			int sucChua = Integer.parseInt(tblPhong.getValueAt(row, 4).toString());
+			int stt = tblPhongDaChon.getRowCount();
+			tblmodelPhongDaChon.addRow(new Object[] { ++stt, maPhong, soPhong, loaiPhong, sucChua, "Tạm giữ" });
+			loadData();
+		} else {
+			JOptionPane.showMessageDialog(this, "Hãy chọn phòng");
+			return;
+		}
 	}
 
 	/****************** XÓA PHÒNG ĐÃ CHỌN ******************/
 	public void chonXoaPhongDaChon() {
-
+		int row = tblPhongDaChon.getSelectedRow();
+		if (row >= 0) {
+			for (int i = row + 1; i < tblPhongDaChon.getRowCount(); i++) {
+				tblPhongDaChon.setValueAt(i, i, 0);
+			}
+			tblmodelPhongDaChon.removeRow(row);
+			loadData();
+		} else {
+			JOptionPane.showMessageDialog(this, "Hãy chọn phòng cần xóa");
+			return;
+		}
 	}
 
-	/****************** NHẬN PHÒNG ******************/
+	/************************************
+	 * NHẬN PHÒNG
+	 ************************************/
 	public void chonNhanPhong() {
+		new GD_XemChiTietDatPhongTruoc(new SendData<ChiTietPhieuDatPhongEntity>() {
 
+			@Override
+			public void send(ChiTietPhieuDatPhongEntity e) {
+				chiTietPhieuDatPhongEntity = e;
+				if (chiTietPhieuDatPhongEntity == null) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng");
+					return;
+				} else {
+					chiTietDatPhongEntity = quanLyHoaDonDAO
+							.timChiTietDatPhongTheoMa(chiTietPhieuDatPhongEntity.getMaChiTietDatPhong());
+					// kiem tra neu ngay nhan phong cua phieu dat do la hom nay + gio nhan phong
+					// trước gio hien tai 5 phut hoac sau gio hien tai 15 phut
+					if (chiTietDatPhongEntity.getNgayNhanPhong().equals(LocalDate.now())
+							&& chiTietDatPhongEntity.getGioNhanPhong().isAfter(LocalTime.now().minusMinutes(5))
+							&& chiTietDatPhongEntity.getGioNhanPhong().isBefore(LocalTime.now().plusMinutes(15))) {
+						String trangThai = "Đang sử dụng";
+						if (quanLyPhongDAO.capNhatTrangThaiPhong(chiTietDatPhongEntity.getPhong(), trangThai)) {
+							JOptionPane.showMessageDialog(null, "Nhận phòng thành công");
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Hiện tại không được phép nhận phòng");
+						return;
+					}
+				}
+			}
+		}).setVisible(true);
 	}
 
-	/****************** ĐỔI PHÒNG ******************/
+	/************************************
+	 * ĐỔI PHÒNG
+	 ************************************/
 	public void chonDoiPhong() {
+		new GD_XemChiTietDatPhongTruoc(new SendData<ChiTietPhieuDatPhongEntity>() {
 
+			@Override
+			public void send(ChiTietPhieuDatPhongEntity e) {
+				chiTietPhieuDatPhongEntity = e;
+				if (chiTietPhieuDatPhongEntity == null) {
+					JOptionPane.showMessageDialog(null, "Vui lòng chọn phòng");
+					return;
+				} else {
+					chiTietDatPhongEntity = quanLyHoaDonDAO
+							.timChiTietDatPhongTheoMa(chiTietPhieuDatPhongEntity.getMaChiTietDatPhong());
+					btnDoiPhong.setText("Kiểm tra");
+					btnDoiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconDanhMuc1.png")));
+				}
+			}
+		}).setVisible(true);
 	}
 
-	/****************** HỦY PHÒNG ĐẶT PHÒNG ******************/
+	public void chonKiemTra() {
+		btnDoiPhong.setText("Xác nhận đổi");
+		btnDoiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconChon1.png")));
+		tblPhong.removeAll();
+		tblPhong.setRowSelectionAllowed(false);
+		tblmodelPhong.setRowCount(0);
+		listPhong = new ArrayList<>();
+		listPhong = datPhongDAO.timPhongTrongTheoNgayVaGio(chiTietDatPhongEntity.getNgayNhanPhong(),
+				chiTietDatPhongEntity.getGioNhanPhong(), chiTietDatPhongEntity.getGioTraPhong());
+		int stt = 1;
+		for (PhongEntity phongEntity : listPhong) {
+			tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
+					phongEntity.getLoaiPhong().getTenLoaiPhong(), phongEntity.getSucChua(),
+					phongEntity.getTrangThai() });
+
+		}
+	}
+
+	public void chonXacNhanDoiPhong() {
+		int row = tblPhong.getSelectedRow();
+		if (row >= 0) {
+			maPhongMoi = tblPhong.getValueAt(row, 1).toString();
+			if (datPhongDAO.doiPhong(chiTietDatPhongEntity, maPhongMoi)) {
+				btnDoiPhong.setText("Đổi phòng");
+				btnDoiPhong.setIcon(new ImageIcon(GD_DatPhong.class.getResource("/images/iconChinhSua2.png")));
+				JOptionPane.showMessageDialog(this, "Đổi phòng thành công");
+				loadData();
+			} else {
+				System.out.println(1);
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn phòng để đổi");
+		}
+	}
+
+	/************************************
+	 * HỦY PHÒNG ĐẶT TRƯỚC
+	 ************************************/
 	public void chonHuyPhongDatTruoc() {
+		new GD_XemChiTietDatPhongTruoc(new SendData<ChiTietPhieuDatPhongEntity>() {
+
+			@Override
+			public void send(ChiTietPhieuDatPhongEntity e) {
+				chiTietPhieuDatPhongEntity = e;
+				if (chiTietPhieuDatPhongEntity != null) {
+					ChiTietDatPhongEntity chiTietDatPhongEntity = quanLyHoaDonDAO
+							.timChiTietDatPhongTheoMa(chiTietPhieuDatPhongEntity.getMaChiTietDatPhong());
+					PhieuDatPhongEntity phieuDatPhongEntity = quanLyPhieuDatPhongDAO
+							.timPhieuDatPhongTheoMa(chiTietPhieuDatPhongEntity.getMaPhieuDatPhong());
+					// neu gio nhan phong sau gio hien tai 1 gio nua thi duoc phep huy phong
+					if (chiTietDatPhongEntity.getNgayNhanPhong().isAfter(LocalDate.now()) || (chiTietDatPhongEntity
+							.getNgayNhanPhong().equals(LocalDate.now())
+							&& chiTietDatPhongEntity.getGioNhanPhong().isAfter(LocalTime.now().minusHours(1)))) {
+						String maChiTietDatPhong = chiTietDatPhongEntity.getMaChiTietDatPhong();
+						ChiTietHoaDonEntity chiTietHoaDonEntity = quanLyHoaDonDAO
+								.timChiTietHoaDonTheoChiTietDatPhong(chiTietDatPhongEntity);
+						// neu phong do co dat dich vu thi xoa cac don dat dich vu truoc
+						// thu tu xoa: chiTietDichVu -> chiTietHoaDon -> chiTietPhieuDatPhong ->
+						// phieuDatPhong + chiTietDatPhong -> cap nhat trang thai phong
+						if (datPhongDAO.demChiTietDichVuTheoChiTietHoaDon(chiTietHoaDonEntity) > 0) {
+							if (!quanLyHoaDonDAO
+									.xoaChiTietDichvuTheoMaHoaDon(chiTietHoaDonEntity.getMaChiTietHoaDon())) {
+								return;
+							}
+						}
+
+						if (quanLyHoaDonDAO.xoaChiTietHoaDon(maChiTietDatPhong)) {
+							if (quanLyPhieuDatPhongDAO.xoaChiTietPhieuDatPhong(maChiTietDatPhong)) {
+								// neu phieu dat phong do khong con phong nao thi xoa phieu dat phong
+								if (datPhongDAO.demChiTietPhieuDatPhongTheoMaPhieuDatPhong(
+										phieuDatPhongEntity.getMaPhieuDatPhong()) == 0) {
+									if (!quanLyPhieuDatPhongDAO
+											.xoaPhieuDatPhong(phieuDatPhongEntity.getMaPhieuDatPhong())) {
+										return;
+									}
+								}
+								if (quanLyHoaDonDAO.xoaChiTietDatPhong(maChiTietDatPhong)) {
+									if (datPhongDAO.demChiTietDatPhongChuaThanhToanCuaPhong(
+											chiTietDatPhongEntity.getPhong().getMaPhong()) == 0) {
+										String trangThai = "Trống";
+										if (quanLyPhongDAO.capNhatTrangThaiPhong(chiTietDatPhongEntity.getPhong(),
+												trangThai)) {
+											JOptionPane.showMessageDialog(null, "Hủy phòng thành công");
+										}
+									}
+								}
+							}
+						}
+					} else {
+						JOptionPane.showMessageDialog(null, "Chỉ được phép hủy trước giờ hiện tại 2 giờ");
+						return;
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Hãy chọn phòng");
+					return;
+				}
+			}
+		}).setVisible(true);
+	}
+
+	/************************************
+	 * XEM PHÒNG ĐẶT TRƯỚC
+	 ************************************/
+	public void chonXemDatTruoc() {
+		new GD_XemChiTietDatPhongTruoc(new SendData<ChiTietPhieuDatPhongEntity>() {
+
+			@Override
+			public void send(ChiTietPhieuDatPhongEntity e) {
+				// TODO Auto-generated method stub
+
+			}
+		}).setVisible(true);
+	}
+
+	/************************************
+	 * ĐẶT PHÒNG
+	 ************************************/
+	public void chonDatPhong() {
+		if (kiemTraDuLieuDatPhong()) {
+			List<PhongEntity> listPhongDuocChon = new ArrayList<>();
+			List<ChiTietDatPhongEntity> listChiTietDatPhong = new ArrayList<>();
+
+			LocalTime gioNhanPhong = LocalTime.now();
+			LocalTime gioTraPhong = gioNhanPhong.plusHours(1);
+			LocalDate ngayNhanPhong = LocalDate.now();
+			int gioNhan = Integer.parseInt(cmbGioNhanPhong.getSelectedItem().toString());
+			int gioTra = Integer.parseInt(cmbGioTraPhong.getSelectedItem().toString());
+			int phutNhan = Integer.parseInt(cmbPhutNhanPhong.getSelectedItem().toString());
+			int phutTra = Integer.parseInt(cmbPhutTraPhong.getSelectedItem().toString());
+			String trangThaiPhong = "Đang sử dụng";
+			// tạo listPhong với tblPhongDaChon
+			for (int i = 0; i < tblPhongDaChon.getRowCount(); i++) {
+				String maPhong = tblPhongDaChon.getValueAt(i, 1).toString();
+				PhongEntity phongEntity = quanLyPhongDAO.timTheoMa(maPhong);
+				listPhongDuocChon.add(phongEntity);
+			}
+
+			/********************************************/
+			if (radDatPhongTruoc.isSelected()) {
+				trangThaiPhong = "Đặt trước";
+				// neu chua chon ngay
+				if (chonNgayDatTruoc.getDate() == null) {
+					JOptionPane.showMessageDialog(this, "Hãy chọn ngày nhận phòng");
+					return;
+				} else {
+					LocalDate ngayNhanPhong1 = DateFormatter.toLocalDate(chonNgayDatTruoc);
+					// neu chon ngay truoc hom nay thi thong bao
+					if (ngayNhanPhong1.isBefore(LocalDate.now())) {
+						JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày nhận phòng gần nhất là hôm nay");
+						return;
+					}
+					ngayNhanPhong = ngayNhanPhong1;
+					LocalTime gioNhanPhong1 = LocalTime.of(gioNhan, phutNhan);
+					if (ngayNhanPhong.isEqual(LocalDate.now())
+							&& gioNhanPhong1.isBefore(LocalTime.now().plusHours(2))) {
+						JOptionPane.showMessageDialog(this,
+								"Giờ nhận phòng đặt trước phải sau giờ hiện tại ít nhất 2 giờ");
+						return;
+					} else {
+						for (PhongEntity phongEntity : listPhongDuocChon) {
+							listChiTietDatPhong = quanLyHoaDonDAO.timChiTietDatPhongChuaThanhToanTheoPhong(phongEntity);
+							for (ChiTietDatPhongEntity chiTietDatPhongEntity : listChiTietDatPhong) {
+								// kiem tra trong danh sach chi tiet dat phong co phong nao da duoc dat trong
+								// khoang thoi gian duoc chon hay khong. Neu co thi thong bao.
+								// Quy dinh la khong duoc dat truoc 30 va sau 30 mot chi tiet dat phong khac
+								if ((ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong()) && gioNhanPhong1
+										.isAfter(chiTietDatPhongEntity.getGioNhanPhong().minusMinutes(30)))
+										|| (ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong())
+												&& gioNhanPhong1.isBefore(
+														chiTietDatPhongEntity.getGioTraPhong().plusMinutes(30)))) {
+									JOptionPane.showMessageDialog(this, "Phòng " + phongEntity.getSoPhong()
+											+ " đã được đặt trong khoảng thời gian này.\n Vui lòng chọn khung giờ khác");
+									return;
+
+								}
+							}
+						}
+						gioNhanPhong = gioNhanPhong1;
+					}
+				}
+			}
+
+//			if (gioNhanPhong.isBefore(LocalTime.of(8, 0))) {
+//				JOptionPane.showMessageDialog(this, "Không được đặt phòng trước 08:00");
+//				return;
+//			}
+
+			// Kiểm tra giờ trả phòng phải sau giờ nhận phòng ít nhất 1 giờ
+			LocalTime gioTraPhong1 = LocalTime.of(gioTra, phutTra);
+			if (gioTraPhong1.isBefore(gioNhanPhong.plusHours(1))) {
+				JOptionPane.showMessageDialog(this, "Vui lòng chọn giờ trả phòng sau giờ nhận phòng ít nhất 1 giờ");
+				return;
+			} else {
+				for (ChiTietDatPhongEntity chiTietDatPhongEntity : listChiTietDatPhong) {
+					if (ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong())
+							&& gioTraPhong1.isAfter(chiTietDatPhongEntity.getGioNhanPhong().minusMinutes(30))) {
+						PhongEntity phongEntity = chiTietDatPhongEntity.getPhong();
+						JOptionPane.showMessageDialog(this, "Phòng " + phongEntity.getSoPhong()
+								+ " được đặt trong khoảng thời gian này.\n Vui lòng chọn giờ trả phòng sớm hơn");
+						return;
+					}
+				}
+				gioTraPhong = gioTraPhong1;
+			}
+			// nếu tạo PhieuDatPhong thất bại thì ngừng
+			if (!quanLyPhieuDatPhongDAO.themPhieuDatPhong(khachHangEntity.getMaKhachHang()))
+				return;
+
+			PhieuDatPhongEntity phieuDatPhongEntity = quanLyPhieuDatPhongDAO.timPhieuDatPhongVuaTao();
+			// nếu phiếu dặt phòng null thì return
+			if (phieuDatPhongEntity == null)
+				return;
+
+			// thêm các ChiTietPhieuDatPhong vào CSDL
+			for (PhongEntity phongEntity : listPhongDuocChon) {
+				ChiTietDatPhongEntity chiTietDatPhongEntity = new ChiTietDatPhongEntity(phongEntity, gioNhanPhong,
+						gioTraPhong, ngayNhanPhong);
+				// neu them chi tiet dat phong thanh cong thi them chiTietPhieuDatPhong va
+				// chiTietHoaDon
+				if (quanLyHoaDonDAO.themChiTietDatPhong(chiTietDatPhongEntity)) {
+					chiTietDatPhongEntity = quanLyHoaDonDAO.timChiTietDatPhongVuaTao();
+					ChiTietPhieuDatPhongEntity chiTietPhieuDatPhongEntity = new ChiTietPhieuDatPhongEntity(
+							phieuDatPhongEntity.getMaPhieuDatPhong(), chiTietDatPhongEntity.getMaChiTietDatPhong());
+
+					if (!quanLyPhieuDatPhongDAO.themChiTietPhieuDatPhong(chiTietPhieuDatPhongEntity)) {
+						return;
+					}
+					if (!quanLyHoaDonDAO.themChiTietHoaDon(chiTietDatPhongEntity.getMaChiTietDatPhong())) {
+						return;
+					} else {
+						if (!phongEntity.getTrangThai().equals("Đang sử dụng")) {
+							if (!quanLyPhongDAO.capNhatTrangThaiPhong(phongEntity, trangThaiPhong)) {
+								return;
+							}
+						}
+					}
+				}
+			}
+			JOptionPane.showMessageDialog(this, "Đặt phòng thành công");
+			tblPhongDaChon.removeAll();
+			tblmodelPhongDaChon.setRowCount(0);
+			chonLamMoi();
+		}
 
 	}
 
-	/****************** ĐẶT PHÒNG ******************/
-	public void chonDatPhong() {
+	/****************** KIỂM TRA DỮ LIỆU TÌM ******************/
+	private boolean kiemTraSoPhong() {
+		String soPhong = txtTimKiemTheoSoPhong.getText().trim();
+		if (soPhong.length() > 0) {
+			try {
+				int so = Integer.parseInt(soPhong);
+				if (so < 0) {
+					JOptionPane.showMessageDialog(this, "Vui lòng nhập số phòng là số dương");
+					txtTimKiemTheoSoPhong.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Số phòng  phải nhập là số");
+				txtTimKiemTheoSoPhong.requestFocus();
+				return false;
+			}
+		}
+		return true;
+	}
 
+	private boolean kiemTraSoDienThoai() {
+		if (!txtSDTKhachHang.getText().trim().matches("\\d{10}")) {
+			JOptionPane.showMessageDialog(this, "Số điện thoại phải nhập 10 số");
+			txtSDTKhachHang.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraDuLieuNhanPhong() {
+		int row = tblPhong.getSelectedRow();
+		if (row >= 0) {
+			if (!tblPhong.getValueAt(row, 5).toString().trim().equals("Đặt trước")) {
+				JOptionPane.showMessageDialog(this, "Vui lòng chọn phòng đặt trước");
+				return false;
+			} else {
+
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn phòng");
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraDuLieuDatPhong() {
+//		if (nhanVienEntity == null) {
+//			JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập");
+//			return false;
+//		}
+		if (khachHangEntity == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng");
+			return false;
+		}
+		if (tblPhongDaChon.getRowCount() == 0) {
+			JOptionPane.showMessageDialog(this, "Vui lòng chọn ít nhất một phòng");
+			return false;
+		}
+
+		return true;
 	}
 }

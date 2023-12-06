@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableModel;
 import controller.QuanLyLoaiPhongController;
 import dao.QuanLyPhongDAO;
 import entities.LoaiPhong;
+import entities.NhanVienEntity;
 
 import java.awt.Color;
 import javax.swing.JButton;
@@ -52,15 +53,16 @@ public class GD_QuanLyLoaiPhong extends JFrame {
 	private List<LoaiPhong> listLoaiPhong;
 	private QuanLyLoaiPhongController controller;
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
+	private NhanVienEntity nhanVienEntity;
 
 	/**
 	 * Create the frame.
 	 */
-	public GD_QuanLyLoaiPhong() {
+	public GD_QuanLyLoaiPhong(NhanVienEntity nhanVienEntity) {
+		this.nhanVienEntity = nhanVienEntity;
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(GD_QuanLyLoaiPhong.class.getResource("/images/iconLogo.png")));
 		setTitle("Quản lý loại phòng");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700, 450);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -164,7 +166,7 @@ public class GD_QuanLyLoaiPhong extends JFrame {
 		btnXoa.addActionListener(controller);
 		btnThoat.addActionListener(controller);
 		loadData();
-
+//		kiemTraQuyen();
 	}
 
 	private void loadData() {
@@ -255,4 +257,14 @@ public class GD_QuanLyLoaiPhong extends JFrame {
 		}
 		return true;
 	}
+
+//	private void kiemTraQuyen() {
+//		if (nhanVienEntity.getChucVu().equalsIgnoreCase("Quản lí")) {
+//			btnChinhSua.setEnabled(true);
+//			btnXoa.setEnabled(true);
+//		} else {
+//			btnChinhSua.setEnabled(false);
+//			btnXoa.setEnabled(false);
+//		}
+//	}
 }

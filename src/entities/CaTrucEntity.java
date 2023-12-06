@@ -28,6 +28,12 @@ public class CaTrucEntity {
 		this.gioKetThuc = gioKetThuc;
 	}
 
+	public CaTrucEntity(String maCaTruc, String tenCaTruc) {
+		super();
+		this.maCaTruc = maCaTruc;
+		this.tenCaTruc = tenCaTruc;
+	}
+
 	public String getMaCaTruc() {
 		return maCaTruc;
 	}

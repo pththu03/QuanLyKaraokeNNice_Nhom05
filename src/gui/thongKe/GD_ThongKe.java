@@ -1,10 +1,8 @@
 package gui.thongKe;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.SystemColor;
-import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,9 +29,6 @@ import com.toedter.calendar.JYearChooser;
 
 import controller.ThongKeController;
 import dao.QuanLyNhanVienDAO;
-import entities.ChiTietHoaDonEntity;
-import entities.HoaDonEntity;
-import entities.KhachHangEntity;
 import entities.NhanVienEntity;
 
 public class GD_ThongKe extends JPanel {
@@ -95,51 +90,26 @@ public class GD_ThongKe extends JPanel {
 	private JLabel lblTongCaVangKetQua;
 
 	/**
-	 * Khach hang
-	 */
-	private JPanel pnlThongKeKhachHang;
-	private JLabel lblTieuDeKhachHang;
-	private JPanel pnlThongKeKhachHangNho;
-	private JPanel pnlChiTietKhachHang;
-	private JPanel pnlTimKiemKhachHang;
-	private JPanel pnlDSKhachHang;
-
-	private JLabel lblchonThangKhachHang;
-	private JLabel lblChonNamKhachHang;
-	private JLabel lblTongSoLanDatPhong;
-	private JLabel lblTongSoKhachHang;
-	private JLabel lblSoKhachHangDatPhongTren50;
-	private JLabel lblSoKhachHangDatPhongTren50KetQua;
-	private JLabel lblTongSoKhachHangKetQua;
-	private JLabel lblTongSoLanDatPhongKetQua;
-
-	/**
 	 * 
 	 */
 
 	private JYearChooser cmbNamDoanhThuThang; // combobox chọn năm trong tìm kiếm doanh thu theo tháng
 	private JYearChooser cmbNamDoanhThuNam;
 	private JYearChooser chonNamNhanVien;
-	private JYearChooser chonNamKhachHang;
 
 	private JDateChooser chonNgayDoanhThu;
 
 	private JComboBox<String> cmbThangDoanhThu;
 	private JComboBox<String> cmbThangLuong;
-	private JComboBox<String> cmbThangKhachHang;
 	private DefaultComboBoxModel<String> cmbmodelThangDoanhThu;
-	private DefaultComboBoxModel<String> cmbmodelThangKhachHang;
 	private DefaultComboBoxModel<String> cmbmodelThangLuong; // model của combobox chọn tháng trong thống kê lương nhân
 
 	public JTable tblHoaDon;
 	public JTable tblNhanVien;
-	public JTable tblKhachHang;
 	private DefaultTableModel tblmodelHoaDon;
 	private DefaultTableModel tblmodelNhanVien;
-	private DefaultTableModel tblmodelKhachHang;
 	private JScrollPane scrHoaDon;
 	private JScrollPane scrNhanVien;
-	private JScrollPane scrKhachHang;
 
 	/**
 	 * 
@@ -154,22 +124,13 @@ public class GD_ThongKe extends JPanel {
 	public JButton btnXemChiTietHoaDonDoanhThu;
 	public JButton btnTimKiemLuong;
 	public JButton btnXemChiTietChamCong;
-	public JButton btnTimKiemKhachHang;
-	public JButton btnXemChiTietHoaDonKhachHang;
 
 	/**
 	 * 
 	 */
-	private List<HoaDonEntity> listHoaDon;
 	private List<NhanVienEntity> listNhanVien;
-	private List<KhachHangEntity> listKhachHang;
-	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
 
 	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
-
-	private HoaDonEntity hoaDonEntity;
-	private NhanVienEntity nhanVienEntity;
-	private KhachHangEntity khachHangEntity;
 
 	/**
 	 * 
@@ -556,138 +517,8 @@ public class GD_ThongKe extends JPanel {
 		pnlDSLuongNhanVien.add(btnXemChiTietChamCong);
 
 		/**
-		 * Thong ke khach hang theo so lan dat phong
-		 */
-
-		pnlThongKeKhachHang = new JPanel();
-		pnlThongKeKhachHang.setBackground(new Color(230, 230, 250));
-		pnlThongKeKhachHang.setToolTipText("");
-		pnlThongKeKhachHang.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		tabThongKe.addTab("Số lần đặt phòng của khách hàng", null, pnlThongKeKhachHang, null);
-		pnlThongKeKhachHang.setLayout(null);
-
-		lblTieuDeKhachHang = new JLabel("Thống kê số lần đặt phòng của khách hàng");
-		lblTieuDeKhachHang.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTieuDeKhachHang.setForeground(Color.BLACK);
-		lblTieuDeKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 18));
-		lblTieuDeKhachHang.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		lblTieuDeKhachHang.setBackground(Color.WHITE);
-		lblTieuDeKhachHang.setBounds(0, 0, 1365, 50);
-		pnlThongKeKhachHang.add(lblTieuDeKhachHang);
-
-		pnlThongKeKhachHangNho = new JPanel();
-		pnlThongKeKhachHangNho.setLayout(null);
-		pnlThongKeKhachHangNho.setBounds(0, 50, 1365, 617);
-		pnlThongKeKhachHang.add(pnlThongKeKhachHangNho);
-
-		pnlChiTietKhachHang = new JPanel();
-		pnlChiTietKhachHang.setLayout(null);
-		pnlChiTietKhachHang.setBorder(null);
-		pnlChiTietKhachHang.setBackground(SystemColor.menu);
-		pnlChiTietKhachHang.setBounds(0, 0, 672, 617);
-		pnlThongKeKhachHangNho.add(pnlChiTietKhachHang);
-
-		pnlTimKiemKhachHang = new JPanel();
-		pnlTimKiemKhachHang.setLayout(null);
-		pnlTimKiemKhachHang.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlTimKiemKhachHang.setBackground(new Color(230, 230, 250));
-		pnlTimKiemKhachHang.setBounds(0, 0, 672, 56);
-		pnlChiTietKhachHang.add(pnlTimKiemKhachHang);
-
-		/**
-		 * Tim kiem khach hang
-		 */
-		lblchonThangKhachHang = new JLabel("Chọn tháng:");
-		lblchonThangKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblchonThangKhachHang.setBounds(30, 11, 110, 30);
-		pnlTimKiemKhachHang.add(lblchonThangKhachHang);
-
-		cmbmodelThangKhachHang = new DefaultComboBoxModel<>(cols_Thang);
-		cmbThangKhachHang = new JComboBox<>(cmbmodelThangKhachHang);
-		cmbThangKhachHang.setBounds(125, 11, 100, 30);
-		pnlTimKiemKhachHang.add(cmbThangKhachHang);
-
-		lblChonNamKhachHang = new JLabel("Chọn năm:");
-		lblChonNamKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		lblChonNamKhachHang.setBounds(247, 11, 88, 30);
-		pnlTimKiemKhachHang.add(lblChonNamKhachHang);
-
-		btnTimKiemKhachHang = new JButton("Tìm kiếm");
-		btnTimKiemKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconTimKiem.png")));
-		btnTimKiemKhachHang.setFont(new Font("Cambria", Font.BOLD, 14));
-		btnTimKiemKhachHang.setFocusable(false);
-		btnTimKiemKhachHang.setBackground(new Color(144, 238, 144));
-		btnTimKiemKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnTimKiemKhachHang.setBounds(512, 11, 150, 35);
-		pnlTimKiemKhachHang.add(btnTimKiemKhachHang);
-
-		chonNamKhachHang = new JYearChooser();
-		chonNamKhachHang.setBounds(333, 11, 100, 30);
-		pnlTimKiemKhachHang.add(chonNamKhachHang);
-
-		lblTongSoLanDatPhong = new JLabel("Tổng số lần đặt phòng:");
-		lblTongSoLanDatPhong.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTongSoLanDatPhong.setBackground(SystemColor.menu);
-		lblTongSoLanDatPhong.setBounds(40, 150, 200, 25);
-		pnlChiTietKhachHang.add(lblTongSoLanDatPhong);
-
-		lblTongSoKhachHang = new JLabel("Tổng số khách hàng:");
-		lblTongSoKhachHang.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTongSoKhachHang.setBackground(SystemColor.menu);
-		lblTongSoKhachHang.setBounds(40, 225, 200, 25);
-		pnlChiTietKhachHang.add(lblTongSoKhachHang);
-
-		lblSoKhachHangDatPhongTren50 = new JLabel("Tổng số khách hàng đặt trên 50 lần:");
-		lblSoKhachHangDatPhongTren50.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblSoKhachHangDatPhongTren50.setBackground(SystemColor.menu);
-		lblSoKhachHangDatPhongTren50.setBounds(40, 297, 316, 25);
-		pnlChiTietKhachHang.add(lblSoKhachHangDatPhongTren50);
-
-		lblSoKhachHangDatPhongTren50KetQua = new JLabel("0");
-		lblSoKhachHangDatPhongTren50KetQua.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblSoKhachHangDatPhongTren50KetQua.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblSoKhachHangDatPhongTren50KetQua.setBounds(494, 297, 135, 25);
-		pnlChiTietKhachHang.add(lblSoKhachHangDatPhongTren50KetQua);
-
-		lblTongSoKhachHangKetQua = new JLabel("0");
-		lblTongSoKhachHangKetQua.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblTongSoKhachHangKetQua.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTongSoKhachHangKetQua.setBounds(429, 225, 200, 25);
-		pnlChiTietKhachHang.add(lblTongSoKhachHangKetQua);
-
-		lblTongSoLanDatPhongKetQua = new JLabel("0");
-		lblTongSoLanDatPhongKetQua.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblTongSoLanDatPhongKetQua.setFont(new Font("Tahoma", Font.BOLD, 16));
-		lblTongSoLanDatPhongKetQua.setBounds(429, 150, 200, 25);
-		pnlChiTietKhachHang.add(lblTongSoLanDatPhongKetQua);
-
-		pnlDSKhachHang = new JPanel();
-		pnlDSKhachHang.setBorder(new MatteBorder(1, 1, 0, 0, (Color) new Color(0, 0, 0)));
-		pnlDSKhachHang.setBackground(new Color(230, 230, 250));
-		pnlDSKhachHang.setBounds(672, 0, 694, 617);
-		pnlThongKeKhachHangNho.add(pnlDSKhachHang);
-		pnlDSKhachHang.setLayout(null);
-
-		/**
 		 * Table DS KhachHang
 		 */
-
-		String[] cols_KhachHang = { "STT", "Mã khách háng", "Họ tên", "Số điện thoại", "Số lần đặt phòng" };
-		tblmodelKhachHang = new DefaultTableModel(cols_KhachHang, 0);
-		tblKhachHang = new JTable(tblmodelKhachHang);
-		scrKhachHang = new JScrollPane(tblKhachHang);
-		scrKhachHang.setBounds(10, 11, 674, 549);
-		pnlDSKhachHang.add(scrKhachHang);
-
-		btnXemChiTietHoaDonKhachHang = new JButton("Xem chi tiết hóa đơn");
-		btnXemChiTietHoaDonKhachHang.setIcon(new ImageIcon(GD_ThongKe.class.getResource("/images/iconMatMo.png")));
-		btnXemChiTietHoaDonKhachHang.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnXemChiTietHoaDonKhachHang.setForeground(Color.BLACK);
-		btnXemChiTietHoaDonKhachHang.setFont(new Font("Cambria", Font.BOLD, 14));
-		btnXemChiTietHoaDonKhachHang.setFocusable(false);
-		btnXemChiTietHoaDonKhachHang.setBackground(new Color(144, 238, 144));
-		btnXemChiTietHoaDonKhachHang.setBounds(468, 571, 216, 35);
-		pnlDSKhachHang.add(btnXemChiTietHoaDonKhachHang);
 
 		// can chinh cac table
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -696,8 +527,6 @@ public class GD_ThongKe extends JPanel {
 		tblHoaDon.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 		tblNhanVien.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		tblNhanVien.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		tblKhachHang.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tblKhachHang.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
@@ -714,13 +543,10 @@ public class GD_ThongKe extends JPanel {
 		btnTimKiemDoanhThuThang.addActionListener(controller);
 		btnTimKiemDoanhThuNam.addActionListener(controller);
 		btnTimKiemLuong.addActionListener(controller);
-		btnTimKiemKhachHang.addActionListener(controller);
 		btnXemChiTietHoaDonDoanhThu.addActionListener(controller);
 		btnXemChiTietChamCong.addActionListener(controller);
-		btnXemChiTietHoaDonKhachHang.addActionListener(controller);
 		tblHoaDon.addMouseListener(controller);
 		tblNhanVien.addMouseListener(controller);
-		tblKhachHang.addMouseListener(controller);
 
 		loadDataNhanVien();
 

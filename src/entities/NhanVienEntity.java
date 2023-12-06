@@ -44,6 +44,13 @@ public class NhanVienEntity {
 		this.trangThai = trangThai;
 	}
 
+	public NhanVienEntity(String maNhanVien, String hoTen, String soDienThoai) {
+		super();
+		this.maNhanVien = maNhanVien;
+		this.hoTen = hoTen;
+		this.soDienThoai = soDienThoai;
+	}
+
 	public String getMaNhanVien() {
 		return maNhanVien;
 	}

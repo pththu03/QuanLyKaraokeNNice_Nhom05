@@ -1,26 +1,34 @@
 package gui.caTruc;
 
+import javax.swing.JPanel;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+
+import java.awt.Font;
+import java.sql.Time;
+import java.time.LocalTime;
+
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.MatteBorder;
-import javax.swing.border.SoftBevelBorder;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 import controller.QuanLyCaTrucController;
+import dao.QuanLyCaTrucDAO;
 import entities.CaTrucEntity;
+import entities.DichVuEntity;
+import entities.KhachHangEntity;
+import util.TimeFormatter;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.ImageIcon;
 
 public class GD_QuanLyCaTruc extends JPanel {
 
@@ -46,6 +54,7 @@ public class GD_QuanLyCaTruc extends JPanel {
 	// JTable
 	private JTable tblDsCaTruc;
 	private DefaultTableModel tblmodelDanhSachPhong;
+	private QuanLyCaTrucDAO quanLyCaTrucDAO = new QuanLyCaTrucDAO();
 	// JScrollPane
 	private JScrollPane scrDsCaTruc;
 
@@ -181,27 +190,112 @@ public class GD_QuanLyCaTruc extends JPanel {
 		btnXoa.addActionListener(controller);
 		btnChinhSua.addActionListener(controller);
 		tblDsCaTruc.addMouseListener(controller);
+		loadData();
 
+	}
+	
+	private void loadData() {
+		tblDsCaTruc.removeAll();
+		tblDsCaTruc.setRowSelectionAllowed(false);
+		tblmodelDanhSachPhong.setRowCount(0);
+		list = new ArrayList<CaTrucEntity>();
+		list = quanLyCaTrucDAO.duyetDanhSach();
+
+		int stt = 1;
+		for (CaTrucEntity caTrucEntity : list) {
+			tblmodelDanhSachPhong.addRow(new Object[] { stt++, caTrucEntity.getMaCaTruc(), caTrucEntity.getTenCaTruc(),
+					TimeFormatter.format(caTrucEntity.getGioBatDau()), TimeFormatter.format(caTrucEntity.getGioKetThuc()) });
+		}
+	}
+
+	public void hienThiThongTin() {
+		list = new ArrayList<CaTrucEntity>();
+		list = quanLyCaTrucDAO.duyetDanhSach();
+		int row = tblDsCaTruc.getSelectedRow();
+		if (row >= 0) {
+			txtMaCaTruc.setText(list.get(row).getMaCaTruc());
+			txtCaTruc.setText(list.get(row).getTenCaTruc());
+			txtGioBD.setText(TimeFormatter.format(list.get(row).getGioBatDau()));
+			txtGioKT.setText(TimeFormatter.format(list.get(row).getGioKetThuc()));
+		}
 	}
 
 	public void chonLamMoi() {
+		txtCaTruc.setText("");
+		txtGioBD.setText("");
+		txtGioKT.setText("");
+		txtMaCaTruc.setText("");
+		tblDsCaTruc.setRowSelectionAllowed(false);
+		loadData();
 
 	}
 
 	public void chonThem() {
-
+		String caTruc = txtCaTruc.getText();
+		LocalTime gioBatDau = LocalTime.parse(txtGioBD.getText());
+		LocalTime gioKetThuc = LocalTime.parse(txtGioKT.getText());
+		CaTrucEntity caTrucEntity = new CaTrucEntity(caTruc, gioBatDau, gioKetThuc);
+		caTrucEntity = quanLyCaTrucDAO.them(caTrucEntity);
+		loadData();
 	}
 
 	public void chonXoa() {
+		int row = tblDsCaTruc.getSelectedRow();
+		if (row >= 0) {
+			if (quanLyCaTrucDAO.xoa(txtMaCaTruc.getText())) {
+				tblmodelDanhSachPhong.removeRow(row);
+				JOptionPane.showMessageDialog(this, "Xóa Ca trực thành công", "Thông Báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				chonLamMoi();
+				loadData();
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Chọn Ca trực cần xóa");
+		}
 
 	}
 
 	public void chonChinhSua() {
-
+		if (kiemTraDuLieuChinhSua()) {
+			int row = tblDsCaTruc.getSelectedRow();
+			if (row >= 0) {
+				String maCaTruc = txtMaCaTruc.getText().trim();
+				String tenCaTruc = txtCaTruc.getText().trim();
+				LocalTime gioBatDau = LocalTime.parse(txtGioBD.getText());
+				LocalTime gioKetThuc = LocalTime.parse(txtGioKT.getText());
+				CaTrucEntity caTrucEntity = new CaTrucEntity(maCaTruc, tenCaTruc, gioBatDau, gioKetThuc);
+				if (quanLyCaTrucDAO.chinhSua(caTrucEntity)) {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin Ca trực thành công", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					chonLamMoi();
+					loadData();
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Chọn Ca trực cần chỉnh sửa");
+			}
+		}
 	}
 
-	public void hienThiThongTin() {
-
+	private boolean kiemTraDuLieuChinhSua() {
+		if (!kiemTraTenCatruc()) {
+			return false;
+		}
+		return true;
 	}
+
+	private boolean kiemTraTenCatruc() {
+		String tenCaTruc = txtCaTruc.getText();
+		list = new ArrayList<>();
+		list = quanLyCaTrucDAO.duyetDanhSach();
+		if (!(tenCaTruc.length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Tên Ca Trực không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtCaTruc.requestFocus();
+			return false;
+		}
+		return false;
+	}
+
+	
 
 }

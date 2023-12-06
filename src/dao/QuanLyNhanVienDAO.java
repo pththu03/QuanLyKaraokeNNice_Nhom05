@@ -60,6 +60,47 @@ public class QuanLyNhanVienDAO {
 		return listNhanVien;
 	}
 
+	public List<NhanVienEntity> duyetDanhSachNhanVienDangLamViec() {
+		List<NhanVienEntity> listNhanVien = new ArrayList<>();
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		Statement statemant = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT * FROM NhanVien WHERE TrangThai = N'Đang làm việc'";
+				statemant = connect.createStatement();
+				result = statemant.executeQuery(query);
+				while (result.next()) {
+					String maNhanVien = result.getString(1);
+					String hoTen = result.getString(2);
+					String soDienThoai = result.getString(3);
+					String email = result.getString(4);
+					String CCCD = result.getString(5);
+					String password = result.getString(6);
+					int namSinh = result.getInt(7);
+					double mucLuong = result.getDouble(8);
+					String ChucVu = result.getString(9);
+					boolean trangThai = false;
+					if (result.getString(10).equalsIgnoreCase("Đang làm việc")) {
+						trangThai = true;
+					}
+					NhanVienEntity nhanVienEntity = new NhanVienEntity(maNhanVien, hoTen, soDienThoai, email, CCCD,
+							password, namSinh, mucLuong, ChucVu, trangThai);
+					listNhanVien.add(nhanVienEntity);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statemant);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return listNhanVien;
+	}
+
 	public NhanVienEntity timTheoMa(String maNhanvien) {
 		NhanVienEntity nhanVienEntity = null;
 		Connection connect = ConnectDB.getConnect();
@@ -87,6 +128,48 @@ public class QuanLyNhanVienDAO {
 						trangThai = true;
 					}
 					nhanVienEntity = new NhanVienEntity(maNhanVien, hoTen, soDienThoai, email, CCCD, password, namSinh,
+							mucLuong, ChucVu, trangThai);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statemant);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return nhanVienEntity;
+	}
+
+	public NhanVienEntity timTheoTenVaSoDienThoai(String hoTen, String soDienThoai) {
+		NhanVienEntity nhanVienEntity = null;
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statemant = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT * FROM NhanVien WHERE HoTen LIKE ? AND SoDienThoai = ?";
+				statemant = connect.prepareStatement(query);
+				statemant.setString(1, hoTen);
+				statemant.setString(2, soDienThoai);
+				result = statemant.executeQuery();
+				while (result.next()) {
+					String maNhanVien = result.getString(1);
+					String hoTenNhanVien = result.getString(2);
+					String sdt = result.getString(3);
+					String email = result.getString(4);
+					String CCCD = result.getString(5);
+					String password = result.getString(6);
+					int namSinh = result.getInt(7);
+					double mucLuong = result.getDouble(8);
+					String ChucVu = result.getString(9);
+					boolean trangThai = false;
+					if (result.getString(10).equalsIgnoreCase("Đang làm việc")) {
+						trangThai = true;
+					}
+					nhanVienEntity = new NhanVienEntity(maNhanVien, hoTenNhanVien, sdt, email, CCCD, password, namSinh,
 							mucLuong, ChucVu, trangThai);
 				}
 			} catch (SQLException e) {
@@ -335,7 +418,7 @@ public class QuanLyNhanVienDAO {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
 
-		String query = "UPDATE NhanVien\r\n" + "SET Password = ?\r\n" + "WHERE SDT = ?";
+		String query = "UPDATE NhanVien\r\n" + "SET Password = ?\r\n" + "WHERE SoDienThoai = ?";
 		if (connect != null) {
 			try {
 				statement = connect.prepareStatement(query);

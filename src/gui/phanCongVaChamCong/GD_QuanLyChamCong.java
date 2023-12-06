@@ -4,18 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.SystemColor;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -23,11 +22,11 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-
+import controller.QuanLyChamCongController;
+import dao.ChamCongDAO;
+import dao.PhanCongDAO;
 import entities.PhieuChamCongEntity;
 import entities.PhieuPhanCongEntity;
 import util.DateFormatter;
@@ -37,8 +36,8 @@ public class GD_QuanLyChamCong extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JScrollPane scrChamCong;
-	private DefaultTableModel tblmodelChamCong;
-	private JTable tblChamCong;
+	private DefaultTableModel tblmodelPhieuChamCong;
+	private JTable tblPhieuChamCong;
 	private JPanel pnlChamCong;
 	private JPanel pnlChucNang;
 	private JLabel lblChamCong;
@@ -47,16 +46,17 @@ public class GD_QuanLyChamCong extends JPanel {
 	private JLabel lblGioChamCong;
 
 	private List<PhieuChamCongEntity> listPhieuChamCong;
-//	private PhanCongDAO phanCongDAO = new PhanCongDAO();
-//	private ChamCongDAO chamCongDAO = new ChamCongDAO();
-//	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
-//	private QuanLyCaTrucDAO quanLyCaTrucDAO = new QuanLyCaTrucDAO();
+	private List<PhieuPhanCongEntity> listPhieuPhanCong;
+	private QuanLyChamCongController controller;
+	private PhanCongDAO phanCongDAO = new PhanCongDAO();
+	private ChamCongDAO chamCongDAO = new ChamCongDAO();
 	private JTextField txtCaTruc;
 	private JTextField txtTenNV;
 	private JLabel lblCaTruc;
 	private JLabel lblTenNV;
 	public JCheckBox chkVang;
 	public JButton btnLuu;
+	private JTextField txtSoDienThoai;
 
 	public GD_QuanLyChamCong() {
 		setLayout(null);
@@ -81,27 +81,25 @@ public class GD_QuanLyChamCong extends JPanel {
 		btnLuu.setBounds(1185, 571, 150, 35);
 		pnlChucNang.add(btnLuu);
 
-		String[] cols_ChamCong = { "STT", "Mã PPC", "Tên Nhân Viên", "Ca Trực", "Ngày", "Trạng Thái", "Lương" };
-		tblmodelChamCong = new DefaultTableModel(cols_ChamCong, 0);
-		tblChamCong = new JTable(tblmodelChamCong);
-		tblChamCong.setAutoCreateRowSorter(true);
-		tblChamCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		scrChamCong = new JScrollPane(tblChamCong);
+		String[] cols_ChamCong = { "STT", "Mã phiếu phân công", "Tên nhân viên", "Số điện thoại", "Ca Trực", "Ngày",
+				"Trạng Thái" };
+		tblmodelPhieuChamCong = new DefaultTableModel(cols_ChamCong, 0);
+		tblPhieuChamCong = new JTable(tblmodelPhieuChamCong);
+		tblPhieuChamCong.setAutoCreateRowSorter(true);
+		tblPhieuChamCong.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		scrChamCong = new JScrollPane(tblPhieuChamCong);
 		scrChamCong.setBounds(30, 96, 1305, 465);
 		pnlChucNang.add(scrChamCong);
 
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		tblChamCong.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		tblChamCong.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-		tblChamCong.getColumnModel().getColumn(2).setCellRenderer(centerRenderer);
-		tblChamCong.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
-		tblChamCong.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
+		tblPhieuChamCong.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+		tblPhieuChamCong.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+		tblPhieuChamCong.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
 
 		DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
 		rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-		tblChamCong.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
-		tblChamCong.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);
+		tblPhieuChamCong.getColumnModel().getColumn(5).setCellRenderer(rightRenderer);
 
 		lblChamCong = new JLabel("Chấm Công");
 		lblChamCong.setBounds(0, 28, 1365, 50);
@@ -141,21 +139,21 @@ public class GD_QuanLyChamCong extends JPanel {
 
 		lblCaTruc = new JLabel("Ca trực:");
 		lblCaTruc.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblCaTruc.setBounds(50, 572, 80, 30);
+		lblCaTruc.setBounds(725, 573, 80, 30);
 		pnlChucNang.add(lblCaTruc);
 
 		txtCaTruc = new JTextField();
-		txtCaTruc.setBounds(130, 572, 200, 30);
+		txtCaTruc.setBounds(794, 573, 200, 30);
 		pnlChucNang.add(txtCaTruc);
 		txtCaTruc.setColumns(10);
 
 		lblTenNV = new JLabel("Nhân viên:");
 		lblTenNV.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblTenNV.setBounds(400, 572, 80, 30);
+		lblTenNV.setBounds(30, 573, 80, 30);
 		pnlChucNang.add(lblTenNV);
 
 		txtTenNV = new JTextField();
-		txtTenNV.setBounds(480, 572, 200, 30);
+		txtTenNV.setBounds(109, 573, 200, 30);
 		pnlChucNang.add(txtTenNV);
 		txtTenNV.setColumns(10);
 
@@ -166,26 +164,91 @@ public class GD_QuanLyChamCong extends JPanel {
 		chkVang.setFocusPainted(false);
 		chkVang.setBackground(new Color(230, 230, 250));
 		chkVang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		chkVang.setBounds(780, 572, 150, 30);
+		chkVang.setBounds(1017, 573, 150, 30);
 		pnlChucNang.add(chkVang);
 
-//		controller = new ChamCongController(this);
-//		btnLuu.addActionListener(controller);
-//		tblChamCong.addMouseListener(controller);
-//		chkVang.addActionListener(controller);
-	}
-	
-	public void hienThiThongTin() {
-		
-	}
-	
-	public void chonLuu() {
-		
-	}
-	
-	public void chonVang() {
-		
-	}
-	
+		JLabel lblSoDienThoai = new JLabel("Số điện thoại:");
+		lblSoDienThoai.setBounds(373, 573, 96, 30);
+		pnlChucNang.add(lblSoDienThoai);
+		lblSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
+		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setBounds(468, 573, 200, 30);
+		pnlChucNang.add(txtSoDienThoai);
+		txtSoDienThoai.setColumns(10);
+
+		controller = new QuanLyChamCongController(this);
+		btnLuu.addActionListener(controller);
+		tblPhieuChamCong.addMouseListener(controller);
+		chkVang.addActionListener(controller);
+		loadData();
+	}
+
+	private void loadData() {
+		tblPhieuChamCong.removeAll();
+		tblPhieuChamCong.setRowSelectionAllowed(false);
+		tblmodelPhieuChamCong.setRowCount(0);
+		listPhieuPhanCong = new ArrayList<PhieuPhanCongEntity>();
+		listPhieuPhanCong = phanCongDAO.duyetDanhSachPhanCongCuaNgay(new Date());
+		listPhieuChamCong = new ArrayList<PhieuChamCongEntity>();
+		listPhieuChamCong = chamCongDAO.duyetDanhSach();
+
+		boolean flag = false;
+		int stt = 1;
+		for (PhieuPhanCongEntity phieuPhanCongEntity : listPhieuPhanCong) {
+			flag = false;
+			for (PhieuChamCongEntity phieuChamCongEntity : listPhieuChamCong) {
+				String trangThai = "Không vắng";
+				if (phieuChamCongEntity.isTrangThai()) {
+					trangThai = "Vắng";
+				}
+				if (phieuChamCongEntity.getPhieuPhanCong().equals(phieuPhanCongEntity)) {
+					flag = true;
+					tblmodelPhieuChamCong.addRow(new Object[] { stt++, phieuPhanCongEntity.getMaPhieuPhanCong(),
+							phieuPhanCongEntity.getNhanVien().getHoTen(),
+							phieuPhanCongEntity.getNhanVien().getSoDienThoai(),
+							phieuPhanCongEntity.getCaTruc().getTenCaTruc(),
+							DateFormatter.format(phieuPhanCongEntity.getNgay()), trangThai });
+				}
+			}
+			if (flag == false) {
+				tblmodelPhieuChamCong.addRow(new Object[] { stt++, phieuPhanCongEntity.getMaPhieuPhanCong(),
+						phieuPhanCongEntity.getNhanVien().getHoTen(),
+						phieuPhanCongEntity.getNhanVien().getSoDienThoai(),
+						phieuPhanCongEntity.getCaTruc().getTenCaTruc(),
+						DateFormatter.format(phieuPhanCongEntity.getNgay()), "" });
+			}
+		}
+	}
+
+	public void hienThiThongTin() {
+		int row = tblPhieuChamCong.getSelectedRow();
+		if (row >= 0) {
+			txtTenNV.setText(tblPhieuChamCong.getValueAt(row, 2).toString());
+			txtSoDienThoai.setText(tblPhieuChamCong.getValueAt(row, 3).toString());
+			txtCaTruc.setText(tblPhieuChamCong.getValueAt(row, 4).toString());
+		}
+	}
+
+	public void chonLuu() {
+		int row = tblPhieuChamCong.getSelectedRow();
+		boolean trangThai = false;
+		if (chkVang.isSelected()) {
+			trangThai = true;
+		}
+		PhieuChamCongEntity phieuChamCongEntity = new PhieuChamCongEntity(
+				phanCongDAO.timTheoMa(tblPhieuChamCong.getValueAt(row, 1).toString()), trangThai);
+		if (chamCongDAO.themPhieuChamCong(phieuChamCongEntity)) {
+			JOptionPane.showMessageDialog(this, "Chấm công thành công");
+			lamMoi();
+		}
+	}
+
+	private void lamMoi() {
+		txtCaTruc.setText("");
+		txtSoDienThoai.setText("");
+		txtTenNV.setText("");
+		chkVang.setSelected(false);
+		loadData();
+	}
 }

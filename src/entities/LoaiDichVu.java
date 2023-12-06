@@ -16,6 +16,11 @@ public class LoaiDichVu {
 		this.tenLoaiDichVu = tenLoaiDichVu;
 	}
 
+	public LoaiDichVu(String tenLoaiDichVu) {
+		super();
+		this.tenLoaiDichVu = tenLoaiDichVu;
+	}
+
 	public String getMaLoaiDichVu() {
 		return maLoaiDichVu;
 	}
@@ -34,7 +39,7 @@ public class LoaiDichVu {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maLoaiDichVu);
+		return Objects.hash(maLoaiDichVu, tenLoaiDichVu);
 	}
 
 	@Override
@@ -44,7 +49,7 @@ public class LoaiDichVu {
 		if (obj == null)
 			return false;
 		LoaiDichVu other = (LoaiDichVu) obj;
-		return Objects.equals(maLoaiDichVu, other.maLoaiDichVu);
+		return Objects.equals(maLoaiDichVu, other.maLoaiDichVu) || Objects.equals(tenLoaiDichVu, other.tenLoaiDichVu);
 	}
 
 	@Override

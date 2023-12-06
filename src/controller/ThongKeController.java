@@ -22,10 +22,7 @@ public class ThongKeController implements ActionListener, MouseListener {
 			giaoDienThongKe.hienThiThongTinDoanhThu();
 		} else if (o.equals(giaoDienThongKe.tblNhanVien)) {
 			giaoDienThongKe.hienThiThongTinLuongNhanVien();
-		} else if (o.equals(giaoDienThongKe.tblKhachHang)) {
-			giaoDienThongKe.hienThiThongTinKhachHang();
 		}
-
 	}
 
 	@Override
@@ -63,14 +60,10 @@ public class ThongKeController implements ActionListener, MouseListener {
 			giaoDienThongKe.chonTimKiemDoanhThuNam();
 		} else if (o.equals(giaoDienThongKe.btnTimKiemLuong)) {
 			giaoDienThongKe.chonTimKiemLuong();
-		} else if (o.equals(giaoDienThongKe.btnTimKiemKhachHang)) {
-			giaoDienThongKe.chonTimKiemKhachHang();
 		} else if (o.equals(giaoDienThongKe.btnXemChiTietHoaDonDoanhThu)) {
 			giaoDienThongKe.chonXemChiTietDoanhThu();
 		} else if (o.equals(giaoDienThongKe.btnXemChiTietChamCong)) {
 			giaoDienThongKe.chonXemChiTietChamCong();
-		} else if (o.equals(giaoDienThongKe.btnXemChiTietHoaDonKhachHang)) {
-			giaoDienThongKe.chonXemChiTietKhachHang();
 		} else if (o.equals(giaoDienThongKe.radTheoNgay)) {
 			giaoDienThongKe.chonTheoNgay();
 		} else if (o.equals(giaoDienThongKe.radTheoThang)) {

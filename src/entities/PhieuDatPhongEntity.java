@@ -6,25 +6,32 @@ import java.util.Objects;
 public class PhieuDatPhongEntity {
 	private String maPhieuDatPhong;
 	private String maKhachHang;
-	private List<PhongEntity> listPhong;
+	private List<ChiTietPhieuDatPhongEntity> listPhong;
 
 	public PhieuDatPhongEntity() {
 		super();
 	}
 
-	public PhieuDatPhongEntity(String maPhieuDatPhong, String maKhachHang, List<PhongEntity> listPhong) {
+	public PhieuDatPhongEntity(String maPhieuDatPhong, String maKhachHang, List<ChiTietPhieuDatPhongEntity> listPhong) {
 		super();
 		this.maPhieuDatPhong = maPhieuDatPhong;
 		this.maKhachHang = maKhachHang;
 		this.listPhong = listPhong;
 	}
 
-	public PhieuDatPhongEntity(String maKhachHang, List<PhongEntity> listPhong) {
+	public PhieuDatPhongEntity(String maPhieuDatPhong, String maKhachHang) {
+		super();
+		this.maPhieuDatPhong = maPhieuDatPhong;
+		this.maKhachHang = maKhachHang;
+	}
+
+	public PhieuDatPhongEntity(String maKhachHang, List<ChiTietPhieuDatPhongEntity> listPhong) {
 		super();
 		this.maKhachHang = maKhachHang;
 		this.listPhong = listPhong;
 	}
 
+	
 	public String getMaPhieuDatPhong() {
 		return maPhieuDatPhong;
 	}
@@ -41,11 +48,11 @@ public class PhieuDatPhongEntity {
 		this.maKhachHang = maKhachHang;
 	}
 
-	public List<PhongEntity> getListPhong() {
+	public List<ChiTietPhieuDatPhongEntity> getListPhong() {
 		return listPhong;
 	}
 
-	public void setListPhong(List<PhongEntity> listPhong) {
+	public void setListPhong(List<ChiTietPhieuDatPhongEntity> listPhong) {
 		this.listPhong = listPhong;
 	}
 

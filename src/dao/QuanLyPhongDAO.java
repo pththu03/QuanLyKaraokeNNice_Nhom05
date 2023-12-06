@@ -393,4 +393,61 @@ public class QuanLyPhongDAO {
 		}
 		return listPhong;
 	}
+
+	public boolean capNhatTrangThaiPhong(PhongEntity phongEntity, String trangThai) {
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+
+		if (connect != null) {
+			try {
+				String query = "UPDATE Phong\r\n" + "SET TrangThai = ?\r\n" + "WHERE MaPhong LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, trangThai);
+				statement.setString(2, phongEntity.getMaPhong());
+				return statement.executeUpdate() > 0;
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+			}
+		}
+		return false;
+	}
+
+	public PhongEntity timTheoMa(String maPhong) {
+		PhongEntity phongEntity = null;
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT MaPhong, SoPhong, LP.MaLoaiPhong, TenLoai, TrangThai, SucChua\r\n"
+						+ "FROM Phong P JOIN LoaiPhong LP ON  P.MaLoaiPhong = LP.MaLoaiPhong WHERE MaPhong LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maPhong);
+				result = statement.executeQuery();
+				while (result.next()) {
+					int soPhong = result.getInt(2);
+					String maLoaiPhong = result.getString(3);
+					String tenLoai = result.getString(4);
+					String trangThai = result.getString(5);
+					int sucChua = result.getInt(6);
+					phongEntity = new PhongEntity(maPhong, soPhong, new LoaiPhong(maLoaiPhong, tenLoai), trangThai,
+							sucChua);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return phongEntity;
+	}
+
 }

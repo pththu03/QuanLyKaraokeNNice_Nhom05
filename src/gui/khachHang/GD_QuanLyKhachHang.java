@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -21,7 +23,10 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.QuanLyKhachHangController;
+import dao.QuanLyKhachHangDAO;
 import entities.KhachHangEntity;
+import entities.NhanVienEntity;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -54,10 +59,16 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JLabel lblTenKH;
 
 	// JButton
+	public JButton btnChinhSua;
+	public JButton btnTimKiem;
+	public JButton btnThem;
+	public JButton btnLamMoi;
 
 	// JScrollPane
 	private JScrollPane scrKhachHang;
 	private DefaultTableModel tblmdelKhachHang;
+	private QuanLyKhachHangController controller;
+	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
 	private List<KhachHangEntity> list;
 	private JTextField txtSLDatPhong;
 	private JLabel lblSLDatPhong;
@@ -66,15 +77,10 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JTextField txtSoLanDatPhongTu;
 	private JTextField txtSoLanDatPhongDen;
 
-	public JButton btnChinhSua;
-	public JButton btnTimKiem;
-	public JButton btnThem;
-	public JButton btnLamMoi;
-
 	public GD_QuanLyKhachHang() {
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
-
+		
 		pnlKhachHang = new JPanel();
 		pnlKhachHang.setBackground(new Color(211, 211, 211));
 		pnlKhachHang.setBounds(0, 0, 1365, 694);
@@ -116,10 +122,15 @@ public class GD_QuanLyKhachHang extends JPanel {
 
 		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem.png")));
+		btnTimKiem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnTimKiem.setFocusable(false);
 		btnTimKiem.setBackground(new Color(144, 238, 144));
 		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+//		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiem.setBounds(1185, 85, 150, 35);
 		pnlTimKiem.add(btnTimKiem);
 
@@ -168,15 +179,16 @@ public class GD_QuanLyKhachHang extends JPanel {
 		txtSoLanDatPhongDen.setColumns(10);
 		txtSoLanDatPhongDen.setBounds(350, 20, 200, 30);
 		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongDen);
-
-		btnLamMoi = new JButton("Làm mới");
-		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
-		btnLamMoi.setBounds(1000, 85, 150, 35);
-		pnlTimKiem.add(btnLamMoi);
-		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
-		btnLamMoi.setFocusable(false);
-		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-		btnLamMoi.setBackground(new Color(144, 238, 144));
+		
+				btnLamMoi = new JButton("Làm mới");
+				btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
+				btnLamMoi.setBounds(1000, 85, 150, 35);
+				pnlTimKiem.add(btnLamMoi);
+				//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi3.png")));
+						btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+						btnLamMoi.setFocusable(false);
+						btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+						btnLamMoi.setBackground(new Color(144, 238, 144));
 
 		JPanel pnlThongTin = new JPanel();
 		pnlThongTin.setBorder(null);
@@ -260,6 +272,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnChinhSua.setBounds(1185, 170, 150, 35);
 		pnlThongTin.add(btnChinhSua);
 		btnChinhSua.setFocusable(false);
+//		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
 		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -268,6 +281,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem.png")));
 		btnThem.setBounds(1000, 170, 150, 35);
 		pnlThongTin.add(btnThem);
+//		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem3.png")));
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -286,32 +300,328 @@ public class GD_QuanLyKhachHang extends JPanel {
 		lblSLDatPhong.setBounds(897, 70, 140, 30);
 		pnlThongTin.add(lblSLDatPhong);
 
-		QuanLyKhachHangController controller = new QuanLyKhachHangController(this);
+		controller = new QuanLyKhachHangController(this);
 		btnThem.addActionListener(controller);
 		btnChinhSua.addActionListener(controller);
 		btnTimKiem.addActionListener(controller);
 		btnLamMoi.addActionListener(controller);
 		tblKhachHang.addMouseListener(controller);
+		loadData();
 
+	}
+	
+	private void loadData() {
+		tblKhachHang.removeAll();
+		tblKhachHang.setRowSelectionAllowed(false);
+		tblmdelKhachHang.setRowCount(0);
+		list = new ArrayList<>();
+		list = quanLyKhachHangDAO.duyetDanhSach();
+
+		int stt = 1;
+		for (KhachHangEntity khachHangEntity : list) {
+			tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
+					khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
+					khachHangEntity.getSoLanDatPhong() });
+		}
 	}
 
 	public void hienThiThongTin() {
-
+		list = new ArrayList<>();
+		list = quanLyKhachHangDAO.duyetDanhSach();
+		int row = tblKhachHang.getSelectedRow();
+		if (row >= 0) {
+			txtMaKH.setText(list.get(row).getMaKhachHang());
+			txtTenKH.setText(list.get(row).getHoTen());
+			txtSDT.setText(list.get(row).getSoDienThoai());
+			txtEmail.setText(list.get(row).getEmail());
+			txtNamSinh.setText(String.valueOf(list.get(row).getNamSinh()));
+			txtSLDatPhong.setText(String.valueOf(list.get(row).getSoLanDatPhong()));
+		}
+	}
+	
+	public void chonChucNangLamMoi() {
+		txtEmail.setText("");
+		txtMaKH.setText("");
+		txtNamSinh.setText("");
+		txtSDT.setText("");
+		txtSLDatPhong.setText("");
+		txtSoLanDatPhongTu.setText("");
+		txtSoLanDatPhongDen.setText("");
+		txtSoDienThoai.setText("");
+		txtTenKH.setText("");
+		txtTenKhachHang.setText("");
+		tblKhachHang.setRowSelectionAllowed(false);
+		loadData();
 	}
 
-	public void chonLamMoi() {
+	public void chonChucNangThem() {
+		if (kiemTraDuLieuThem()) {
+			String hoTen = txtTenKH.getText();
+			String sdt = txtSDT.getText();
+			String email = txtEmail.getText();
+			int namSinh = Integer.parseInt(txtNamSinh.getText());
+			int slDatPhong = 0;
+			KhachHangEntity khachHangEntity = new KhachHangEntity(hoTen, sdt, email, namSinh, slDatPhong);
+			khachHangEntity = quanLyKhachHangDAO.them(khachHangEntity);
+			loadData();
+		}
+	}
+	
+	private boolean kiemTraDuLieuThem() {
+		if (!kiemTraHoTen()) {
+			return false;
+		}
 
+		if (!kiemTraNamSinh()) {
+			return false;
+		}
+
+		if (!kiemTraSoDienThoaiThem()) {
+			return false;
+		}
+
+		if (!kiemTraEmail()) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	private boolean kiemTraHoTen() {
+		if (!(txtTenKH.getText().trim().length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Họ tên không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtTenKH.requestFocus();
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean kiemTraSoDienThoaiThem() {
+		list = new ArrayList<>();
+		list= quanLyKhachHangDAO.duyetDanhSach();
+		String sdt = txtSDT.getText().trim();
+		if (sdt.length() > 0) {
+			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean kiemTraEmail() {
+		String email = txtEmail.getText().trim();
+		if (email.length() > 0) {
+			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
+				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtEmail.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Email không được để trống");
+			txtEmail.requestFocus();
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean kiemTraNamSinh() {
+		if (txtNamSinh.getText().trim().length() > 0) {
+			try {
+				int nam = Integer.parseInt(txtNamSinh.getText().trim());
+				int tuoi = 2023 - nam;
+				if (!(tuoi >= 18 && tuoi <= 60)) {
+					JOptionPane.showMessageDialog(this, "Khách Hàng phải từ 18 ", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtNamSinh.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Năm sinh nhập vào  là số nguyên", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtNamSinh.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Năm sinh không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtNamSinh.requestFocus();
+			return false;
+		}
+		return true;
+	}
+	
+	
+	
+	public void chonChucNangChinhSua() {
+		if (kiemTraDuLieuChinhSua()) {
+			int row = tblKhachHang.getSelectedRow();
+			if (row == -1) {
+				JOptionPane.showMessageDialog(this, "Chọn Khách Hàng cần chỉnh sửa");
+			} else {
+				String maKH = txtMaKH.getText().trim();
+				String hoTen = txtTenKH.getText().trim();
+				String sdt = txtSDT.getText().trim();
+				String email = txtEmail.getText().trim();
+				int namSinh = Integer.parseInt(txtNamSinh.getText().trim());
+				int slDatPhong = Integer.parseInt(txtSLDatPhong.getText().trim());
+				KhachHangEntity khachHangEntity = new KhachHangEntity(maKH, hoTen, sdt, email, namSinh, slDatPhong);
+				if (quanLyKhachHangDAO.chinhSua(khachHangEntity) != 0) {
+					JOptionPane.showMessageDialog(this, "Chỉnh sửa thông tin khách hàng thành công ", "Thông Báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					chonChucNangLamMoi();
+					loadData();
+				}
+			}
+		}
 	}
 
-	public void chonTimKiem() {
+	
 
+	private boolean kiemTraDuLieuChinhSua() {
+		if (!kiemTraSoDienThoaiChinhSua()) {
+			return false;
+		}
+
+		if (!kiemTraHoTen()) {
+			return false;
+		}
+
+		if (!kiemTraNamSinh()) {
+			return false;
+		}
+
+		if (!kiemTraEmail()) {
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean kiemTraSoDienThoaiChinhSua() {
+		list = new ArrayList<>();
+		list= quanLyKhachHangDAO.duyetDanhSach();
+		String sdt = txtSDT.getText().trim();
+		if (sdt.length() > 0) {
+			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtSDT.requestFocus();
+			return false;
+		}
+		return true;
 	}
 
-	public void chonThem() {
+	public void chonChucNangTimKiem() {
+		if(kiemTraDuLieuTim()) {
+			String tenKH = txtTenKhachHang.getText().trim();
+			String sdt = txtSoDienThoai.getText().trim();
+			int soluongTu = -1, soluongDen = -1;
+			if (!txtSoLanDatPhongTu.getText().equals("")) {
+				soluongTu = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
+			}
+
+			if (!txtSoLanDatPhongDen.getText().equals("")) {
+				soluongDen = Integer.parseInt(txtSoLanDatPhongDen.getText().trim());
+			}
+
+			list = new ArrayList<>();
+			tblKhachHang.removeAll();
+			tblmdelKhachHang.setRowCount(0);
+			list = quanLyKhachHangDAO.timKiem(tenKH, sdt, soluongTu, soluongDen);
+			int stt = 1;
+			for (KhachHangEntity khachHangEntity : list) {
+
+				tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
+						khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
+						khachHangEntity.getSoLanDatPhong() });
+			}
+		}
+	}
+	
+	private boolean kiemTraDuLieuTim() {
+		
+		if (!kiemTraSoLanDatPhong()) {
+			return false;
+		}
+		
+
+		return true;
+	}
+	
+	private boolean kiemTraSoLanDatPhong() {
+
+		if (txtSoLanDatPhongTu.getText().trim().length() > 0) {
+			String soLuongTu = txtSoLanDatPhongTu.getText().trim();
+			if (!soLuongTu.matches("[0-9]+")) {
+				JOptionPane.showMessageDialog(this, "Số lượng tối thiểu nhập vào phải là số");
+				txtSoLanDatPhongTu.requestFocus();
+				return false;
+			}
+
+			if (Integer.parseInt(soLuongTu) <= 0) {
+				JOptionPane.showMessageDialog(this, "Số lượng tổi thiểu nhập vào phải là số nguyên");
+				txtSoLanDatPhongTu.requestFocus();
+				return false;
+			}
+
+			if (txtSoLanDatPhongDen.getText().trim().length() > 0) {
+				String soLuongDen = txtSoLanDatPhongDen.getText().trim();
+				if (!soLuongDen.matches("[0-9]+")) {
+					JOptionPane.showMessageDialog(this, "Số lượng tối đa nhập vào phải là số");
+					txtSoLanDatPhongDen.requestFocus();
+					return false;
+				}
+
+				if (Integer.parseInt(soLuongDen) <= 0) {
+					JOptionPane.showMessageDialog(this, "Số lượng tối đa  nhập vào phải là số nguyên");
+					txtSoLanDatPhongDen.requestFocus();
+					return false;
+				}
+
+				if (Integer.parseInt(soLuongDen) < Integer.parseInt(soLuongTu)) {
+					JOptionPane.showMessageDialog(this, "Số lượng tối dâ phải lớn hơn Số lượng tối thiểu");
+					txtSoLanDatPhongDen.requestFocus();
+					return false;
+				}
+			} else {
+				JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng tối đa");
+				txtSoLanDatPhongDen.requestFocus();
+				return false;
+			}
+		}
+
+		return true;
 
 	}
-
-	public void chonChinhSua() {
-
-	}
+	
+	
+	
 }
+

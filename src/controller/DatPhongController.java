@@ -52,6 +52,8 @@ public class DatPhongController implements ActionListener, MouseListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+		String action = e.getActionCommand();
+
 		if (o.equals(giaoDienDatPhong.btnLamMoi)) {
 			giaoDienDatPhong.chonLamMoi();
 		} else if (o.equals(giaoDienDatPhong.btnTimKiemPhong)) {
@@ -64,10 +66,16 @@ public class DatPhongController implements ActionListener, MouseListener {
 			giaoDienDatPhong.chonXoaPhongDaChon();
 		} else if (o.equals(giaoDienDatPhong.btnNhanPhong)) {
 			giaoDienDatPhong.chonNhanPhong();
-		} else if (o.equals(giaoDienDatPhong.btnDoiPhong)) {
+		} else if (action.equals("Đổi phòng")) {
 			giaoDienDatPhong.chonDoiPhong();
+		} else if (action.equals("Kiểm tra")) {
+			giaoDienDatPhong.chonKiemTra();
+		} else if (action.equals("Xác nhận đổi")) {
+			giaoDienDatPhong.chonXacNhanDoiPhong();
 		} else if (o.equals(giaoDienDatPhong.btnHuyPhongDatTruoc)) {
 			giaoDienDatPhong.chonHuyPhongDatTruoc();
+		} else if (o.equals(giaoDienDatPhong.btnXemDatTruoc)) {
+			giaoDienDatPhong.chonXemDatTruoc();
 		} else if (o.equals(giaoDienDatPhong.btnDatPhong)) {
 			giaoDienDatPhong.chonDatPhong();
 		} else if (o.equals(giaoDienDatPhong.radDatPhongNgay)) {

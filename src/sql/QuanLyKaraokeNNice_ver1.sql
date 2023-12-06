@@ -111,10 +111,10 @@ RETURNS VARCHAR(7)
 AS
 BEGIN
 	DECLARE @ID INT
-	IF (SELECT COUNT(MaDV) FROM DichVu) = 0
+	IF (SELECT COUNT(MaDichVu) FROM DichVu) = 0
 		SET @ID = 0
 	ELSE
-		SELECT @ID = MAX(CAST(RIGHT(MaDV, 3) AS INT)) FROM DichVu
+		SELECT @ID = MAX(CAST(RIGHT(MaDichVu, 3) AS INT)) FROM DichVu
 	SET @ID = @ID + 1
 
 	DECLARE @MaDV VARCHAR(7)
@@ -216,6 +216,24 @@ BEGIN
 	SET @MaPhieuDatPhong = 'PDP' + RIGHT('00' + CAST(@ID AS VARCHAR(3)), 3)
 
 	RETURN @MaPhieuDatPhong
+END
+GO 
+
+CREATE FUNCTION AUTO_ID_ChiTietPhieuDatPhong()
+RETURNS VARCHAR(7)
+AS
+BEGIN
+	DECLARE @ID INT
+	IF (SELECT COUNT(MaChiTIetPhieuDatPhong) FROM ChiTIetPhieuDatPhong) = 0
+		SET @ID = 0
+	ELSE
+		SELECT @ID = MAX(CAST(RIGHT(MaChiTIetPhieuDatPhong, 3) AS INT)) FROM ChiTIetPhieuDatPhong
+	SET @ID = @ID + 1
+
+	DECLARE @MaChiTIetPhieuDatPhong VARCHAR(7)
+	SET @MaChiTIetPhieuDatPhong = 'CTPD' + RIGHT('00' + CAST(@ID AS VARCHAR(3)), 3)
+
+	RETURN @MaChiTIetPhieuDatPhong
 END
 GO 
 
@@ -340,10 +358,15 @@ GO
 -- 7
 CREATE TABLE PhieuDatPhong(
 	MaPhieuDatPhong VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_ID_PhieuDatPhong(),
-	MaKhachHang VARCHAR(7) NOT NULL,
-	MaPhong VARCHAR(7) NOT NULL,
-	NgayDat DATE NOT NULL
+	MaKhachHang VARCHAR(7) NOT NULL
 ) 
+GO
+
+CREATE TABLE ChiTietPhieuDatPhong(
+	MaChiTietPhieuDatPhong VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietPhieuDatPhong(),
+	MaPhieuDatPhong VARCHAR(7),
+	MaChiTietDatPhong VARCHAR(7) NOT NULL
+)
 GO
 
 -- 8
@@ -360,8 +383,7 @@ GO
 CREATE TABLE ChiTietHoaDon(
 	MaChiTietHoaDon VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietHoaDon(),
 	MaHoaDon VARCHAR(7),
-	MaChiTietDatPhong VARCHAR(7) NOT NULL,
-	MaChiTietDichVu VARCHAR(7) NOT NULL
+	MaChiTietDatPhong VARCHAR(7) NOT NULL
 ) 
 GO
 
@@ -369,6 +391,7 @@ GO
 CREATE TABLE ChiTietDatPhong(
 	MaChiTietDatPhong VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietDatPhong(),
 	MaPhong VARCHAR(7) NOT NULL,
+	NgayDatPhong DATE NOT NULL,
 	GioNhanPhong TIME NOT NULL,
 	GioTraPhong TIME NOT NULL
 ) 
@@ -378,7 +401,8 @@ GO
 CREATE TABLE ChiTietDichVu(
 	MaChiTietDichVu VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietDichVu(),
 	MaDichVu VARCHAR(7) NOT NULL,
-	SoLuong INT NOT NULL
+	SoLuong INT NOT NULL,
+	MaChiTietHoaDon VARCHAR(7) NOT NULL
 ) 
 GO
 
@@ -416,13 +440,13 @@ FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong)
 GO
 
 ALTER TABLE ChiTietDichVu ADD
-FOREIGN KEY (MaDichVu) REFERENCES DichVu(MaDichVu)
+FOREIGN KEY (MaDichVu) REFERENCES DichVu(MaDichVu),
+FOREIGN KEY (MaChiTietHoaDon) REFERENCES ChiTietHoaDon(MaChiTietHoaDon)
 GO
 
 ALTER TABLE ChiTietHoaDon ADD
 FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon),
-FOREIGN KEY (MaChiTietDatPhong) REFERENCES ChiTietDatPhong(MaChiTietDatPhong),
-FOREIGN KEY (MaChiTietDichVu) REFERENCES ChiTietDichVu(MaChiTietDichVu)
+FOREIGN KEY (MaChiTietDatPhong) REFERENCES ChiTietDatPhong(MaChiTietDatPhong)
 GO
 
 ALTER TABLE DichVu ADD
@@ -439,8 +463,12 @@ FOREIGN KEY (MaPhieuPhanCong) REFERENCES PhieuPhanCong(MaPhieuPhanCong)
 GO
 
 ALTER TABLE PhieuDatPhong ADD
-FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
-FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong)
+FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang)
+GO
+
+ALTER TABLE ChiTietPhieuDatPhong ADD
+FOREIGN KEY (MaPhieuDatPhong) REFERENCES PhieuDatPhong(MaPhieuDatPhong),
+FOREIGN KEY (MaChiTietDatPhong) REFERENCES ChiTietDatPhong(MaChiTietDatPhong)
 GO
 
 ALTER TABLE PhieuPhanCong ADD
@@ -505,29 +533,29 @@ GO
 
 select * from NhanVien
 
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Dương Hoàng Lan Anh', '0906809981', 'dhlananh2309@gmail.com', 1998)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Hoàng Anh', '0941727338', 'hoanganh54321.oc@gmail.com', 2000)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lý Nhựt Anh', '0915841171', 'Lynhutanh26@gmail.com', 2000)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Nhựt Anh', '0939968135', 'nhutanh123abc@gmail.com', 1999)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Thị Ánh', '0355615214', 'nguyenthianh0514@gmail.com', 2004)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Vũ Thảo Ánh', '0356690717', 'thaoanh.0717@gmail.com', 2004)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Gia Bảo', '0934776810', 'datbao124@gmail.com', 2001)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Huỳnh Thế Bảo', '0374151952', ' nguyenhuynhthebao29@gmail.com', 2001)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Lê Gia Bảo', '0931508027', ' nguyenlegiabao810@gmail.com', 1997)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Trần Chí Bảo', '0337061506', 'baotran.060103@gmail.com', 1998)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Bùi Thanh Bình', '0707102548', 'Thanhbinh14062003@gmail.com', 2000)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Vũ Hòa Bình', '0866625408', 'hoabinh.viprpro63@gmail.com', 2001)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Đinh Nguyên Chung', '0335090607', 'dinhvanchung24042003@gmail.com', 1998)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Thành Cương', '0349424156', ' nguyenthanh8a2@gmail.com', 1999)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Duy Cường', '0836985735', ' Nguyenduycuong712@gmail.com', 1999)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Tấn Đãm', '0834848767', ' Tandam9902@gmail.com', 1999)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Đặng Duy Hồ Điệp', '0344037974', ' diepakpro@gmail.com', 2005)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lê Thiên Định', '0389832067', ' lethiendinh123@gmail.com', 2005)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Văn Đủ', '0886550735', '  nguyenvandu222k4@gmail.com', 2000)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Đặng Mãi Chí Đức ', '0876040304', '  duc1211depv@gmail.com', 2002)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Võ Huỳnh Đức ', '0964335169', '  ducfazi14@gmail.com', 1999)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lê Minh Thư', '0384573214', 'leminhthu@gmail.com', 1999)
-INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Trịnh Khang Ninh', '0384573453', 'khangninh@gmail.com', 1989)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Dương Hoàng Lan Anh', '0906809981', 'dhlananh2309@gmail.com', 1998)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Hoàng Anh', '0941727338', 'hoanganh54321.oc@gmail.com', 2000)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lý Nhựt Anh', '0915841171', 'Lynhutanh26@gmail.com', 2000)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Nhựt Anh', '0939968135', 'nhutanh123abc@gmail.com', 1999)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Thị Ánh', '0355615214', 'nguyenthianh0514@gmail.com', 2004)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Vũ Thảo Ánh', '0356690717', 'thaoanh.0717@gmail.com', 2004)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Gia Bảo', '0934776810', 'datbao124@gmail.com', 2001)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Huỳnh Thế Bảo', '0374151952', ' nguyenhuynhthebao29@gmail.com', 2001)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Lê Gia Bảo', '0931508027', ' nguyenlegiabao810@gmail.com', 1997)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Trần Chí Bảo', '0337061506', 'baotran.060103@gmail.com', 1998)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Bùi Thanh Bình', '0707102548', 'Thanhbinh14062003@gmail.com', 2000)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Vũ Hòa Bình', '0866625408', 'hoabinh.viprpro63@gmail.com', 2001)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Đinh Nguyên Chung', '0335090607', 'dinhvanchung24042003@gmail.com', 1998)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Thành Cương', '0349424156', ' nguyenthanh8a2@gmail.com', 1999)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Duy Cường', '0836985735', ' Nguyenduycuong712@gmail.com', 1999)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Tấn Đãm', '0834848767', ' Tandam9902@gmail.com', 1999)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Đặng Duy Hồ Điệp', '0344037974', ' diepakpro@gmail.com', 2005)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lê Thiên Định', '0389832067', ' lethiendinh123@gmail.com', 2005)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Văn Đủ', '0886550735', '  nguyenvandu222k4@gmail.com', 2000)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Đặng Mãi Chí Đức ', '0876040304', '  duc1211depv@gmail.com', 2002)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Võ Huỳnh Đức ', '0964335169', '  ducfazi14@gmail.com', 1999)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Lê Minh Thư', '0384573214', 'leminhthu@gmail.com', 1999)
+--INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Trịnh Khang Ninh', '0384573453', 'khangninh@gmail.com', 1989)
 INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Tống Anh Quân', '0388973214', 'nguyenanhquan@gmail.com', 1999)
 INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Trần Đức Vũ', '0385732141', 'tranducvu@gmail.com', 1979)
 INSERT INTO [dbo].[KhachHang] ([HoTen], [SoDienThoai], [Email], [NamSinh]) VALUES (N'Nguyễn Thành Nghiêm', '0384532564', 'thanhnghiem@gmail.com', 2000)
@@ -628,3 +656,121 @@ GO
 
 SELECT * FROM NhanVien
 WHERE SoDienThoai = '0333411964' AND Password = 'ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f' AND TrangThai = N'Đang làm việc'
+
+SELECT MaPhong, SoPhong, LP.MaLoaiPhong, TenLoai, SucChua, TrangThai
+FROM Phong P JOIN LoaiPhong LP ON P.MaLoaiPhong = LP.MaLoaiPhong
+WHERE TenLoai LIKE N'%VIP%'
+
+SELECT * FROM ChiTietDatPhong
+WHERE MaPhong LIKE '' AND NgayDatPhong >= '2023-11-24' AND GioNhanPhong > '19:00:00'
+
+-- 
+SELECT MaChiTietDatPhong, MaPhong, NgayDatPhong, GioNhanPhong, GioTraPhong
+FROM ChiTietDatPhong 
+
+WHERE MaPhong LIKE 'P001' AND NgayDatPhong = '2023-11-25' AND (GioNhanPhong >= '22:00:00' AND GioNhanPhong <= '22:20:00')
+
+INSERT INTO ChiTietDatPhong
+	(MaPhong, NgayDatPhong, GioNhanPhong, GioTraPhong)
+VALUES ('P001', '2023-11-25', '22:20:00' , '00:00:00')
+
+INSERT INTO ChiTietDatPhong
+	(MaPhong, NgayDatPhong, GioNhanPhong, GioTraPhong)
+VALUES ('P003', '2023-11-25', '23:30:00' , '00:00:00')
+
+UPDATE Phong
+SET TrangThai = N'Trống'
+WHERE MaPhong LIKE 'P003'
+
+select * from PhieuDatPhong
+ORDER BY MaPhieuDatPhong DESC
+select * from ChiTietPhieuDatPhong
+
+INSERT INTO PhieuDatPhong (MaKhachHang)
+VALUES ('KH023')
+
+SELECT * FROM ChiTietHoaDon WHERE MaHoaDon is null
+
+INSERT INTO ChiTietHoaDon (MaHoaDon, MaChiTietDatPhong)
+VALUES ( 'HD001', 'CTDP001')
+
+INSERT INTO ChiTietDatPhong (MaPhong, NgayDatPhong, GioNhanPhong, GioTraPhong)
+VALUES ('P001', '2023-11-28', '18:00:00', '19:00:00')
+
+INSERT INTO ChiTietDatPhong (MaPhong, NgayDatPhong, GioNhanPhong, GioTraPhong)
+VALUES ('P001', '2023-11-28', '18:00:00', '19:00:00')
+
+INSERT INTO HoaDon (MaNhanVien, MaKhachHang, NgayLap, GioLap)
+VALUES ('NV002', 'KH003', '2023-11-28', '21:00:00')
+
+select * from ChiTietDatPhong
+select MaChiTietDatPhong from ChiTietHoaDon
+where MaHoaDon is null
+
+select* from Phong
+select * from DichVu
+select * from HoaDon
+SELECT * FROM ChiTietHoaDon
+SELECT * FROM ChiTietDichVu
+
+delete from ChiTietDichVu
+SELECT * FROM ChiTietDatPhong
+SELECT * FROM PhieuDatPhong
+SELECT * FROM ChiTietPhieuDatPhong
+SELECT * FROM KhachHang
+
+
+
+INSERT INTO ChiTietPhieuDatPhong (MaPhieuDatPhong, MaChiTietDatPhong)
+VALUES ('PDP001', 'CTDP001')
+
+INSERT INTO HoaDon (MaNhanVien, MaKhachHang, NgayLap, GioLap)
+VALUES ('NV001', 'KH020', '2023-12-01', '22:00:00')
+
+
+INSERT INTO ChiTietDichVu (MaDichVu, MaChiTietHoaDon, SoLuong)
+VALUES ('DV001', 'CTHD001', 2)
+
+delete from ChiTietDichVu
+where MaChiTietHoaDon = 'CTHD001'
+delete from ChiTietHoaDon
+delete from ChiTietPhieuDatPhong
+delete from ChiTietDatPhong
+delete from PhieuDatPhong
+
+update Phong
+Set TrangThai = N'Trống'
+
+SELECT * FROM ChiTietPhieuDatPhong CTPDP
+WHERE EXISTS (SELECT * FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+		ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong JOIN Phong P
+		ON CTDP.MaPhong = P.MaPhong
+		WHERE CTDP.MaChiTietDatPhong = CTPDP.MaChiTietDatPhong AND MaHoaDon IS NULL)
+
+SELECT COUNT(*) FROM ChiTietPhieuDatPhong
+WHERE MaPhieuDatPhong LIKE 'PDP004'
+
+SELECT * FROM Phong P
+WHERE MaPhong LIKE 'P001' AND NOT EXISTS (SELECT MaPhong FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+	ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong 
+	WHERE CTDP.MaPhong = P.MaPhong AND MaHoaDon IS NULL)
+
+SELECT COUNT(*) FROM ChiTietDatPhong CTDP JOIN Phong P
+ON P.MaPhong = CTDP.MaPhong JOIN ChiTietHoaDon CTHD
+ON CTHD.MaChiTietDatPhong = CTDP.MaChiTietDatPhong
+WHERE CTDP.MaPhong LIKE 'P004' AND MaHoaDon IS NULL
+
+UPDATE ChiTietDatPhong
+SET MaPhong = 'P004'
+FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong
+WHERE MaHoaDon IS NULL AND CTDP.MaChiTietDatPhong LIKE 'CTDP002'
+
+
+SELECT *
+FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong
+WHERE MaHoaDon IS NULL AND CTDP.MaChiTietDatPhong LIKE 'CTDP002'
+
+SELECT MaDichVu, TenDichVu, LD.MaLoaiDichVu, TenLoaiDichVu, Gia
+FROM [dbo].[DichVu] D JOIN [dbo].[LoaiDichVu] LD ON D.MaLoaiDichVu = LD.MaLoaiDichVu

@@ -22,4 +22,8 @@ public class TimeFormatter {
 	public static int tinhSoPhut(LocalTime gio1, LocalTime gio2) {
 		return (int) gio1.until(gio2, ChronoUnit.MINUTES);
 	}
+
+	public static String formatSql(LocalTime gio) {
+		return gio.getHour() + ":" + gio.getMinute() + ":" + "00";
+	}
 }
