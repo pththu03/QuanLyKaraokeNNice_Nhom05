@@ -17,12 +17,6 @@ public class ThongKeController implements ActionListener, MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Object o = e.getSource();
-		if (o.equals(giaoDienThongKe.tblHoaDon)) {
-			giaoDienThongKe.hienThiThongTinDoanhThu();
-		} else if (o.equals(giaoDienThongKe.tblNhanVien)) {
-			giaoDienThongKe.hienThiThongTinLuongNhanVien();
-		}
 	}
 
 	@Override

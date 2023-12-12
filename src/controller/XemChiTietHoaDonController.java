@@ -5,13 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import gui.hoaDon.GD_XemChiTietHoaDon;
+import gui.hoaDon.GD_XemChiTietHoaDonThongKe;
 
 public class XemChiTietHoaDonController implements ActionListener, MouseListener {
 
-	private GD_XemChiTietHoaDon giaoDienXemChiTietHoaDon;
+	private GD_XemChiTietHoaDonThongKe giaoDienXemChiTietHoaDon;
 
-	public XemChiTietHoaDonController(GD_XemChiTietHoaDon giaoDienXemChiTietHoaDon) {
+	public XemChiTietHoaDonController(GD_XemChiTietHoaDonThongKe giaoDienXemChiTietHoaDon) {
 		this.giaoDienXemChiTietHoaDon = giaoDienXemChiTietHoaDon;
 	}
 

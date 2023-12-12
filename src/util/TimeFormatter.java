@@ -26,4 +26,8 @@ public class TimeFormatter {
 	public static String formatSql(LocalTime gio) {
 		return gio.getHour() + ":" + gio.getMinute() + ":" + "00";
 	}
+
+	public static int tinhSiGio(LocalTime gio1, LocalTime gio2) {
+		return (int) gio1.until(gio2, ChronoUnit.HOURS);
+	}
 }

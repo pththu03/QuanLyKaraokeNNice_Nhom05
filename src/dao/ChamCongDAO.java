@@ -77,4 +77,35 @@ public class ChamCongDAO {
 		}
 		return false;
 	}
+
+	public PhieuChamCongEntity timTheoMaPhieuPhanCong(String maPhieuPhanCong) {
+		PhieuChamCongEntity phieuChamCongEntity = null;
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "SELECT * FROM PhieuChamCong\r\n" + "WHERE MaPhieuPhanCong = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maPhieuPhanCong);
+				result = statement.executeQuery();
+				while (result.next()) {
+					String maPhieuChamCong = result.getString(1);
+					boolean trangThai = false;
+					if (result.getString(3).equals("Vắng")) {
+						trangThai = true;
+					}
+					phieuChamCongEntity = new PhieuChamCongEntity(maPhieuChamCong,
+							phanCongDAO.timTheoMa(maPhieuPhanCong), trangThai);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return phieuChamCongEntity;
+	}
 }

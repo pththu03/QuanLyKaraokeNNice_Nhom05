@@ -7,9 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
-
 import entities.ChiTietPhieuDatPhongEntity;
 import entities.PhieuDatPhongEntity;
 import util.ConnectDB;
@@ -182,8 +180,6 @@ public class QuanLyPhieuDatPhongDAO {
 		}
 		return listChiTietPhieuDatPhong;
 	}
-	
-
 
 	public boolean xoaChiTietPhieuDatPhong(String maChiTietDatPhong) {
 		Connection connect = ConnectDB.getConnect();
@@ -363,7 +359,6 @@ public class QuanLyPhieuDatPhongDAO {
 		}
 		return phieuDatPhongEntity;
 	}
-	
 
 	public boolean xoaPhieuDatPhong(String maPhieuDatPhong) {
 		Connection connect = ConnectDB.getConnect();
@@ -383,5 +378,71 @@ public class QuanLyPhieuDatPhongDAO {
 			}
 		}
 		return false;
+	}
+
+	public List<PhieuDatPhongEntity> duyetDanhSachHoaDonChuaThanhToan() {
+		List<PhieuDatPhongEntity> listPhieuDatPhong = new ArrayList<PhieuDatPhongEntity>();
+		Connection connect = ConnectDB.getConnect();
+		Statement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "select *from PhieuDatPhong pdp\r\n"
+						+ "where exists (select *from ChiTietPhieuDatPhong ctpdp \r\n"
+						+ "join ChiTietDatPhong ctdp on ctdp.MaChiTietDatPhong = ctpdp.MaChiTietDatPhong\r\n"
+						+ "join ChiTietHoaDon cthd on cthd.MaChiTietDatPhong = ctdp.MaChiTietDatPhong\r\n"
+						+ "where pdp.MaPhieuDatPhong = ctpdp.MaPhieuDatPhong and cthd.MaHoaDon is null) ";
+				statement = connect.createStatement();
+				result = statement.executeQuery(query);
+				while (result.next()) {
+					String maPhieuDatPhong = result.getString(1);
+					String maKhachHang = result.getString(2);
+					PhieuDatPhongEntity phieuDatPhongEntity = new PhieuDatPhongEntity(maPhieuDatPhong, maKhachHang);
+					listPhieuDatPhong.add(phieuDatPhongEntity);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return listPhieuDatPhong;
+	}
+
+	public List<ChiTietPhieuDatPhongEntity> duyetDanhSachChiTietPhieuDatPhongTheoPhieuDatPhong(String maPhieuDatPhong) {
+		List<ChiTietPhieuDatPhongEntity> listChiTietPhieuDatPhong = new ArrayList<ChiTietPhieuDatPhongEntity>();
+		Connection connect = ConnectDB.getConnect();
+		ResultSet result = null;
+		PreparedStatement statement = null;
+		if (connect != null) {
+			try {
+				String query = "select *from ChiTietPhieuDatPhong\r\n" + "where MaPhieuDatPhong = ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maPhieuDatPhong);
+				result = statement.executeQuery();
+				while (result.next()) {
+					String maChiTietPhieuDatPhong = result.getString(1);
+					String maChiTietDatPhong = result.getString(3);
+
+					ChiTietPhieuDatPhongEntity chiTietPhieuDatPhongEntity = new ChiTietPhieuDatPhongEntity(
+							maChiTietPhieuDatPhong, maPhieuDatPhong, maChiTietDatPhong);
+					listChiTietPhieuDatPhong.add(chiTietPhieuDatPhongEntity);
+
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeResultSet(result);
+				ConnectDB.closeStatement(statement);
+			}
+
+		}
+		return listChiTietPhieuDatPhong;
 	}
 }

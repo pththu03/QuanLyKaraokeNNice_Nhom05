@@ -237,12 +237,12 @@ public class GD_TrangChu extends JFrame {
 		pnlNguoiDung.add(pnlThongTinNhanVien);
 		pnlThongTinNhanVien.setLayout(new BoxLayout(pnlThongTinNhanVien, BoxLayout.PAGE_AXIS));
 
-		lblTenNhanVien = new JLabel("111");
+		lblTenNhanVien = new JLabel(nhanVienEntity.getHoTen());
 		pnlThongTinNhanVien.add(lblTenNhanVien);
 		lblTenNhanVien.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblTenNhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 15));
 
-		lblChucVu = new JLabel("111");
+		lblChucVu = new JLabel(nhanVien.getChucVu());
 		lblChucVu.setHorizontalTextPosition(SwingConstants.RIGHT);
 		pnlThongTinNhanVien.add(lblChucVu);
 		lblChucVu.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -297,7 +297,7 @@ public class GD_TrangChu extends JFrame {
 		mniNhanVien.addActionListener(controller);
 		mniKhachHang.addActionListener(controller);
 		mniCaTruc.addActionListener(controller);
-//		kiemTraQuyen();
+		kiemTraQuyen();
 	}
 
 	private void kiemTraQuyen() {
@@ -372,7 +372,7 @@ public class GD_TrangChu extends JFrame {
 	}
 
 	public void chonDanhMucCaTruc() {
-		this.thayDoiPanelChinh(new GD_QuanLyCaTruc(), mniCaTruc);
+		this.thayDoiPanelChinh(new GD_QuanLyCaTruc(nhanVienEntity), mniCaTruc);
 	}
 
 	public void chonDatPhong() {
@@ -384,7 +384,7 @@ public class GD_TrangChu extends JFrame {
 	}
 
 	public void chonLapHoaDon() {
-		this.thayDoiPanelChinh(new GD_LapHoaDon(), mniLapHoaDon);
+		this.thayDoiPanelChinh(new GD_LapHoaDon(nhanVienEntity), mniLapHoaDon);
 	}
 
 	public void chonPhanCong() {
@@ -401,9 +401,5 @@ public class GD_TrangChu extends JFrame {
 
 	public void chonTaiKhoan() {
 		this.thayDoiPanelChinh(new GD_QuanLyTaiKhoan(nhanVienEntity), new JMenuItem());
-	}
-
-	public static void main(String[] args) {
-		new GD_TrangChu(null).setVisible(true);
 	}
 }

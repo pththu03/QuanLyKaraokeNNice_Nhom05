@@ -94,6 +94,7 @@ public class GD_DangNhap extends JFrame {
 		contentPane.add(lblDangNhap);
 
 		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setText("0333411964");
 		txtSoDienThoai.setBorder(null);
 		txtSoDienThoai.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		txtSoDienThoai.setForeground(Color.BLACK);

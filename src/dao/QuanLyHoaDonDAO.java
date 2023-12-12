@@ -20,6 +20,7 @@ import entities.ChiTietDatPhongEntity;
 import entities.ChiTietDichVuEntity;
 import entities.ChiTietHoaDonEntity;
 import entities.DichVuEntity;
+import entities.HoaDonEntity;
 import entities.PhongEntity;
 import util.ConnectDB;
 import util.DateFormatter;
@@ -104,6 +105,38 @@ public class QuanLyHoaDonDAO {
 		}
 
 		return chiTietHoaDonEntity;
+	}
+
+	public List<ChiTietHoaDonEntity> duyetDanhSachChiTietHoaDonTheoMaHoaDon(String maHoaDon) {
+		List<ChiTietHoaDonEntity> listChiTietHoaDon = new ArrayList<>();
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		ResultSet result = null;
+
+		if (connect != null) {
+			try {
+				String query = "SELECT * FROM ChiTietHoaDon WHERE MaHoaDon LIKE ?";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, maHoaDon);
+				result = statement.executeQuery();
+				while (result.next()) {
+					String maChiTietHoaDon = result.getString(1);
+					String maChiTietDatPhong = result.getString(3);
+					ChiTietDatPhongEntity chiTietDatPhongEntity = timChiTietDatPhongTheoMa(maChiTietDatPhong);
+					ChiTietHoaDonEntity chiTietHoaDonEntity = new ChiTietHoaDonEntity(maChiTietHoaDon, maHoaDon,
+							chiTietDatPhongEntity);
+					listChiTietHoaDon.add(chiTietHoaDonEntity);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closeStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return listChiTietHoaDon;
 	}
 
 	/*********************************************************
@@ -431,4 +464,9 @@ public class QuanLyHoaDonDAO {
 		}
 		return false;
 	}
+
+	/*********************************************************
+	 * HÓA ĐƠN
+	 *********************************************************/
+
 }

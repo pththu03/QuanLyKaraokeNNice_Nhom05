@@ -68,7 +68,7 @@ public class CaTrucEntity {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(maCaTruc);
+		return Objects.hash(maCaTruc, tenCaTruc);
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class CaTrucEntity {
 		if (obj == null)
 			return false;
 		CaTrucEntity other = (CaTrucEntity) obj;
-		return Objects.equals(maCaTruc, other.maCaTruc);
+		return Objects.equals(maCaTruc, other.maCaTruc) || Objects.equals(tenCaTruc, other.tenCaTruc);
 	}
 
 	@Override

@@ -156,7 +156,6 @@ public class GD_DatPhong extends JPanel {
 	private DefaultTableModel tblmodelPhongDaChon;
 
 	private List<PhongEntity> listPhong;
-	private List<KhachHangEntity> listKhachHang;
 
 	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
 	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
@@ -169,7 +168,6 @@ public class GD_DatPhong extends JPanel {
 	public ChiTietPhieuDatPhongEntity chiTietPhieuDatPhongEntity = null;
 	public ChiTietDatPhongEntity chiTietDatPhongEntity = null;
 
-	private String maPhongCu = null;
 	private String maPhongMoi = null;
 
 	public GD_DatPhong(NhanVienEntity nhanVienEntity) {
@@ -703,7 +701,7 @@ public class GD_DatPhong extends JPanel {
 		tblmodelPhong.setRowCount(0);
 		listPhong = new ArrayList<>();
 		listPhong = quanLyPhongDAO.duyetDanhSach();
-
+		capNhatTrangThaiPhong(listPhong);
 		int stt = 1;
 		for (PhongEntity phongEntity : listPhong) {
 			boolean kiemTra = true;
@@ -717,6 +715,29 @@ public class GD_DatPhong extends JPanel {
 				tblmodelPhong.addRow(new Object[] { stt++, phongEntity.getMaPhong(), phongEntity.getSoPhong(),
 						phongEntity.getLoaiPhong().getTenLoaiPhong(), phongEntity.getSucChua(),
 						phongEntity.getTrangThai() });
+			}
+		}
+	}
+
+	private void capNhatTrangThaiPhong(List<PhongEntity> listPhong) {
+		List<ChiTietDatPhongEntity> listChiTietDatPhong = new ArrayList<>();
+		for (PhongEntity phongEntity : listPhong) {
+			String trangThai = "Trống";
+			listChiTietDatPhong = datPhongDAO.duyetChiTietDatPhongChuaThanhToanTheoPhong(phongEntity);
+			if (listChiTietDatPhong.size() > 0) {
+				for (ChiTietDatPhongEntity chiTietDatPhongEntity : listChiTietDatPhong) {
+					LocalTime gioHienTai = LocalTime.now();
+					if (gioHienTai.isAfter(chiTietDatPhongEntity.getGioNhanPhong())
+							&& gioHienTai.isBefore(chiTietDatPhongEntity.getGioTraPhong())) {
+						trangThai = "Đang sử dụng";
+						quanLyPhongDAO.capNhatTrangThaiPhong(phongEntity, trangThai);
+						return;
+					}
+				}
+				trangThai = "Đặt trước";
+				quanLyPhongDAO.capNhatTrangThaiPhong(phongEntity, trangThai);
+			} else {
+				quanLyPhongDAO.capNhatTrangThaiPhong(phongEntity, trangThai);
 			}
 		}
 	}
@@ -1131,15 +1152,14 @@ public class GD_DatPhong extends JPanel {
 								// kiem tra trong danh sach chi tiet dat phong co phong nao da duoc dat trong
 								// khoang thoi gian duoc chon hay khong. Neu co thi thong bao.
 								// Quy dinh la khong duoc dat truoc 30 va sau 30 mot chi tiet dat phong khac
-								if ((ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong()) && gioNhanPhong1
-										.isAfter(chiTietDatPhongEntity.getGioNhanPhong().minusMinutes(30)))
-										|| (ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong())
-												&& gioNhanPhong1.isBefore(
-														chiTietDatPhongEntity.getGioTraPhong().plusMinutes(30)))) {
+								if (ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong())
+										&& (gioNhanPhong1
+												.isAfter(chiTietDatPhongEntity.getGioNhanPhong().minusMinutes(30)))
+										&& gioNhanPhong1
+												.isBefore(chiTietDatPhongEntity.getGioTraPhong().plusMinutes(30))) {
 									JOptionPane.showMessageDialog(this, "Phòng " + phongEntity.getSoPhong()
 											+ " đã được đặt trong khoảng thời gian này.\n Vui lòng chọn khung giờ khác");
 									return;
-
 								}
 							}
 						}
@@ -1148,10 +1168,10 @@ public class GD_DatPhong extends JPanel {
 				}
 			}
 
-//			if (gioNhanPhong.isBefore(LocalTime.of(8, 0))) {
-//				JOptionPane.showMessageDialog(this, "Không được đặt phòng trước 08:00");
-//				return;
-//			}
+			if (gioNhanPhong.isBefore(LocalTime.of(8, 0))) {
+				JOptionPane.showMessageDialog(this, "Không được đặt phòng trước 08:00");
+				return;
+			}
 
 			// Kiểm tra giờ trả phòng phải sau giờ nhận phòng ít nhất 1 giờ
 			LocalTime gioTraPhong1 = LocalTime.of(gioTra, phutTra);
@@ -1161,7 +1181,8 @@ public class GD_DatPhong extends JPanel {
 			} else {
 				for (ChiTietDatPhongEntity chiTietDatPhongEntity : listChiTietDatPhong) {
 					if (ngayNhanPhong.equals(chiTietDatPhongEntity.getNgayNhanPhong())
-							&& gioTraPhong1.isAfter(chiTietDatPhongEntity.getGioNhanPhong().minusMinutes(30))) {
+							&& (gioTraPhong1.isAfter(chiTietDatPhongEntity.getGioNhanPhong().minusMinutes(30))
+									&& gioTraPhong1.isBefore(chiTietDatPhongEntity.getGioTraPhong()))) {
 						PhongEntity phongEntity = chiTietDatPhongEntity.getPhong();
 						JOptionPane.showMessageDialog(this, "Phòng " + phongEntity.getSoPhong()
 								+ " được đặt trong khoảng thời gian này.\n Vui lòng chọn giờ trả phòng sớm hơn");
@@ -1258,10 +1279,10 @@ public class GD_DatPhong extends JPanel {
 	}
 
 	private boolean kiemTraDuLieuDatPhong() {
-//		if (nhanVienEntity == null) {
-//			JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập");
-//			return false;
-//		}
+		if (nhanVienEntity == null) {
+			JOptionPane.showMessageDialog(this, "Vui lòng đăng nhập");
+			return false;
+		}
 		if (khachHangEntity == null) {
 			JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng");
 			return false;

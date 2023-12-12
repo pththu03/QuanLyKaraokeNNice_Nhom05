@@ -318,4 +318,39 @@ public class DatPhongDAO {
 		}
 		return 0;
 	}
+
+	public List<ChiTietDatPhongEntity> duyetChiTietDatPhongChuaThanhToanTheoPhong(PhongEntity phongEntity) {
+		List<ChiTietDatPhongEntity> listChiTietDatPhong = new ArrayList<>();
+		Connection connect = ConnectDB.getConnect();
+		PreparedStatement statement = null;
+		ResultSet result = null;
+		if (connect != null) {
+			try {
+				String query = "SELECT CTDP.MaChiTietDatPhong, MaPhong, NgayDatPhong, GioNhanPhong, GioTraPhong \r\n"
+						+ "FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD \r\n"
+						+ "ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong\r\n"
+						+ "WHERE MaHoaDon IS NULL AND MaPhong = ?\r\n" + "ORDER BY NgayDatPhong ASC, GioNhanPhong ASC";
+				statement = connect.prepareStatement(query);
+				statement.setString(1, phongEntity.getMaPhong());
+				result = statement.executeQuery();
+				while (result.next()) {
+					String maChiTietDatPhong = result.getString(1);
+					LocalDate ngayNhanPhong = result.getDate(3).toLocalDate();
+					LocalTime gioNhanPhong = result.getTime(4).toLocalTime();
+					LocalTime gioTraPhong = result.getTime(5).toLocalTime();
+					ChiTietDatPhongEntity chiTietPhieuDatPhongEntity = new ChiTietDatPhongEntity(maChiTietDatPhong,
+							phongEntity, gioNhanPhong, gioTraPhong, ngayNhanPhong);
+					listChiTietDatPhong.add(chiTietPhieuDatPhongEntity);
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
+				e.printStackTrace();
+			} finally {
+				ConnectDB.closeConnect(connect);
+				ConnectDB.closePreStatement(statement);
+				ConnectDB.closeResultSet(result);
+			}
+		}
+		return listChiTietDatPhong;
+	}
 }

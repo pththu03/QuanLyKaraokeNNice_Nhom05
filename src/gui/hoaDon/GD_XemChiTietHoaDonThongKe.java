@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -23,11 +24,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import controller.XemChiTietHoaDonController;
+import dao.QuanLyHoaDonDAO;
+import entities.ChiTietDatPhongEntity;
 import entities.ChiTietDichVuEntity;
 import entities.ChiTietHoaDonEntity;
 import entities.HoaDonEntity;
+import util.MoneyFormatter;
+import util.TimeFormatter;
 
-public class GD_XemChiTietHoaDon extends JFrame {
+public class GD_XemChiTietHoaDonThongKe extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel pnlContent;
@@ -46,14 +51,15 @@ public class GD_XemChiTietHoaDon extends JFrame {
 	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
 	private List<ChiTietDichVuEntity> listChiTietDichVu;
 
+	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
+
 	/**
 	 * Create the frame.
 	 */
-	public GD_XemChiTietHoaDon(HoaDonEntity hoaDonEntity) {
+	public GD_XemChiTietHoaDonThongKe(HoaDonEntity hoaDonEntity) {
 		setBackground(new Color(230, 230, 250));
 		this.hoaDonEntity = hoaDonEntity;
 		setTitle("Xem chi tiết hóa đơn");
-		setLocationRelativeTo(null);
 		pnlContent = new JPanel();
 		pnlContent.setBackground(new Color(230, 230, 250));
 		pnlContent.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -61,6 +67,7 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		setContentPane(pnlContent);
 		pnlContent.setLayout(null);
 		setSize(903, 476);
+		setLocationRelativeTo(null);
 
 		JPanel pnlChiTietPhong = new JPanel();
 		pnlChiTietPhong.setBorder(new TitledBorder(
@@ -76,14 +83,14 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		tblPhong = new JTable(tblmodelPhong);
 
 		JScrollPane scrPhong = new JScrollPane(tblPhong);
-		scrPhong.setBounds(20, 20, 827, 138);
+		scrPhong.setBounds(20, 20, 827, 149);
 		pnlChiTietPhong.add(scrPhong);
 
 		JPanel pnlChiTietDichVu = new JPanel();
 		pnlChiTietDichVu.setBorder(
 				new TitledBorder(null, "Danh sách dịch vụ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		pnlChiTietDichVu.setBackground(new Color(230, 230, 250));
-		pnlChiTietDichVu.setBounds(10, 216, 873, 229);
+		pnlChiTietDichVu.setBounds(10, 202, 873, 224);
 		pnlContent.add(pnlChiTietDichVu);
 		pnlChiTietDichVu.setLayout(null);
 
@@ -92,7 +99,7 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		tblDichVu = new JTable(tblmodelDichVu);
 
 		JScrollPane scrDichVu = new JScrollPane(tblDichVu);
-		scrDichVu.setBounds(20, 56, 827, 151);
+		scrDichVu.setBounds(20, 56, 827, 157);
 		pnlChiTietDichVu.add(scrDichVu);
 
 		JLabel lblSoPhong = new JLabel("Số phòng:");
@@ -128,17 +135,59 @@ public class GD_XemChiTietHoaDon extends JFrame {
 		btnLamMoi.addActionListener(controller);
 		btnThoat.addActionListener(controller);
 		tblPhong.addMouseListener(controller);
+		loadPhong();
+	}
+
+	private void loadPhong() {
+		listChiTietHoaDon = new ArrayList<>();
+		listChiTietHoaDon = quanLyHoaDonDAO.duyetDanhSachChiTietHoaDonTheoMaHoaDon(hoaDonEntity.getMaHoaDon());
+		tblPhong.removeAll();
+		tblPhong.setRowSelectionAllowed(false);
+		tblmodelPhong.setRowCount(0);
+
+		int stt = 1;
+		for (ChiTietHoaDonEntity chiTietHoaDonEntity : listChiTietHoaDon) {
+			ChiTietDatPhongEntity chiTietDatPhongEntity = chiTietHoaDonEntity.getChiTietDatPhong();
+			tblmodelPhong.addRow(new Object[] { stt++, chiTietDatPhongEntity.getPhong().getSoPhong(),
+					chiTietDatPhongEntity.getPhong().getLoaiPhong().getTenLoaiPhong(),
+					chiTietDatPhongEntity.getPhong().getSucChua(),
+					TimeFormatter.format(chiTietDatPhongEntity.getGioNhanPhong()),
+					TimeFormatter.format(chiTietDatPhongEntity.getGioTraPhong()) });
+		}
 	}
 
 	public void chonPhong() {
-
+		int row = tblPhong.getSelectedRow();
+		listChiTietHoaDon = quanLyHoaDonDAO.duyetDanhSachChiTietHoaDonTheoMaHoaDon(hoaDonEntity.getMaHoaDon());
+		if (row >= 0) {
+			txtSoPhong.setText(tblPhong.getValueAt(row, 1).toString());
+			listChiTietDichVu = quanLyHoaDonDAO
+					.duyetDanhSachChiTietDichVuTheoChiTietHoaDon(listChiTietHoaDon.get(row).getMaChiTietHoaDon());
+			tblDichVu.removeAll();
+			tblDichVu.setRowSelectionAllowed(false);
+			tblmodelDichVu.setRowCount(0);
+			int stt = 1;
+			for (ChiTietDichVuEntity chiTietDichVuEntity : listChiTietDichVu) {
+				tblmodelDichVu.addRow(new Object[] { stt++, chiTietDichVuEntity.getDichVu().getTenDichVu(),
+						chiTietDichVuEntity.getDichVu().getLoaiDichVu().getTenLoaiDichVu(),
+						MoneyFormatter.format(chiTietDichVuEntity.getDichVu().getGia()),
+						chiTietDichVuEntity.getSoLuong(), MoneyFormatter.format(tinhThanhTien(chiTietDichVuEntity)) });
+			}
+		}
 	}
 
 	public void chonLamMoi() {
-
+		txtSoPhong.setText("");
+		tblDichVu.removeAll();
+		tblDichVu.setRowSelectionAllowed(false);
+		tblmodelDichVu.setRowCount(0);
 	}
 
 	public void chonThoat() {
+		this.dispose();
+	}
 
+	private double tinhThanhTien(ChiTietDichVuEntity chiTietDichVuEntity) {
+		return chiTietDichVuEntity.getDichVu().getGia() * chiTietDichVuEntity.getSoLuong();
 	}
 }

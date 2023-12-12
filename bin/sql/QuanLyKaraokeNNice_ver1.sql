@@ -111,10 +111,10 @@ RETURNS VARCHAR(7)
 AS
 BEGIN
 	DECLARE @ID INT
-	IF (SELECT COUNT(MaDV) FROM DichVu) = 0
+	IF (SELECT COUNT(MaDichVu) FROM DichVu) = 0
 		SET @ID = 0
 	ELSE
-		SELECT @ID = MAX(CAST(RIGHT(MaDV, 3) AS INT)) FROM DichVu
+		SELECT @ID = MAX(CAST(RIGHT(MaDichVu, 3) AS INT)) FROM DichVu
 	SET @ID = @ID + 1
 
 	DECLARE @MaDV VARCHAR(7)
@@ -365,7 +365,7 @@ GO
 CREATE TABLE ChiTietPhieuDatPhong(
 	MaChiTietPhieuDatPhong VARCHAR(7) NOT NULL PRIMARY KEY DEFAULT DBO.AUTO_ID_ChiTietPhieuDatPhong(),
 	MaPhieuDatPhong VARCHAR(7),
-	MaPhong VARCHAR(7) NOT NULL
+	MaChiTietDatPhong VARCHAR(7) NOT NULL
 )
 GO
 
@@ -468,7 +468,7 @@ GO
 
 ALTER TABLE ChiTietPhieuDatPhong ADD
 FOREIGN KEY (MaPhieuDatPhong) REFERENCES PhieuDatPhong(MaPhieuDatPhong),
-FOREIGN KEY (MaPhong) REFERENCES Phong(MaPhong)
+FOREIGN KEY (MaChiTietDatPhong) REFERENCES ChiTietDatPhong(MaChiTietDatPhong)
 GO
 
 ALTER TABLE PhieuPhanCong ADD
@@ -689,9 +689,6 @@ select * from ChiTietPhieuDatPhong
 INSERT INTO PhieuDatPhong (MaKhachHang)
 VALUES ('KH023')
 
-INSERT INTO ChiTietPhieuDatPhong (MaPhieuDatPhong, MaPhong)
-VALUES ('PDP001', 'P001')
-
 SELECT * FROM ChiTietHoaDon WHERE MaHoaDon is null
 
 INSERT INTO ChiTietHoaDon (MaHoaDon, MaChiTietDatPhong)
@@ -710,19 +707,70 @@ select * from ChiTietDatPhong
 select MaChiTietDatPhong from ChiTietHoaDon
 where MaHoaDon is null
 
-select * from HoaDon
 select* from Phong
+select * from DichVu
+select * from HoaDon
 SELECT * FROM ChiTietHoaDon
+SELECT * FROM ChiTietDichVu
+
+delete from ChiTietDichVu
 SELECT * FROM ChiTietDatPhong
-SELECT * FROM ChiTietPhieuDatPhong
 SELECT * FROM PhieuDatPhong
+SELECT * FROM ChiTietPhieuDatPhong
 SELECT * FROM KhachHang
 
 
+
+INSERT INTO ChiTietPhieuDatPhong (MaPhieuDatPhong, MaChiTietDatPhong)
+VALUES ('PDP001', 'CTDP001')
+
+INSERT INTO HoaDon (MaNhanVien, MaKhachHang, NgayLap, GioLap)
+VALUES ('NV001', 'KH020', '2023-12-01', '22:00:00')
+
+
+INSERT INTO ChiTietDichVu (MaDichVu, MaChiTietHoaDon, SoLuong)
+VALUES ('DV001', 'CTHD001', 2)
+
+delete from ChiTietDichVu
+where MaChiTietHoaDon = 'CTHD001'
 delete from ChiTietHoaDon
-delete from ChiTietDatPhong
 delete from ChiTietPhieuDatPhong
+delete from ChiTietDatPhong
 delete from PhieuDatPhong
 
 update Phong
 Set TrangThai = N'Trống'
+
+SELECT * FROM ChiTietPhieuDatPhong CTPDP
+WHERE EXISTS (SELECT * FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+		ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong JOIN Phong P
+		ON CTDP.MaPhong = P.MaPhong
+		WHERE CTDP.MaChiTietDatPhong = CTPDP.MaChiTietDatPhong AND MaHoaDon IS NULL)
+
+SELECT COUNT(*) FROM ChiTietPhieuDatPhong
+WHERE MaPhieuDatPhong LIKE 'PDP004'
+
+SELECT * FROM Phong P
+WHERE MaPhong LIKE 'P001' AND NOT EXISTS (SELECT MaPhong FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+	ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong 
+	WHERE CTDP.MaPhong = P.MaPhong AND MaHoaDon IS NULL)
+
+SELECT COUNT(*) FROM ChiTietDatPhong CTDP JOIN Phong P
+ON P.MaPhong = CTDP.MaPhong JOIN ChiTietHoaDon CTHD
+ON CTHD.MaChiTietDatPhong = CTDP.MaChiTietDatPhong
+WHERE CTDP.MaPhong LIKE 'P004' AND MaHoaDon IS NULL
+
+UPDATE ChiTietDatPhong
+SET MaPhong = 'P004'
+FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong
+WHERE MaHoaDon IS NULL AND CTDP.MaChiTietDatPhong LIKE 'CTDP002'
+
+
+SELECT *
+FROM ChiTietDatPhong CTDP JOIN ChiTietHoaDon CTHD
+ON CTDP.MaChiTietDatPhong = CTHD.MaChiTietDatPhong
+WHERE MaHoaDon IS NULL AND CTDP.MaChiTietDatPhong LIKE 'CTDP002'
+
+SELECT MaDichVu, TenDichVu, LD.MaLoaiDichVu, TenLoaiDichVu, Gia
+FROM [dbo].[DichVu] D JOIN [dbo].[LoaiDichVu] LD ON D.MaLoaiDichVu = LD.MaLoaiDichVu

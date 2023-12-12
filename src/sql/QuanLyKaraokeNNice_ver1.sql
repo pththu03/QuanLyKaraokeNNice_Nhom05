@@ -707,17 +707,7 @@ select * from ChiTietDatPhong
 select MaChiTietDatPhong from ChiTietHoaDon
 where MaHoaDon is null
 
-select* from Phong
-select * from DichVu
-select * from HoaDon
-SELECT * FROM ChiTietHoaDon
-SELECT * FROM ChiTietDichVu
 
-delete from ChiTietDichVu
-SELECT * FROM ChiTietDatPhong
-SELECT * FROM PhieuDatPhong
-SELECT * FROM ChiTietPhieuDatPhong
-SELECT * FROM KhachHang
 
 
 
@@ -731,12 +721,6 @@ VALUES ('NV001', 'KH020', '2023-12-01', '22:00:00')
 INSERT INTO ChiTietDichVu (MaDichVu, MaChiTietHoaDon, SoLuong)
 VALUES ('DV001', 'CTHD001', 2)
 
-delete from ChiTietDichVu
-where MaChiTietHoaDon = 'CTHD001'
-delete from ChiTietHoaDon
-delete from ChiTietPhieuDatPhong
-delete from ChiTietDatPhong
-delete from PhieuDatPhong
 
 update Phong
 Set TrangThai = N'Trống'

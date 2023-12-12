@@ -43,7 +43,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private JTextField txtSDT;
 	private JTextField txtNamSinh;
 	private JTextField txtEmail;
-	private JTextField txtSoDienThoai;
+	private JTextField txtSoDienThoaiTim;
 
 	// JTable
 	private JTable tblKhachHang;
@@ -72,15 +72,15 @@ public class GD_QuanLyKhachHang extends JPanel {
 	private List<KhachHangEntity> list;
 	private JTextField txtSLDatPhong;
 	private JLabel lblSLDatPhong;
-	private JTextField txtTenKhachHang;
+	private JTextField txtTenKhachHangTim;
 	private JLabel lblDanhSchKhch;
-	private JTextField txtSoLanDatPhongTu;
-	private JTextField txtSoLanDatPhongDen;
+	private JTextField txtSoLanDatPhongToiThieu;
+	private JTextField txtSoLanDatPhongToiDa;
 
 	public GD_QuanLyKhachHang() {
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
-		
+
 		pnlKhachHang = new JPanel();
 		pnlKhachHang.setBackground(new Color(211, 211, 211));
 		pnlKhachHang.setBounds(0, 0, 1365, 694);
@@ -130,25 +130,24 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnTimKiem.setBackground(new Color(144, 238, 144));
 		btnTimKiem.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnTimKiem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-//		btnTimKiem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconTimKiem1.png")));
 		btnTimKiem.setBounds(1185, 85, 150, 35);
 		pnlTimKiem.add(btnTimKiem);
 
-		txtSoDienThoai = new JTextField();
-		txtSoDienThoai.setColumns(10);
-		txtSoDienThoai.setBounds(480, 30, 200, 30);
-		pnlTimKiem.add(txtSoDienThoai);
+		txtSoDienThoaiTim = new JTextField();
+		txtSoDienThoaiTim.setColumns(10);
+		txtSoDienThoaiTim.setBounds(480, 30, 200, 30);
+		pnlTimKiem.add(txtSoDienThoaiTim);
 
 		lblTenKH = new JLabel("Tên khách hàng:");
 		lblTenKH.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		lblTenKH.setBounds(30, 30, 110, 30);
 		pnlTimKiem.add(lblTenKH);
 
-		txtTenKhachHang = new JTextField();
-		txtTenKhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		txtTenKhachHang.setColumns(10);
-		txtTenKhachHang.setBounds(140, 30, 200, 30);
-		pnlTimKiem.add(txtTenKhachHang);
+		txtTenKhachHangTim = new JTextField();
+		txtTenKhachHangTim.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		txtTenKhachHangTim.setColumns(10);
+		txtTenKhachHangTim.setBounds(140, 30, 200, 30);
+		pnlTimKiem.add(txtTenKhachHangTim);
 
 		JPanel pnlTimTheoSoLanDatPhong = new JPanel();
 		pnlTimTheoSoLanDatPhong.setBackground(new Color(230, 230, 250));
@@ -170,25 +169,24 @@ public class GD_QuanLyKhachHang extends JPanel {
 		lblSoLanDatPhongDen.setBounds(300, 19, 54, 30);
 		pnlTimTheoSoLanDatPhong.add(lblSoLanDatPhongDen);
 
-		txtSoLanDatPhongTu = new JTextField();
-		txtSoLanDatPhongTu.setColumns(10);
-		txtSoLanDatPhongTu.setBounds(60, 20, 200, 30);
-		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongTu);
+		txtSoLanDatPhongToiThieu = new JTextField();
+		txtSoLanDatPhongToiThieu.setColumns(10);
+		txtSoLanDatPhongToiThieu.setBounds(60, 20, 200, 30);
+		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongToiThieu);
 
-		txtSoLanDatPhongDen = new JTextField();
-		txtSoLanDatPhongDen.setColumns(10);
-		txtSoLanDatPhongDen.setBounds(350, 20, 200, 30);
-		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongDen);
-		
-				btnLamMoi = new JButton("Làm mới");
-				btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
-				btnLamMoi.setBounds(1000, 85, 150, 35);
-				pnlTimKiem.add(btnLamMoi);
-				//		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi3.png")));
-						btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
-						btnLamMoi.setFocusable(false);
-						btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
-						btnLamMoi.setBackground(new Color(144, 238, 144));
+		txtSoLanDatPhongToiDa = new JTextField();
+		txtSoLanDatPhongToiDa.setColumns(10);
+		txtSoLanDatPhongToiDa.setBounds(350, 20, 200, 30);
+		pnlTimTheoSoLanDatPhong.add(txtSoLanDatPhongToiDa);
+
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconLamMoi.png")));
+		btnLamMoi.setBounds(1000, 85, 150, 35);
+		pnlTimKiem.add(btnLamMoi);
+		btnLamMoi.setFont(new Font("Cambria", Font.BOLD, 14));
+		btnLamMoi.setFocusable(false);
+		btnLamMoi.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
+		btnLamMoi.setBackground(new Color(144, 238, 144));
 
 		JPanel pnlThongTin = new JPanel();
 		pnlThongTin.setBorder(null);
@@ -272,7 +270,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnChinhSua.setBounds(1185, 170, 150, 35);
 		pnlThongTin.add(btnChinhSua);
 		btnChinhSua.setFocusable(false);
-//		btnChinhSua.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconChinhSua1.png")));
 		btnChinhSua.setBackground(new Color(144, 238, 144));
 		btnChinhSua.setFont(new Font("Cambria", Font.BOLD, 14));
 		btnChinhSua.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
@@ -281,7 +278,6 @@ public class GD_QuanLyKhachHang extends JPanel {
 		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem.png")));
 		btnThem.setBounds(1000, 170, 150, 35);
 		pnlThongTin.add(btnThem);
-//		btnThem.setIcon(new ImageIcon(GD_QuanLyKhachHang.class.getResource("/images/iconThem3.png")));
 		btnThem.setBorder(new SoftBevelBorder(BevelBorder.RAISED, null, null, null, null));
 		btnThem.setBackground(new Color(144, 238, 144));
 		btnThem.setFont(new Font("Cambria", Font.BOLD, 14));
@@ -309,7 +305,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 		loadData();
 
 	}
-	
+
 	private void loadData() {
 		tblKhachHang.removeAll();
 		tblKhachHang.setRowSelectionAllowed(false);
@@ -338,18 +334,18 @@ public class GD_QuanLyKhachHang extends JPanel {
 			txtSLDatPhong.setText(String.valueOf(list.get(row).getSoLanDatPhong()));
 		}
 	}
-	
+
 	public void chonChucNangLamMoi() {
 		txtEmail.setText("");
 		txtMaKH.setText("");
 		txtNamSinh.setText("");
 		txtSDT.setText("");
 		txtSLDatPhong.setText("");
-		txtSoLanDatPhongTu.setText("");
-		txtSoLanDatPhongDen.setText("");
-		txtSoDienThoai.setText("");
+		txtSoLanDatPhongToiThieu.setText("");
+		txtSoLanDatPhongToiDa.setText("");
+		txtSoDienThoaiTim.setText("");
 		txtTenKH.setText("");
-		txtTenKhachHang.setText("");
+		txtTenKhachHangTim.setText("");
 		tblKhachHang.setRowSelectionAllowed(false);
 		loadData();
 	}
@@ -366,108 +362,7 @@ public class GD_QuanLyKhachHang extends JPanel {
 			loadData();
 		}
 	}
-	
-	private boolean kiemTraDuLieuThem() {
-		if (!kiemTraHoTen()) {
-			return false;
-		}
 
-		if (!kiemTraNamSinh()) {
-			return false;
-		}
-
-		if (!kiemTraSoDienThoaiThem()) {
-			return false;
-		}
-
-		if (!kiemTraEmail()) {
-			return false;
-		}
-
-		return true;
-	}
-	
-	private boolean kiemTraHoTen() {
-		if (!(txtTenKH.getText().trim().length() > 0)) {
-			JOptionPane.showMessageDialog(this, "Họ tên không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtTenKH.requestFocus();
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean kiemTraSoDienThoaiThem() {
-		list = new ArrayList<>();
-		list= quanLyKhachHangDAO.duyetDanhSach();
-		String sdt = txtSDT.getText().trim();
-		if (sdt.length() > 0) {
-			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
-				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSDT.requestFocus();
-				return false;
-			}
-			if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))) {
-				JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtSDT.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtSDT.requestFocus();
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean kiemTraEmail() {
-		String email = txtEmail.getText().trim();
-		if (email.length() > 0) {
-			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
-				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtEmail.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Email không được để trống");
-			txtEmail.requestFocus();
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean kiemTraNamSinh() {
-		if (txtNamSinh.getText().trim().length() > 0) {
-			try {
-				int nam = Integer.parseInt(txtNamSinh.getText().trim());
-				int tuoi = 2023 - nam;
-				if (!(tuoi >= 18 && tuoi <= 60)) {
-					JOptionPane.showMessageDialog(this, "Khách Hàng phải từ 18 ", "Thông báo",
-							JOptionPane.INFORMATION_MESSAGE);
-					txtNamSinh.requestFocus();
-					return false;
-				}
-			} catch (NumberFormatException e) {
-				JOptionPane.showMessageDialog(this, "Năm sinh nhập vào  là số nguyên", "Thông báo",
-						JOptionPane.INFORMATION_MESSAGE);
-				txtNamSinh.requestFocus();
-				return false;
-			}
-		} else {
-			JOptionPane.showMessageDialog(this, "Năm sinh không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
-			txtNamSinh.requestFocus();
-			return false;
-		}
-		return true;
-	}
-	
-	
-	
 	public void chonChucNangChinhSua() {
 		if (kiemTraDuLieuChinhSua()) {
 			int row = tblKhachHang.getSelectedRow();
@@ -491,13 +386,34 @@ public class GD_QuanLyKhachHang extends JPanel {
 		}
 	}
 
-	
+	public void chonChucNangTimKiem() {
+		if (kiemTraDuLieuTim()) {
+			String tenKH = txtTenKhachHangTim.getText().trim();
+			String sdt = txtSoDienThoaiTim.getText().trim();
+			int soluongTu = -1, soluongDen = -1;
+			if (!txtSoLanDatPhongToiThieu.getText().equals("")) {
+				soluongTu = Integer.parseInt(txtSoLanDatPhongToiThieu.getText().trim());
+			}
 
-	private boolean kiemTraDuLieuChinhSua() {
-		if (!kiemTraSoDienThoaiChinhSua()) {
-			return false;
+			if (!txtSoLanDatPhongToiDa.getText().equals("")) {
+				soluongDen = Integer.parseInt(txtSoLanDatPhongToiDa.getText().trim());
+			}
+
+			list = new ArrayList<>();
+			tblKhachHang.removeAll();
+			tblmdelKhachHang.setRowCount(0);
+			list = quanLyKhachHangDAO.timKiem(tenKH, sdt, soluongTu, soluongDen);
+			int stt = 1;
+			for (KhachHangEntity khachHangEntity : list) {
+
+				tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(),
+						khachHangEntity.getHoTen(), khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(),
+						khachHangEntity.getNamSinh(), khachHangEntity.getSoLanDatPhong() });
+			}
 		}
+	}
 
+	private boolean kiemTraDuLieuThem() {
 		if (!kiemTraHoTen()) {
 			return false;
 		}
@@ -506,15 +422,30 @@ public class GD_QuanLyKhachHang extends JPanel {
 			return false;
 		}
 
+		if (!kiemTraSoDienThoaiThem()) {
+			return false;
+		}
+
 		if (!kiemTraEmail()) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean kiemTraHoTen() {
+		if (!(txtTenKH.getText().trim().length() > 0)) {
+			JOptionPane.showMessageDialog(this, "Họ tên không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtTenKH.requestFocus();
 			return false;
 		}
 		return true;
 	}
-	
-	private boolean kiemTraSoDienThoaiChinhSua() {
+
+	private boolean kiemTraSoDienThoaiThem() {
 		list = new ArrayList<>();
-		list= quanLyKhachHangDAO.duyetDanhSach();
+		list = quanLyKhachHangDAO.duyetDanhSach();
 		String sdt = txtSDT.getText().trim();
 		if (sdt.length() > 0) {
 			if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
@@ -538,90 +469,170 @@ public class GD_QuanLyKhachHang extends JPanel {
 		return true;
 	}
 
-	public void chonChucNangTimKiem() {
-		if(kiemTraDuLieuTim()) {
-			String tenKH = txtTenKhachHang.getText().trim();
-			String sdt = txtSoDienThoai.getText().trim();
-			int soluongTu = -1, soluongDen = -1;
-			if (!txtSoLanDatPhongTu.getText().equals("")) {
-				soluongTu = Integer.parseInt(txtSoLanDatPhongTu.getText().trim());
+	private boolean kiemTraEmail() {
+		String email = txtEmail.getText().trim();
+		if (email.length() > 0) {
+			if (!(email.matches("\\w+@gmail\\.com") || email.matches("\\w+@email\\.com"))) {
+				JOptionPane.showMessageDialog(this, "Email phải nhập dạng username@domain.com", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtEmail.requestFocus();
+				return false;
 			}
-
-			if (!txtSoLanDatPhongDen.getText().equals("")) {
-				soluongDen = Integer.parseInt(txtSoLanDatPhongDen.getText().trim());
-			}
-
-			list = new ArrayList<>();
-			tblKhachHang.removeAll();
-			tblmdelKhachHang.setRowCount(0);
-			list = quanLyKhachHangDAO.timKiem(tenKH, sdt, soluongTu, soluongDen);
-			int stt = 1;
-			for (KhachHangEntity khachHangEntity : list) {
-
-				tblmdelKhachHang.addRow(new Object[] { stt++, khachHangEntity.getMaKhachHang(), khachHangEntity.getHoTen(),
-						khachHangEntity.getSoDienThoai(), khachHangEntity.getEmail(), khachHangEntity.getNamSinh(),
-						khachHangEntity.getSoLanDatPhong() });
-			}
-		}
-	}
-	
-	private boolean kiemTraDuLieuTim() {
-		
-		if (!kiemTraSoLanDatPhong()) {
+		} else {
+			JOptionPane.showMessageDialog(this, "Email không được để trống");
+			txtEmail.requestFocus();
 			return false;
 		}
-		
-
 		return true;
 	}
-	
-	private boolean kiemTraSoLanDatPhong() {
 
-		if (txtSoLanDatPhongTu.getText().trim().length() > 0) {
-			String soLuongTu = txtSoLanDatPhongTu.getText().trim();
-			if (!soLuongTu.matches("[0-9]+")) {
-				JOptionPane.showMessageDialog(this, "Số lượng tối thiểu nhập vào phải là số");
-				txtSoLanDatPhongTu.requestFocus();
-				return false;
-			}
-
-			if (Integer.parseInt(soLuongTu) <= 0) {
-				JOptionPane.showMessageDialog(this, "Số lượng tổi thiểu nhập vào phải là số nguyên");
-				txtSoLanDatPhongTu.requestFocus();
-				return false;
-			}
-
-			if (txtSoLanDatPhongDen.getText().trim().length() > 0) {
-				String soLuongDen = txtSoLanDatPhongDen.getText().trim();
-				if (!soLuongDen.matches("[0-9]+")) {
-					JOptionPane.showMessageDialog(this, "Số lượng tối đa nhập vào phải là số");
-					txtSoLanDatPhongDen.requestFocus();
+	private boolean kiemTraNamSinh() {
+		if (txtNamSinh.getText().trim().length() > 0) {
+			try {
+				int nam = Integer.parseInt(txtNamSinh.getText().trim());
+				int tuoi = 2023 - nam;
+				if (!(tuoi >= 18)) {
+					JOptionPane.showMessageDialog(this, "Khách Hàng phải từ 18 ", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtNamSinh.requestFocus();
 					return false;
 				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Năm sinh nhập vào  là số nguyên", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtNamSinh.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Năm sinh không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtNamSinh.requestFocus();
+			return false;
+		}
+		return true;
+	}
 
-				if (Integer.parseInt(soLuongDen) <= 0) {
-					JOptionPane.showMessageDialog(this, "Số lượng tối đa  nhập vào phải là số nguyên");
-					txtSoLanDatPhongDen.requestFocus();
+	private boolean kiemTraDuLieuChinhSua() {
+		if (!kiemTraSoDienThoaiChinhSua()) {
+			return false;
+		}
+
+		if (!kiemTraHoTen()) {
+			return false;
+		}
+
+		if (!kiemTraNamSinh()) {
+			return false;
+		}
+
+		if (!kiemTraEmail()) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraSoDienThoaiChinhSua() {
+		list = new ArrayList<>();
+		list = quanLyKhachHangDAO.duyetDanhSach();
+		String sdt = txtSDT.getText().trim();
+		int row = tblKhachHang.getSelectedRow();
+		if (row >= 0) {
+			if (sdt.length() > 0) {
+				if (!(sdt.length() == 10 && sdt.matches("\\d{10}"))) {
+					JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtSDT.requestFocus();
 					return false;
 				}
-
-				if (Integer.parseInt(soLuongDen) < Integer.parseInt(soLuongTu)) {
-					JOptionPane.showMessageDialog(this, "Số lượng tối dâ phải lớn hơn Số lượng tối thiểu");
-					txtSoLanDatPhongDen.requestFocus();
+				if (list.contains(new KhachHangEntity("", "", sdt, "", 0, 0))
+						&& !list.get(row).getSoDienThoai().equals(sdt)) {
+					JOptionPane.showMessageDialog(this, "Số điện thoại đã tồn tại trong hệ thống", "Thông báo",
+							JOptionPane.INFORMATION_MESSAGE);
+					txtSDT.requestFocus();
 					return false;
 				}
 			} else {
-				JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng tối đa");
-				txtSoLanDatPhongDen.requestFocus();
+				JOptionPane.showMessageDialog(this, "Số điện thoại không được để trống", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtSDT.requestFocus();
 				return false;
 			}
 		}
-
 		return true;
-
 	}
-	
-	
-	
-}
 
+	private boolean kiemTraDuLieuTim() {
+
+		if (!kiemTraSoLanDatPhong()) {
+			return false;
+		}
+
+		if (!kiemTraSoDienThoaiTim()) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraSoLanDatPhong() {
+		if (txtSoLanDatPhongToiThieu.getText().trim().length() > 0) {
+			String soLuongTu = txtSoLanDatPhongToiThieu.getText().trim();
+			try {
+				int num = Integer.parseInt(soLuongTu);
+				if (num < 0) {
+					JOptionPane.showMessageDialog(this, "Số lượng tổi thiểu nhập vào phải là số nguyên");
+					txtSoLanDatPhongToiThieu.requestFocus();
+					return false;
+				}
+				if (txtSoLanDatPhongToiDa.getText().trim().length() > 0) {
+					String soLuongDen = txtSoLanDatPhongToiDa.getText().trim();
+					try {
+						int num2 = Integer.parseInt(soLuongDen);
+						if (num2 < num) {
+							JOptionPane.showMessageDialog(this, "Số lượng tối đa lớn hơn hoặc bằng số lương tối thiểu");
+							txtSoLanDatPhongToiDa.requestFocus();
+							return false;
+						}
+					} catch (NumberFormatException e) {
+						JOptionPane.showMessageDialog(this, "Số lượng tối đa nhập vào phải là số");
+						txtSoLanDatPhongToiDa.requestFocus();
+						return false;
+					}
+				} else {
+					JOptionPane.showMessageDialog(this, "Vui lòng nhập số lượng tối đa");
+					txtSoLanDatPhongToiDa.requestFocus();
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Số lượng tối thiểu nhập vào phải là số");
+				txtSoLanDatPhongToiThieu.requestFocus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean kiemTraSoDienThoaiTim() {
+		if (txtSoDienThoaiTim.getText().trim().length() > 0) {
+			if (txtSoDienThoaiTim.getText().trim().length() > 10) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại không được nhập quá 10 số");
+				txtSoDienThoaiTim.requestFocus();
+				return false;
+			} else {
+				try {
+					Integer num = Integer.parseInt(txtSoDienThoaiTim.getText().trim());
+					if (num < 0) {
+						JOptionPane.showMessageDialog(this, "Số điện thoại không được nhập số âm");
+						txtSoDienThoaiTim.requestFocus();
+						return false;
+					}
+				} catch (NumberFormatException e) {
+					JOptionPane.showMessageDialog(this, "Số điện thoại phải nhập số");
+					txtSoDienThoaiTim.requestFocus();
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+}

@@ -3,7 +3,9 @@ package gui.thongKe;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.SystemColor;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -28,8 +30,24 @@ import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JYearChooser;
 
 import controller.ThongKeController;
+import dao.ChamCongDAO;
+import dao.QuanLyHoaDonDAO;
+import dao.QuanLyKhachHangDAO;
 import dao.QuanLyNhanVienDAO;
+import dao.QuanLyPhongDAO;
+import dao.ThongKeDAO;
+import entities.ChiTietDatPhongEntity;
+import entities.ChiTietHoaDonEntity;
+import entities.ChiTietPhieuDatPhongEntity;
+import entities.HoaDonEntity;
+import entities.KhachHangEntity;
 import entities.NhanVienEntity;
+import entities.PhongEntity;
+import gui.hoaDon.GD_XemChiTietHoaDonThongKe;
+import gui.phanCongVaChamCong.GD_XemChiTietChamCong;
+import util.DateFormatter;
+import util.MoneyFormatter;
+import util.TimeFormatter;
 
 public class GD_ThongKe extends JPanel {
 
@@ -128,9 +146,17 @@ public class GD_ThongKe extends JPanel {
 	/**
 	 * 
 	 */
-	private List<NhanVienEntity> listNhanVien;
+	private List<NhanVienEntity> listNhanVien = new ArrayList<>();
+	private List<HoaDonEntity> listHoaDon = new ArrayList<>();
+	private List<ChiTietHoaDonEntity> listChiTietHoaDon = new ArrayList<>();
+	private HoaDonEntity hoaDonEntity = null;
+	private NhanVienEntity nhanVienEntity = null;
+
+	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
+	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
 
 	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
+	private ThongKeDAO thongKeDAO = new ThongKeDAO();
 
 	/**
 	 * 
@@ -233,6 +259,7 @@ public class GD_ThongKe extends JPanel {
 
 		chonNgayDoanhThu = new JDateChooser();
 		chonNgayDoanhThu.setDateFormatString("dd/MM/yyyy");
+		chonNgayDoanhThu.setDate(new Date());
 		chonNgayDoanhThu.setBounds(125, 11, 133, 30);
 		pnlTimKiemDoanhThu.add(chonNgayDoanhThu);
 
@@ -269,6 +296,7 @@ public class GD_ThongKe extends JPanel {
 				"Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12" };
 		cmbmodelThangDoanhThu = new DefaultComboBoxModel<>(cols_Thang);
 		cmbThangDoanhThu = new JComboBox<String>(cmbmodelThangDoanhThu);
+		cmbThangDoanhThu.setSelectedIndex(LocalDate.now().getMonthValue() - 1);
 		cmbThangDoanhThu.setBounds(125, 11, 100, 30);
 
 		lblchonNamDoanhThuThang = new JLabel("Chọn năm:");
@@ -276,6 +304,7 @@ public class GD_ThongKe extends JPanel {
 		lblchonNamDoanhThuThang.setBounds(254, 11, 88, 30);
 
 		cmbNamDoanhThuThang = new JYearChooser();
+		cmbNamDoanhThuThang.setYear(LocalDate.now().getYear());
 		cmbNamDoanhThuThang.setBounds(333, 11, 100, 30);
 
 		lblchonNamDoanhThuNam = new JLabel("Chọn năm:");
@@ -283,6 +312,7 @@ public class GD_ThongKe extends JPanel {
 		lblchonNamDoanhThuNam.setBounds(30, 11, 110, 30);
 
 		cmbNamDoanhThuNam = new JYearChooser();
+		cmbNamDoanhThuNam.setYear(LocalDate.now().getYear());
 		cmbNamDoanhThuNam.setBounds(125, 11, 100, 30);
 
 		lblTongDoanhThu = new JLabel("Tổng doanh thu:");
@@ -422,6 +452,7 @@ public class GD_ThongKe extends JPanel {
 
 		cmbmodelThangLuong = new DefaultComboBoxModel<>(cols_Thang);
 		cmbThangLuong = new JComboBox<>(cmbmodelThangLuong);
+		cmbThangLuong.setSelectedIndex(LocalDate.now().getMonthValue() - 1);
 		cmbThangLuong.setBounds(125, 11, 100, 30);
 		pnlTimKiemLuong.add(cmbThangLuong);
 
@@ -548,24 +579,16 @@ public class GD_ThongKe extends JPanel {
 		tblHoaDon.addMouseListener(controller);
 		tblNhanVien.addMouseListener(controller);
 
+		loadDataHoaDon();
 		loadDataNhanVien();
+	}
 
+	private void loadDataHoaDon() {
+		chonTimKiemDoanhThuNgay();
 	}
 
 	private void loadDataNhanVien() {
-		tblNhanVien.removeAll();
-		tblNhanVien.setRowSelectionAllowed(false);
-		tblmodelNhanVien.setRowCount(0);
-		listNhanVien = new ArrayList<>();
-		listNhanVien = quanLyNhanVienDAO.duyetDanhSach();
-
-		int stt = 1;
-		for (NhanVienEntity nhanVienEntity : listNhanVien) {
-			if (nhanVienEntity.isTrangThai()) {
-				tblmodelNhanVien.addRow(new Object[] { stt++, nhanVienEntity.getMaNhanVien(), nhanVienEntity.getHoTen(),
-						nhanVienEntity.getSoDienThoai(), 0, 0, 0 });
-			}
-		}
+		chonTimKiemLuong();
 	}
 
 	public void chonTheoNgay() {
@@ -578,6 +601,7 @@ public class GD_ThongKe extends JPanel {
 		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNgay);
 		this.pnlTimKiemDoanhThu.repaint();
 		this.pnlTimKiemDoanhThu.revalidate();
+		chonTimKiemDoanhThuNgay();
 	}
 
 	public void chonTheoThang() {
@@ -592,6 +616,7 @@ public class GD_ThongKe extends JPanel {
 		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuThang);
 		this.pnlTimKiemDoanhThu.repaint();
 		this.pnlTimKiemDoanhThu.revalidate();
+		chonTimKiemDoanhThuThang();
 	}
 
 	public void chonTheoNam() {
@@ -604,50 +629,229 @@ public class GD_ThongKe extends JPanel {
 		this.pnlTimKiemDoanhThu.add(btnTimKiemDoanhThuNam);
 		this.pnlTimKiemDoanhThu.repaint();
 		this.pnlTimKiemDoanhThu.revalidate();
+		chonTimKiemDoanhThuNam();
 	}
 
-	public void hienThiThongTinDoanhThu() {
-
+	private void hienThiThongTinDoanhThu() {
+		if (tblHoaDon.getRowCount() != 0) {
+			lblTongDoanhThuKetQua.setText(MoneyFormatter.format(tinhTongTienTatCaHoaDon()));
+			lblTongSoHDKetQua.setText(tblHoaDon.getRowCount() + "");
+			lblTongTienDichVuKetQua.setText(MoneyFormatter.format(tinhTongTienDichVu()));
+			lblTongTienHatKetQua.setText(MoneyFormatter.format(tinhTongTienHatTatCaHoaDon()));
+			lblDoanhThuTrungBinhKetQua
+					.setText(MoneyFormatter.format(tinhTongTienTatCaHoaDon() / tblHoaDon.getRowCount()));
+		} else {
+			lamMoi();
+		}
 	}
 
-	public void hienThiThongTinLuongNhanVien() {
-
-	}
-
-	public void hienThiThongTinKhachHang() {
-
+	private void lamMoi() {
+		lblTongDoanhThuKetQua.setText(MoneyFormatter.format(0));
+		lblTongSoHDKetQua.setText("0");
+		lblTongTienDichVuKetQua.setText(MoneyFormatter.format(0));
+		lblTongTienHatKetQua.setText(MoneyFormatter.format(0));
+		lblDoanhThuTrungBinhKetQua.setText(MoneyFormatter.format(0));
 	}
 
 	public void chonTimKiemDoanhThuNgay() {
+		tblHoaDon.removeAll();
+		tblHoaDon.setRowSelectionAllowed(false);
+		tblmodelHoaDon.setRowCount(0);
+		LocalDate ngay = DateFormatter.toLocalDate(chonNgayDoanhThu);
+		listHoaDon = thongKeDAO.duyetDanhSachHoaDonTheoNgay(ngay);
 
+		int stt = 1;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
+			NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(hoaDonEntity.getMaNhanVien());
+			tblmodelHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHoaDon(), khachHangEntity.getHoTen(),
+					nhanVienEntity.getHoTen(), hoaDonEntity.getNgayLap(), hoaDonEntity.getGioLap(),
+					MoneyFormatter.format1(tinhTongTienCuaHoaDon(hoaDonEntity)) });
+		}
+		hienThiThongTinDoanhThu();
 	}
 
 	public void chonTimKiemDoanhThuThang() {
+		tblHoaDon.removeAll();
+		tblHoaDon.setRowSelectionAllowed(false);
+		tblmodelHoaDon.setRowCount(0);
+		int thang = cmbThangDoanhThu.getSelectedIndex() + 1;
+		int nam = cmbNamDoanhThuThang.getYear();
+		LocalDate ngay = LocalDate.of(nam, thang, 1);
+		listHoaDon = new ArrayList<>();
+		listHoaDon = thongKeDAO.duyetDanhSachHoaDonTheoNamThang(ngay);
 
+		int stt = 1;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
+			NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(hoaDonEntity.getMaNhanVien());
+			tblmodelHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHoaDon(), khachHangEntity.getHoTen(),
+					nhanVienEntity.getHoTen(), hoaDonEntity.getNgayLap(), hoaDonEntity.getGioLap(),
+					MoneyFormatter.format1(tinhTongTienCuaHoaDon(hoaDonEntity)) });
+		}
+		hienThiThongTinDoanhThu();
 	}
 
 	public void chonTimKiemDoanhThuNam() {
+		tblHoaDon.removeAll();
+		tblHoaDon.setRowSelectionAllowed(false);
+		tblmodelHoaDon.setRowCount(0);
+		int nam = cmbNamDoanhThuNam.getYear();
+		LocalDate ngay = LocalDate.of(nam, 1, 1);
+		listHoaDon = new ArrayList<>();
+		listHoaDon = thongKeDAO.duyetDanhSachHoaDonTheoNam(ngay);
+
+		int stt = 1;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(hoaDonEntity.getMaKhachHang());
+			NhanVienEntity nhanVienEntity = quanLyNhanVienDAO.timTheoMa(hoaDonEntity.getMaNhanVien());
+			tblmodelHoaDon.addRow(new Object[] { stt++, hoaDonEntity.getMaHoaDon(), khachHangEntity.getHoTen(),
+					nhanVienEntity.getHoTen(), hoaDonEntity.getNgayLap(), hoaDonEntity.getGioLap(),
+					MoneyFormatter.format1(tinhTongTienCuaHoaDon(hoaDonEntity)) });
+		}
+		hienThiThongTinDoanhThu();
+	}
+
+	public void chonXemChiTietDoanhThu() {
+		int row = tblHoaDon.getSelectedRow();
+		if (row >= 0) {
+			new GD_XemChiTietHoaDonThongKe(listHoaDon.get(row)).setVisible(true);
+		}
+	}
+
+	private double tinhTongTienDichVu() {
+		double tong = 0;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			tong += thongKeDAO.tinhTongTienDichVuCuaHoaDon(hoaDonEntity);
+		}
+		return tong;
+	}
+
+	private double tinhTienHatMotPhong(PhongEntity phongEntity, double gioHat) {
+		double tien = 0;
+		if (phongEntity.getLoaiPhong().getTenLoaiPhong().equals("VIP"))
+			tien = gioHat * 200000.0;
+		else
+			tien = gioHat * 150000.0;
+
+		return tien;
+	}
+
+	/***** TÍNH TỔNG TIỀN HÁT *****/
+	private double tinhTongTienHatHoaDon(HoaDonEntity hoaDonEntity) {
+		double tienHat = 0;
+		listChiTietHoaDon = quanLyHoaDonDAO.duyetDanhSachChiTietHoaDonTheoMaHoaDon(hoaDonEntity.getMaHoaDon());
+		for (ChiTietHoaDonEntity chiTietHoaDonEntity : listChiTietHoaDon) {
+			double gioHat = TimeFormatter.tinhSoPhut(chiTietHoaDonEntity.getChiTietDatPhong().getGioNhanPhong(),
+					chiTietHoaDonEntity.getChiTietDatPhong().getGioTraPhong()) / 60.0;
+			tienHat += tinhTienHatMotPhong(chiTietHoaDonEntity.getChiTietDatPhong().getPhong(), gioHat);
+		}
+		return tienHat;
+	}
+
+	private double tinhTongTienHatTatCaHoaDon() {
+		double tong = 0;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			tong += tinhTongTienHatHoaDon(hoaDonEntity);
+		}
+		return tong;
+	}
+
+	private double tinhTongTienCuaHoaDon(HoaDonEntity hoaDonEntity) {
+		return thongKeDAO.tinhTongTienDichVuCuaHoaDon(hoaDonEntity) + tinhTongTienHatHoaDon(hoaDonEntity);
+	}
+
+	private double tinhTongTienTatCaHoaDon() {
+		double tong = 0;
+		for (HoaDonEntity hoaDonEntity : listHoaDon) {
+			tong += tinhTongTienCuaHoaDon(hoaDonEntity);
+		}
+		return tong;
+	}
+
+	/****************
+	 * NHAN VIEN
+	 ****************/
+
+	private void hienThiThongTinLuongNhanVien() {
+		lblTongTienLuongKetQua.setText(MoneyFormatter.format(tinhTongTienLuong()));
+		lblTongSoNhanVienKetQua.setText(listNhanVien.size() + "");
+		lblTongGioLamViecKetQua.setText(tinhTongSoGioLamViec() + "");
+		lblTongCaVangKetQua.setText(tinhTongCaVang() + "");
 
 	}
 
 	public void chonTimKiemLuong() {
-
-	}
-
-	public void chonTimKiemKhachHang() {
-
-	}
-
-	public void chonXemChiTietDoanhThu() {
-
+		int thang = cmbThangLuong.getSelectedIndex() + 1;
+		int nam = chonNamNhanVien.getValue();
+		LocalDate ngay = LocalDate.of(nam, thang, 1);
+		tblNhanVien.removeAll();
+		tblNhanVien.setRowSelectionAllowed(false);
+		tblmodelNhanVien.setRowCount(0);
+		listNhanVien = new ArrayList<>();
+		listNhanVien = thongKeDAO.duyetDanhSachNhanVienDangLamVien();
+		int stt = 1;
+		for (NhanVienEntity nhanVienEntity : listNhanVien) {
+			if (nhanVienEntity.isTrangThai()) {
+				int soGioLamViec = thongKeDAO.demSoGioLamViec(nhanVienEntity, ngay);
+				int soCaVang = thongKeDAO.demSoCaVang(nhanVienEntity, ngay);
+				tblmodelNhanVien.addRow(new Object[] { stt++, nhanVienEntity.getMaNhanVien(), nhanVienEntity.getHoTen(),
+						nhanVienEntity.getSoDienThoai(), soGioLamViec, soCaVang, 0 });
+			}
+		}
+		hienThiThongTinLuongNhanVien();
 	}
 
 	public void chonXemChiTietChamCong() {
-
+		int thang = cmbThangLuong.getSelectedIndex() + 1;
+		int nam = chonNamNhanVien.getValue();
+		LocalDate ngay = LocalDate.of(nam, thang, 1);
+		int row = tblNhanVien.getSelectedRow();
+		if (row >= 0) {
+			nhanVienEntity = quanLyNhanVienDAO.timTheoMa(tblNhanVien.getValueAt(row, 1).toString());
+			new GD_XemChiTietChamCong(nhanVienEntity, ngay).setVisible(true);
+		}
 	}
 
-	public void chonXemChiTietKhachHang() {
-
+	private int tinhTongSoGioLamViec() {
+		int tong = 0;
+		int thang = cmbThangLuong.getSelectedIndex() + 1;
+		int nam = chonNamNhanVien.getValue();
+		LocalDate ngay = LocalDate.of(nam, thang, 1);
+		for (NhanVienEntity nhanVienEntity : listNhanVien) {
+			if (nhanVienEntity.isTrangThai()) {
+				tong += thongKeDAO.demSoGioLamViec(nhanVienEntity, ngay);
+			}
+		}
+		return tong;
 	}
 
+	private int tinhTongCaVang() {
+		int tong = 0;
+		int thang = cmbThangLuong.getSelectedIndex() + 1;
+		int nam = chonNamNhanVien.getValue();
+		LocalDate ngay = LocalDate.of(nam, thang, 1);
+		for (NhanVienEntity nhanVienEntity : listNhanVien) {
+			if (nhanVienEntity.isTrangThai()) {
+				tong += thongKeDAO.demSoCaVang(nhanVienEntity, ngay);
+			}
+		}
+		return tong;
+	}
+
+	private double tinhTienLuongCuaNhanVien(NhanVienEntity nhanVienEntity, int soGioLamViec) {
+		return nhanVienEntity.getMucLuong() * soGioLamViec;
+	}
+
+	private double tinhTongTienLuong() {
+		double tong = 0;
+		int thang = cmbThangLuong.getSelectedIndex() + 1;
+		int nam = chonNamNhanVien.getValue();
+		LocalDate ngay = LocalDate.of(nam, thang, 1);
+
+		for (NhanVienEntity nhanVienEntity : listNhanVien) {
+			tong += tinhTienLuongCuaNhanVien(nhanVienEntity, thongKeDAO.demSoGioLamViec(nhanVienEntity, ngay));
+		}
+		return tong;
+	}
 }

@@ -1,21 +1,27 @@
 package gui.lapHoaDon;
 
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Desktop;
 import java.awt.Font;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,20 +34,40 @@ import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPRow;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
 import controller.LapHoaDonController;
-//import controller.LapHoaDonController;
-//import dao.LapHoaDonDAO;
-//import dao.QuanLyChiTietDichVuDAO;
-//import dao.QuanLyChiTietHoaDonDAO;
-//import dao.QuanLyDichVuDAO;
-//import dao.QuanLyHoaDonDAO;
-//import dao.QuanLyKhachHangDAO;
-//import dao.QuanLyNhanVienDAO;
-//import dao.QuanLyPhongDAO;
-//import entities.ChiTietDichVuEntity;
+import dao.LapHoaDonDAO;
+import dao.QuanLyHoaDonDAO;
+import dao.QuanLyKhachHangDAO;
+import dao.QuanLyPhieuDatPhongDAO;
+import dao.QuanLyPhongDAO;
+import entities.ChiTietDatPhongEntity;
+import entities.ChiTietDichVuEntity;
 import entities.ChiTietHoaDonEntity;
+import entities.ChiTietPhieuDatPhongEntity;
+import entities.DichVuEntity;
 import entities.HoaDonEntity;
+import entities.KhachHangEntity;
+import entities.NhanVienEntity;
+import entities.PhieuDatPhongEntity;
+import entities.PhongEntity;
+import gui.hoaDon.GD_XemChiTietHoaDonLapHoaDon;
+import gui.hoaDon.GD_XemChiTietHoaDonThongKe;
 import util.DateFormatter;
+import util.MoneyFormatter;
 import util.TimeFormatter;
 
 public class GD_LapHoaDon extends JPanel {
@@ -69,7 +95,6 @@ public class GD_LapHoaDon extends JPanel {
 	private JScrollPane scrDSHoaDon;
 	private JLabel lblChiTietLapHoaDon;
 
-	private HoaDonEntity hoaDonEntity;
 	private JPanel pnlTimKiem;
 	private JLabel lblTimKiemTheoSDT;
 	private JTextField textField;
@@ -83,21 +108,24 @@ public class GD_LapHoaDon extends JPanel {
 	public JButton btnLapHoaDon;
 	public JButton btnXemChiTiet;
 
-//	private LapHoaDonController controller;
-//	private List<HoaDonEntity> listHoaDon;
-//	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
-//	private List<ChiTietDichVuEntity> listChiTietDichVu;
-//	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
-//	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
-//	private LapHoaDonDAO lapHoaDonDAO = new LapHoaDonDAO();
-//	private QuanLyChiTietHoaDonDAO quanLyChiTietHoaDonDAO = new QuanLyChiTietHoaDonDAO();
-//	private QuanLyPhongDAO quanLyPhongDAO = new QuanLyPhongDAO();
-//	private QuanLyDichVuDAO quanLyDichVuDAO = new QuanLyDichVuDAO();
-//	private QuanLyNhanVienDAO quanLyNhanVienDAO = new QuanLyNhanVienDAO();
-//	private QuanLyChiTietDichVuDAO quanLyChiTietDichVuDAO = new QuanLyChiTietDichVuDAO();
-//	private double tienTra = 0;
+	private LapHoaDonController controller;
+	private List<PhieuDatPhongEntity> listPhieuDatPhong;
+	private List<ChiTietPhieuDatPhongEntity> listChiTietPhieuDatPhong;
+	private List<ChiTietHoaDonEntity> listChiTietHoaDon;
+	private QuanLyPhieuDatPhongDAO quanLyPhieuDatPhongDAO = new QuanLyPhieuDatPhongDAO();
+	private QuanLyKhachHangDAO quanLyKhachHangDAO = new QuanLyKhachHangDAO();
+	private LapHoaDonDAO lapHoaDonDAO = new LapHoaDonDAO();
+	private QuanLyHoaDonDAO quanLyHoaDonDAO = new QuanLyHoaDonDAO();
+	private List<ChiTietDichVuEntity> listChiTietDichVu;
+	private double tienTra = 0;
+	private NhanVienEntity nhanVienEntity;
+	private KhachHangEntity khachHangEntity;
+	private PhieuDatPhongEntity phieuDatPhongEntity;
+	private HoaDonEntity hoaDonEntity;
+	private double tienDichVu = 0;
 
-	public GD_LapHoaDon() {
+	public GD_LapHoaDon(NhanVienEntity nhanVienEntity) {
+		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
 
@@ -353,7 +381,7 @@ public class GD_LapHoaDon extends JPanel {
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-//				tinhTienTraKhach();
+				tinhTienTraKhach();
 			}
 
 			@Override
@@ -362,32 +390,444 @@ public class GD_LapHoaDon extends JPanel {
 			}
 		});
 
-		LapHoaDonController controller = new LapHoaDonController(this);
+		controller = new LapHoaDonController(this);
 		btnLamMoi.addActionListener(controller);
 		btnTimKiem.addActionListener(controller);
 		btnXemChiTiet.addActionListener(controller);
 		btnLapHoaDon.addActionListener(controller);
 		tblHoaDon.addMouseListener(controller);
+		loadData();
+	}
+
+	/***** loadData *****/
+	private void loadData() {
+		tblHoaDon.removeAll();
+		tblHoaDon.setRowSelectionAllowed(false);
+		tblmodelHoaDon.setRowCount(0);
+		listPhieuDatPhong = new ArrayList<PhieuDatPhongEntity>();
+		listPhieuDatPhong = quanLyPhieuDatPhongDAO.duyetDanhSachHoaDonChuaThanhToan();
+
+		int stt = 1;
+		for (PhieuDatPhongEntity phieuDatPhongEntity : listPhieuDatPhong) {
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoMa(phieuDatPhongEntity.getMaKhachHang());
+			tblmodelHoaDon.addRow(new Object[] { stt++, khachHangEntity.getHoTen(), khachHangEntity.getSoDienThoai(),
+					lapHoaDonDAO.demSoLuongPhong(phieuDatPhongEntity.getMaPhieuDatPhong()),
+					MoneyFormatter.format1(tinhTongTienThanhToan(phieuDatPhongEntity.getMaPhieuDatPhong())) });
+		}
 
 	}
 
+	/***** HIỂN THỊ THÔNG TIN *****/
 	public void hienThiThongTin() {
+		listPhieuDatPhong = new ArrayList<PhieuDatPhongEntity>();
+		listPhieuDatPhong = quanLyPhieuDatPhongDAO.duyetDanhSachHoaDonChuaThanhToan();
 
+		int row = tblHoaDon.getSelectedRow();
+		if (row >= 0) {
+			khachHangEntity = quanLyKhachHangDAO.timTheoMa(listPhieuDatPhong.get(row).getMaKhachHang());
+			txtTenKhachHang.setText(khachHangEntity.getHoTen());
+			txtSoDienThoai.setText(khachHangEntity.getSoDienThoai());
+			txtSoLuongPhong.setText(
+					String.valueOf(lapHoaDonDAO.demSoLuongPhong(listPhieuDatPhong.get(row).getMaPhieuDatPhong())));
+			txtTienDichVu.setText(MoneyFormatter
+					.format(lapHoaDonDAO.tinhTienDichVu(listPhieuDatPhong.get(row).getMaPhieuDatPhong())));
+			txtTongTien.setText(
+					MoneyFormatter.format(tinhTongTienThanhToan(listPhieuDatPhong.get(row).getMaPhieuDatPhong())));
+			phieuDatPhongEntity = quanLyPhieuDatPhongDAO
+					.timPhieuDatPhongTheoMa(listPhieuDatPhong.get(row).getMaPhieuDatPhong());
+		}
 	}
 
+	/***** LÀM MỚI *****/
 	public void chonLamMoi() {
-
+		txtTienDichVu.setText("");
+		txtSoDienThoai.setText("");
+		txtTenKhachHang.setText("");
+		txtSoLuongPhong.setText("");
+		txtTienNhan.setText("");
+		txtTienTraKhach.setText("");
+		textField.setText("");
+		txtTongTien.setText("");
+		loadData();
 	}
 
+	/***** TÌM KIẾM *****/
 	public void chonTimKiem() {
-
+		if (kiemTraDuLieuTim()) {
+			String sdt = textField.getText().trim();
+			listPhieuDatPhong = new ArrayList<PhieuDatPhongEntity>();
+			tblHoaDon.removeAll();
+			tblmodelHoaDon.setRowCount(0);
+			KhachHangEntity khachHangEntity = quanLyKhachHangDAO.timTheoSoDienThoai(sdt);
+			listPhieuDatPhong = lapHoaDonDAO.timHoaDonTheoKhachHang(khachHangEntity);
+			int stt = 1;
+			for (PhieuDatPhongEntity phieuDatPhongEntity : listPhieuDatPhong) {
+				tblmodelHoaDon
+						.addRow(new Object[] { stt++, khachHangEntity.getHoTen(), khachHangEntity.getSoDienThoai(),
+								lapHoaDonDAO.demSoLuongPhong(phieuDatPhongEntity.getMaPhieuDatPhong()),
+								tinhTongTienThanhToan(phieuDatPhongEntity.getMaPhieuDatPhong()) });
+			}
+		}
 	}
 
+	/***** XEM CHI TIẾT *****/
 	public void chonXemChiTiet() {
+		int row = tblHoaDon.getSelectedRow();
+		if (row >= 0) {
+			listPhieuDatPhong = quanLyPhieuDatPhongDAO.duyetDanhSachHoaDonChuaThanhToan();
+			new GD_XemChiTietHoaDonLapHoaDon(listPhieuDatPhong.get(row)).setVisible(true);
+			;
+		}
+	}
+
+	/***** LẬP HÓA ĐƠN *****/
+	public void chonLapHoaDon() {
+		if (kiemTraTienNhan()) {
+			hoaDonEntity = new HoaDonEntity(nhanVienEntity.getMaNhanVien(), khachHangEntity.getMaKhachHang(),
+					LocalDate.now(), LocalTime.now());
+			if (lapHoaDonDAO.themHoaDon(hoaDonEntity)) {
+				hoaDonEntity = lapHoaDonDAO.timHoaDonVuaTao();
+				listChiTietHoaDon = new ArrayList<ChiTietHoaDonEntity>();
+				listChiTietHoaDon = lapHoaDonDAO.duyetDanhSachChiTietHoaDon(phieuDatPhongEntity.getMaPhieuDatPhong());
+				for (ChiTietHoaDonEntity chiTietHoaDonEntity : listChiTietHoaDon) {
+					if (!lapHoaDonDAO.capNhatChiTietHoaDon(chiTietHoaDonEntity, hoaDonEntity.getMaHoaDon())) {
+						return;
+					}
+				}
+				if (chkXuatHoaDon.isSelected()) {
+					xuatFile(hoaDonEntity.getMaHoaDon());
+					moFile(hoaDonEntity.getMaHoaDon());
+				} else {
+					JOptionPane.showMessageDialog(null, "Lập hóa đơn thành công");
+				}
+				chonLamMoi();
+				return;
+			}
+
+		}
+	}
+
+	/**** KIỂM TRA TIỀN NHẬN *****/
+	private boolean kiemTraTienNhan() {
+		String tienNhan = txtTienNhan.getText();
+		if (tienNhan.length() > 0) {
+			if (!(tienNhan.length() > 0 && tienNhan.matches("[0-9]+"))) {
+				JOptionPane.showMessageDialog(this, "Tiền nhận của khách là số", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				txtTienNhan.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Tiền nhận không được để trống", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			txtTienNhan.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	/***** TÍNH TIỀN HÁT MỘT PHÒNG THEO GIỜ *****/
+	private double tinhTienHatMotPhong(PhongEntity phongEntity, double gioHat) {
+		if (phongEntity.getLoaiPhong().getTenLoaiPhong().equals("VIP")) {
+			return gioHat * 200000.0;
+		}
+		return gioHat * 150000.0;
+	}
+
+	/***** TÍNH TỔNG TIỀN HÁT *****/
+	private double tinhTongTienHat(String maPhieuDatPhong) {
+		double tienHat = 0;
+		listChiTietPhieuDatPhong = new ArrayList<ChiTietPhieuDatPhongEntity>();
+		listChiTietPhieuDatPhong = quanLyPhieuDatPhongDAO
+				.duyetDanhSachChiTietPhieuDatPhongTheoPhieuDatPhong(maPhieuDatPhong);
+		for (ChiTietPhieuDatPhongEntity chiTietPhieuDatPhongEntity : listChiTietPhieuDatPhong) {
+			ChiTietDatPhongEntity chiTietDatPhongEntity = quanLyHoaDonDAO
+					.timChiTietDatPhongTheoMa(chiTietPhieuDatPhongEntity.getMaChiTietDatPhong());
+
+			double gioHat = TimeFormatter.tinhSoPhut(chiTietDatPhongEntity.getGioNhanPhong(),
+					chiTietDatPhongEntity.getGioTraPhong()) / 60.0;
+			tienHat += tinhTienHatMotPhong(chiTietDatPhongEntity.getPhong(), gioHat);
+
+		}
+		return tienHat;
+	}
+
+	/***** TÍNH TỔNG TIỀN CẦN THANH TOÁN *****/
+	private double tinhTongTienThanhToan(String maPhieuDatPhong) {
+		double tienDichVu = lapHoaDonDAO.tinhTienDichVu(maPhieuDatPhong);
+		double tienHat = tinhTongTienHat(maPhieuDatPhong);
+		return tienDichVu + tienHat;
+	}
+
+	/**** TÍNH TIỀN TRẢ KHÁCH *****/
+	private void tinhTienTraKhach() {
+		listPhieuDatPhong = new ArrayList<PhieuDatPhongEntity>();
+		listPhieuDatPhong = quanLyPhieuDatPhongDAO.duyetDanhSachHoaDonChuaThanhToan();
+		int row = tblHoaDon.getSelectedRow();
+		if (row >= 0) {
+			txtTienTraKhach.setText("");
+			double tienNhan;
+
+			String tienTraKhach;
+			if (!txtTienNhan.getText().equals("")) {
+				tienNhan = Double.parseDouble(txtTienNhan.getText().trim());
+			} else {
+				tienNhan = 0;
+			}
+			double tongTien = tinhTongTienThanhToan(listPhieuDatPhong.get(row).getMaPhieuDatPhong());
+			if (tienNhan >= tongTien) {
+				tienTra = tienNhan - tongTien;
+				tienTraKhach = MoneyFormatter.format(tienTra);
+				txtTienTraKhach.setText(tienTraKhach);
+			}
+		}
+	}
+
+	/***** KIỂM TRA DỮ LIỆU TÌM *****/
+	private boolean kiemTraDuLieuTim() {
+		String sdt = textField.getText();
+		if (sdt.length() > 0) {
+			if (!(sdt.length() == 10 && sdt.matches("^0[0-9]{9}$"))) {
+				JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 ký số và bắt đầu bằng số 0", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				textField.requestFocus();
+				return false;
+			}
+		} else {
+			JOptionPane.showMessageDialog(this, "Nhập số điện thoại khách hàng cần tìm", "Thông báo",
+					JOptionPane.INFORMATION_MESSAGE);
+			textField.requestFocus();
+			return false;
+		}
+		return true;
+	}
+
+	/***** MỞ FILE *****/
+	public void moFile(String maHoaDon) {
+		String url = "";
+		url = System.getProperty("user.dir") + "/HoaDon.pdf";
+		File file = new File(url);
+		if (Desktop.isDesktopSupported()) {
+			Desktop desktop = Desktop.getDesktop();
+			try {
+				desktop.open(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Desktop is not supported on your system.");
+		}
 
 	}
 
-	public void chonLapHoaDon() {
+	/***** XUẤT FILE *****/
+	public void xuatFile(String maHoaDon) {
+		Document hoaDon = new Document(PageSize.LETTER);
+		hoaDon.setMargins(50, 50, 10, 0);
+		try {
+			// Tạo font với Unicode
+			BaseFont unicodeFont = BaseFont.createFont("Arial Unicode MS.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+			com.itextpdf.text.Font unicodeFontObj = new com.itextpdf.text.Font(unicodeFont, 12);
+			// Tạo file
+			PdfWriter.getInstance(hoaDon, new FileOutputStream("HoaDon.pdf"));
+			hoaDon.open();
 
+			String imagePath = "src/images/iconLogo1.png";
+			Image image = Image.getInstance(imagePath);
+			Paragraph loGo = new Paragraph();
+			loGo.add(image);
+			image.setAlignment(Image.MIDDLE);
+			hoaDon.add(loGo);
+
+			Paragraph diaChi = new Paragraph("524 Đ. Phan Văn Trị, Phường 7, Gò Vấp, Thành phố Hồ Chí Minh, Việt Nam",
+					new com.itextpdf.text.Font(unicodeFont, 10, com.itextpdf.text.Font.NORMAL));
+			diaChi.setAlignment(Element.ALIGN_CENTER);
+			hoaDon.add(diaChi);
+			hoaDon.add(Chunk.NEWLINE);
+
+			Paragraph hoaDonThanhToan = new Paragraph("HÓA ĐƠN",
+					new com.itextpdf.text.Font(unicodeFont, 20, com.itextpdf.text.Font.BOLD));
+			hoaDonThanhToan.setAlignment(Element.ALIGN_CENTER);
+			hoaDon.add(hoaDonThanhToan);
+			Paragraph tmp = new Paragraph("********************", unicodeFontObj);
+			tmp.setAlignment(Element.ALIGN_CENTER);
+			hoaDon.add(tmp);
+
+			Paragraph ngayVaGioLapHoaDon = new Paragraph("Ngày/ Giờ thanh toán: "
+					+ DateFormatter.format(LocalDate.now()) + "  " + TimeFormatter.format(LocalTime.now()),
+					unicodeFontObj);
+			ngayVaGioLapHoaDon.setAlignment(Element.ALIGN_LEFT);
+			hoaDon.add(ngayVaGioLapHoaDon);
+
+			Paragraph tenNhanVien = new Paragraph("Nhân viên: " + nhanVienEntity.getHoTen(), unicodeFontObj);
+			hoaDon.add(tenNhanVien);
+
+			Paragraph tenKhachHang = new Paragraph("Khách hàng: " + khachHangEntity.getHoTen(), unicodeFontObj);
+			hoaDon.add(tenKhachHang);
+			hoaDon.add(Chunk.NEWLINE);
+			PdfPTable pdftblThongTinPhong = new PdfPTable(5);
+			pdftblThongTinPhong.setTotalWidth(new float[] { 20f, 40f, 160f, 40f, 50f });
+			pdftblThongTinPhong.setWidthPercentage(100);
+
+			PdfPTable pdftblThongTinDichVu = new PdfPTable(4);
+			pdftblThongTinDichVu.setTotalWidth(new float[] { 60f, 20f, 40f, 40f });
+			pdftblThongTinDichVu.setWidthPercentage(100);
+			pdftblThongTinDichVu.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+
+			PdfPTable pdftblThongTinThanhToan = new PdfPTable(8);
+			pdftblThongTinThanhToan.setTotalWidth(new float[] { 20f, 40f, 60f, 20f, 40f, 50f, 30f, 50f });
+			pdftblThongTinThanhToan.setWidthPercentage(100);
+			pdftblThongTinThanhToan.getDefaultCell().setBorder(Rectangle.NO_BORDER);
+
+			// Thông tin phòng
+			Paragraph stt = new Paragraph("STT", unicodeFontObj);
+			Paragraph soPhong = new Paragraph("Số phòng", unicodeFontObj);
+			Paragraph cacDichVu = new Paragraph("Các dịch vụ", unicodeFontObj);
+			Paragraph giaMotGio = new Paragraph("Giá/Giờ", unicodeFontObj);
+			Paragraph tienHat = new Paragraph("Tiền hát", unicodeFontObj);
+
+			// Bảng dịch vụ
+			pdftblThongTinDichVu.addCell(new PdfPCell(new Paragraph("Tên dịch vụ", unicodeFontObj)));
+			pdftblThongTinDichVu.addCell(new PdfPCell(new Paragraph("SL")));
+			pdftblThongTinDichVu.addCell(new PdfPCell(new Paragraph("Đơn giá", unicodeFontObj)));
+			pdftblThongTinDichVu.addCell(new PdfPCell(new Paragraph("Tiền DV", unicodeFontObj)));
+
+			PdfPCell cellStt = new PdfPCell();
+			PdfPCell cellSoPhong = new PdfPCell();
+			PdfPCell cellDichVu = new PdfPCell();
+			PdfPCell cellGiaMotGio = new PdfPCell();
+			PdfPCell cellTienHat = new PdfPCell();
+
+			cacDichVu.setAlignment(Element.ALIGN_CENTER);
+			cellStt.addElement(stt);
+			cellSoPhong.addElement(soPhong);
+			cellGiaMotGio.addElement(giaMotGio);
+			cellTienHat.addElement(tienHat);
+			cellDichVu.addElement(cacDichVu);
+			cellDichVu.addElement(pdftblThongTinDichVu);
+			for (PdfPRow row : pdftblThongTinDichVu.getRows()) {
+				for (PdfPCell cell : row.getCells()) {
+					cell.setBorder(Rectangle.NO_BORDER);
+				}
+			}
+
+			pdftblThongTinPhong.addCell(cellStt);
+			pdftblThongTinPhong.addCell(cellSoPhong);
+			pdftblThongTinPhong.addCell(cellDichVu);
+			pdftblThongTinPhong.addCell(cellGiaMotGio);
+			pdftblThongTinPhong.addCell(cellTienHat);
+
+			int soThuTu = 1;
+			listChiTietHoaDon = new ArrayList<ChiTietHoaDonEntity>();
+			listChiTietHoaDon = quanLyHoaDonDAO.duyetDanhSachChiTietHoaDonTheoMaHoaDon(hoaDonEntity.getMaHoaDon());
+
+			for (ChiTietHoaDonEntity chiTietHoaDonEntity : listChiTietHoaDon) {
+				// 1
+				pdftblThongTinPhong.addCell(new PdfPCell(new Paragraph(String.valueOf(soThuTu++))));
+
+				// 2
+				pdftblThongTinPhong.addCell(new PdfPCell(new Paragraph(
+						String.valueOf(chiTietHoaDonEntity.getChiTietDatPhong().getPhong().getSoPhong()))));
+
+				// 3
+				listChiTietDichVu = new ArrayList<ChiTietDichVuEntity>();
+				listChiTietDichVu = quanLyHoaDonDAO
+						.duyetDanhSachChiTietDichVuTheoChiTietHoaDon(chiTietHoaDonEntity.getMaChiTietHoaDon());
+				pdftblThongTinDichVu.deleteBodyRows();
+				for (ChiTietDichVuEntity chiTietDichVuEntity : listChiTietDichVu) {
+					pdftblThongTinDichVu.addCell(new PdfPCell(new Paragraph(
+							String.valueOf(chiTietDichVuEntity.getDichVu().getTenDichVu()), unicodeFontObj)));
+					pdftblThongTinDichVu
+							.addCell(new PdfPCell(new Paragraph(String.valueOf(chiTietDichVuEntity.getSoLuong()))));
+					pdftblThongTinDichVu.addCell(new PdfPCell(new Paragraph(
+							String.valueOf(MoneyFormatter.format1(chiTietDichVuEntity.getDichVu().getGia())))));
+					double dv = chiTietDichVuEntity.getDichVu().getGia() * chiTietDichVuEntity.getSoLuong();
+					pdftblThongTinDichVu
+							.addCell(new PdfPCell(new Paragraph(String.valueOf(MoneyFormatter.format1(dv)))));
+					tienDichVu += dv;
+
+				}
+				PdfPCell cot3 = new PdfPCell(pdftblThongTinDichVu);
+				for (PdfPRow row : pdftblThongTinDichVu.getRows()) {
+					for (PdfPCell cell : row.getCells()) {
+						cell.setBorder(Rectangle.NO_BORDER);
+					}
+				}
+				pdftblThongTinPhong.addCell(cot3);
+
+				// 4
+				if (chiTietHoaDonEntity.getChiTietDatPhong().getPhong().getLoaiPhong().getTenLoaiPhong()
+						.equals("VIP")) {
+					pdftblThongTinPhong.addCell(new PdfPCell(new Paragraph(MoneyFormatter.format1(200000))));
+				} else {
+					pdftblThongTinPhong.addCell(new PdfPCell(new Paragraph(MoneyFormatter.format1(150000))));
+				}
+
+				double gioHat = TimeFormatter.tinhSoPhut(chiTietHoaDonEntity.getChiTietDatPhong().getGioNhanPhong(),
+						chiTietHoaDonEntity.getChiTietDatPhong().getGioTraPhong()) / 60.0;
+				pdftblThongTinPhong.addCell(new PdfPCell(new Paragraph(MoneyFormatter
+						.format1(tinhTienHatMotPhong(chiTietHoaDonEntity.getChiTietDatPhong().getPhong(), gioHat)))));
+
+				for (PdfPRow row : pdftblThongTinPhong.getRows()) {
+					for (PdfPCell cell : row.getCells()) {
+						cell.setBorder(Rectangle.BOTTOM);
+					}
+				}
+			}
+			hoaDon.add(pdftblThongTinPhong);
+
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(String.valueOf(""))));
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(
+					String.valueOf(lapHoaDonDAO.demSoLuongPhong(phieuDatPhongEntity.getMaPhieuDatPhong())))));
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(String.valueOf(""))));
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(String.valueOf(""))));
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(String.valueOf(""))));
+			pdftblThongTinThanhToan
+					.addCell(new PdfPCell(new Paragraph(String.valueOf(MoneyFormatter.format1(tienDichVu)))));
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(String.valueOf(""))));
+			pdftblThongTinThanhToan.addCell(new PdfPCell(new Paragraph(String
+					.valueOf(MoneyFormatter.format1(tinhTongTienHat(phieuDatPhongEntity.getMaPhieuDatPhong()))))));
+			for (PdfPRow row : pdftblThongTinThanhToan.getRows()) {
+				for (PdfPCell cell : row.getCells()) {
+					cell.setBorder(Rectangle.NO_BORDER);
+				}
+			}
+			hoaDon.add(pdftblThongTinThanhToan);
+
+			// Tổng thanh toán
+			hoaDon.add(Chunk.NEWLINE);
+			Paragraph tongThanhToan = new Paragraph(
+					"Tổng thanh toán: " + MoneyFormatter
+							.format1(tienDichVu + tinhTongTienHat(phieuDatPhongEntity.getMaPhieuDatPhong())),
+					unicodeFontObj);
+			tongThanhToan.setAlignment(Element.ALIGN_RIGHT);
+			hoaDon.add(tongThanhToan);
+
+			// tiền nhận
+			Paragraph tienNhan = new Paragraph(
+					"Tiền nhận: " + MoneyFormatter.format1(Double.parseDouble(txtTienNhan.getText().trim())),
+					unicodeFontObj);
+			tienNhan.setAlignment(Element.ALIGN_RIGHT);
+			hoaDon.add(tienNhan);
+
+			// tiền trả khách
+			Paragraph tienTraKhach = new Paragraph("Tiền trả khách: " + MoneyFormatter.format1(tienTra),
+					unicodeFontObj);
+			tienTraKhach.setAlignment(Element.ALIGN_RIGHT);
+			hoaDon.add(tienTraKhach);
+
+			// lời cảm ơn
+			hoaDon.add(Chunk.NEWLINE);
+			Paragraph camOn = new Paragraph("Karaoke NNice xin cảm ơn - Hẹn gặp lại Quý Khách",
+					new com.itextpdf.text.Font(unicodeFont, 10, com.itextpdf.text.Font.BOLD));
+			camOn.setAlignment(Element.ALIGN_CENTER);
+			hoaDon.add(camOn);
+
+			hoaDon.close();
+		} catch (DocumentException | FileNotFoundException | MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

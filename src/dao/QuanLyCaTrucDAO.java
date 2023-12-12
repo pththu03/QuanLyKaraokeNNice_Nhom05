@@ -44,6 +44,7 @@ public class QuanLyCaTrucDAO {
 				list.add(caTrucEntity);
 			}
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 			e.printStackTrace();
 		} finally {
 			ConnectDB.closeConnect(connect);
@@ -60,7 +61,8 @@ public class QuanLyCaTrucDAO {
 		PreparedStatement statement = null;
 		if (connect != null) {
 			try {
-				String query = "SELECT MaCaTruc, TenCaTruc, GioBatDau, GioKetThuc \r\n" + "FROM CaTruc \r\n" + "WHERE MaCaTruc LIKE ?";
+				String query = "SELECT MaCaTruc, TenCaTruc, GioBatDau, GioKetThuc \r\n" + "FROM CaTruc \r\n"
+						+ "WHERE MaCaTruc LIKE ?";
 				statement = connect.prepareStatement(query);
 				statement.setString(1, maCT);
 				result = statement.executeQuery();
@@ -73,6 +75,7 @@ public class QuanLyCaTrucDAO {
 					caTrucKq = new CaTrucEntity(maCTr, tenCT, gioBD, gioKT);
 				}
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -82,7 +85,7 @@ public class QuanLyCaTrucDAO {
 		}
 		return caTrucKq;
 	}
-	
+
 	public CaTrucEntity them(CaTrucEntity caTrucEntity) {
 		CaTrucEntity catrucEntity2 = null;
 		Connection connect = ConnectDB.getConnect();
@@ -90,8 +93,7 @@ public class QuanLyCaTrucDAO {
 		PreparedStatement statement = null;
 		if (connect != null) {
 			try {
-				String query = "INSERT INTO CaTruc" + "([TenCaTruc],[GioBatDau],[GioKetThuc])"
-						+ "VALUES (?, ?, ?)";
+				String query = "INSERT INTO CaTruc" + "([TenCaTruc],[GioBatDau],[GioKetThuc])" + "VALUES (?, ?, ?)";
 				statement = connect.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 				statement.setString(1, caTrucEntity.getTenCaTruc());
 				statement.setTime(2, Time.valueOf(caTrucEntity.getGioBatDau()));
@@ -104,6 +106,7 @@ public class QuanLyCaTrucDAO {
 
 				}
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -115,7 +118,7 @@ public class QuanLyCaTrucDAO {
 		return catrucEntity2;
 
 	}
-	
+
 	public boolean xoa(String maCaTruc) {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
@@ -138,15 +141,15 @@ public class QuanLyCaTrucDAO {
 		return false;
 
 	}
-	
+
 	public boolean chinhSua(CaTrucEntity caTrucEntity) {
 		Connection connect = ConnectDB.getConnect();
 		PreparedStatement statement = null;
 
 		if (connect != null) {
 			try {
-				String query = "UPDATE CaTruc \r\n"
-						+ "SET TenCaTruc = ?, GioBatDau = ?, GioKetThuc = ?" + "where MaCaTruc LIKE ?";
+				String query = "UPDATE CaTruc \r\n" + "SET TenCaTruc = ?, GioBatDau = ?, GioKetThuc = ?"
+						+ "where MaCaTruc LIKE ?";
 				statement = connect.prepareStatement(query);
 				statement.setString(1, caTrucEntity.getTenCaTruc());
 				statement.setTime(2, Time.valueOf(caTrucEntity.getGioBatDau()));
@@ -154,6 +157,7 @@ public class QuanLyCaTrucDAO {
 				statement.setString(4, caTrucEntity.getMaCaTruc());
 				return statement.executeUpdate() > 0;
 			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Lỗi cơ sở dữ liệu");
 				e.printStackTrace();
 			} finally {
 				ConnectDB.closeConnect(connect);
@@ -164,6 +168,5 @@ public class QuanLyCaTrucDAO {
 		return false;
 
 	}
-	
-	
+
 }

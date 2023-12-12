@@ -42,6 +42,13 @@ public class ChiTietHoaDonEntity {
 		this.chiTietDatPhong = chiTietDatPhong;
 	}
 
+	public ChiTietHoaDonEntity(String maChiTietHoaDon, String maHoaDon, ChiTietDatPhongEntity chiTietDatPhong) {
+		super();
+		this.maChiTietHoaDon = maChiTietHoaDon;
+		this.maHoaDon = maHoaDon;
+		this.chiTietDatPhong = chiTietDatPhong;
+	}
+
 	public String getMaChiTietHoaDon() {
 		return maChiTietHoaDon;
 	}

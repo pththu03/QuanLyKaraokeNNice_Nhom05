@@ -21,6 +21,7 @@ import dao.QuanLyCaTrucDAO;
 import entities.CaTrucEntity;
 import entities.DichVuEntity;
 import entities.KhachHangEntity;
+import entities.NhanVienEntity;
 import util.TimeFormatter;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -64,7 +65,10 @@ public class GD_QuanLyCaTruc extends JPanel {
 	public JButton btnXoa;
 	public JButton btnThem;
 
-	public GD_QuanLyCaTruc() {
+	private NhanVienEntity nhanVienEntity;
+
+	public GD_QuanLyCaTruc(NhanVienEntity nhanVienEntity) {
+		this.nhanVienEntity = nhanVienEntity;
 		setLayout(null);
 		setBounds(0, 0, 1365, 694);
 
@@ -191,9 +195,22 @@ public class GD_QuanLyCaTruc extends JPanel {
 		btnChinhSua.addActionListener(controller);
 		tblDsCaTruc.addMouseListener(controller);
 		loadData();
+		kiemTraQuyen();
 
 	}
-	
+
+	private void kiemTraQuyen() {
+		if (nhanVienEntity.getChucVu().equalsIgnoreCase("Quản lí")) {
+			btnChinhSua.setEnabled(true);
+			btnThem.setEnabled(true);
+			btnXoa.setEnabled(true);
+		} else {
+			btnChinhSua.setEnabled(false);
+			btnThem.setEnabled(false);
+			btnXoa.setEnabled(false);
+		}
+	}
+
 	private void loadData() {
 		tblDsCaTruc.removeAll();
 		tblDsCaTruc.setRowSelectionAllowed(false);
@@ -204,7 +221,8 @@ public class GD_QuanLyCaTruc extends JPanel {
 		int stt = 1;
 		for (CaTrucEntity caTrucEntity : list) {
 			tblmodelDanhSachPhong.addRow(new Object[] { stt++, caTrucEntity.getMaCaTruc(), caTrucEntity.getTenCaTruc(),
-					TimeFormatter.format(caTrucEntity.getGioBatDau()), TimeFormatter.format(caTrucEntity.getGioKetThuc()) });
+					TimeFormatter.format(caTrucEntity.getGioBatDau()),
+					TimeFormatter.format(caTrucEntity.getGioKetThuc()) });
 		}
 	}
 
@@ -231,12 +249,14 @@ public class GD_QuanLyCaTruc extends JPanel {
 	}
 
 	public void chonThem() {
-		String caTruc = txtCaTruc.getText();
-		LocalTime gioBatDau = LocalTime.parse(txtGioBD.getText());
-		LocalTime gioKetThuc = LocalTime.parse(txtGioKT.getText());
-		CaTrucEntity caTrucEntity = new CaTrucEntity(caTruc, gioBatDau, gioKetThuc);
-		caTrucEntity = quanLyCaTrucDAO.them(caTrucEntity);
-		loadData();
+		if (kiemTraDuLieuThem()) {
+			String caTruc = txtCaTruc.getText();
+			LocalTime gioBatDau = LocalTime.parse(txtGioBD.getText());
+			LocalTime gioKetThuc = LocalTime.parse(txtGioKT.getText());
+			CaTrucEntity caTrucEntity = new CaTrucEntity(caTruc, gioBatDau, gioKetThuc);
+			caTrucEntity = quanLyCaTrucDAO.them(caTrucEntity);
+			loadData();
+		}
 	}
 
 	public void chonXoa() {
@@ -251,8 +271,8 @@ public class GD_QuanLyCaTruc extends JPanel {
 			}
 		} else {
 			JOptionPane.showMessageDialog(this, "Chọn Ca trực cần xóa");
+			return;
 		}
-
 	}
 
 	public void chonChinhSua() {
@@ -280,6 +300,10 @@ public class GD_QuanLyCaTruc extends JPanel {
 		if (!kiemTraTenCatruc()) {
 			return false;
 		}
+
+		if (!kiemTraGio()) {
+			return false;
+		}
 		return true;
 	}
 
@@ -287,15 +311,93 @@ public class GD_QuanLyCaTruc extends JPanel {
 		String tenCaTruc = txtCaTruc.getText();
 		list = new ArrayList<>();
 		list = quanLyCaTrucDAO.duyetDanhSach();
-		if (!(tenCaTruc.length() > 0)) {
-			JOptionPane.showMessageDialog(this, "Tên Ca Trực không được để trống", "Thông báo",
-					JOptionPane.INFORMATION_MESSAGE);
+		int row = tblDsCaTruc.getSelectedRow();
+		if (row >= 0) {
+			if (!(tenCaTruc.length() > 0)) {
+				JOptionPane.showMessageDialog(this, "Tên Ca Trực không được để trống");
+				txtCaTruc.requestFocus();
+				return false;
+			}
+			if (list.contains(new CaTrucEntity("", tenCaTruc, null, null))
+					&& !tenCaTruc.equals(list.get(row).getTenCaTruc())) {
+				JOptionPane.showMessageDialog(this, "Tên ca trực đã tồn tại");
+				txtCaTruc.requestFocus();
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean kiemTraDuLieuThem() {
+		if (!kiemTraTenCaTrucThem()) {
+			return false;
+		}
+		if (!kiemTraGio()) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean kiemTraTenCaTrucThem() {
+		String tenCaTruc = txtCaTruc.getText();
+		list = new ArrayList<>();
+		list = quanLyCaTrucDAO.duyetDanhSach();
+		if (list.contains(new CaTrucEntity("", tenCaTruc, null, null))) {
+			JOptionPane.showMessageDialog(this, "Tên ca trực đã tồn tại");
 			txtCaTruc.requestFocus();
 			return false;
 		}
-		return false;
+
+		if (!tenCaTruc.matches("^Ca\\s\\w+")) {
+			JOptionPane.showMessageDialog(this, "Tên ca trực bắt đầu là \"Ca ...\"");
+			txtCaTruc.requestFocus();
+			return false;
+		}
+		return true;
 	}
 
-	
+	private boolean kiemTraGio() {
+		String gioBatDau = txtGioBD.getText().trim();
+		String gioKetThuc = txtGioKT.getText().trim();
+		if (!gioBatDau.matches("\\d{2}:\\d{2}")) {
+			JOptionPane.showMessageDialog(this, "Định dạng nhập giờ là: 00:00");
+			txtGioBD.requestFocus();
+			return false;
+		}
+		if (!gioKetThuc.matches("\\d{2}:\\d{2}")) {
+			JOptionPane.showMessageDialog(this, "Định dạng nhập giờ là: 00:00");
+			txtGioKT.requestFocus();
+			return false;
+		}
+
+		Integer gio1 = Integer.parseInt(gioBatDau.substring(0, 2));
+		Integer gio2 = Integer.parseInt(gioKetThuc.substring(0, 2));
+		Integer phut1 = Integer.parseInt(gioBatDau.substring(3, 5));
+		Integer phut2 = Integer.parseInt(gioKetThuc.substring(3, 5));
+
+		if (gio1 < 8) {
+			JOptionPane.showMessageDialog(this, "Giờ bắt đầu ca trực phải sau 8h");
+			txtGioBD.requestFocus();
+			return false;
+		}
+		if (phut1 < 0 || phut1 > 59) {
+			JOptionPane.showMessageDialog(this, "Phút từ 0 - 59");
+			txtGioBD.requestFocus();
+			return false;
+		}
+
+		if (gio2 > 23) {
+			JOptionPane.showMessageDialog(this, "Giờ kết thúc ca trực phải trước 24");
+			txtGioKT.requestFocus();
+			return false;
+		}
+		if (phut2 < 0 || phut2 > 59) {
+			JOptionPane.showMessageDialog(this, "Phút từ 0 - 59");
+			txtGioKT.requestFocus();
+			return false;
+		}
+
+		return true;
+	}
 
 }
